@@ -7,11 +7,13 @@ import { ContentSection } from "@/components/tools/ContentSection"
 
 export default function KeycodeInfoPage() {
     const [event, setEvent] = useState<KeyboardEvent | null>(null)
+    const [history, setHistory] = useState<KeyboardEvent[]>([])
 
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
             e.preventDefault()
             setEvent(e)
+            setHistory(prev => [e, ...prev].slice(0, 5))
         }
         window.addEventListener("keydown", down)
         return () => window.removeEventListener("keydown", down)
@@ -73,6 +75,23 @@ export default function KeycodeInfoPage() {
                         <div className={`font-mono font-bold ${event.metaKey ? "text-green-500" : "text-muted-foreground"}`}>{String(event.metaKey)}</div>
                     </div>
                 </div>
+
+                {history.length > 0 && (
+                    <div className="w-full max-w-2xl space-y-4 pt-8 border-t">
+                        <h3 className="font-medium text-sm text-muted-foreground uppercase tracking-wide text-center">Recent History</h3>
+                        <div className="grid gap-2">
+                            {history.map((e, i) => (
+                                <div key={i} className={`flex items-center justify-between p-3 rounded-lg border ${i === 0 ? "bg-primary/5 border-primary/20" : "bg-muted/30"}`}>
+                                    <div className="flex items-center gap-3">
+                                        <span className="font-mono font-bold text-lg w-16 text-center">{e.keyCode}</span>
+                                        <span className="font-mono text-sm bg-muted px-2 py-0.5 rounded">{e.code}</span>
+                                    </div>
+                                    <span className="font-medium">{e.key === " " ? "(Space)" : e.key}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
 
             <ContentSection

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Copy, Trash2, ShieldCheck, Minimize, Maximize } from "lucide-react"
+import { Copy, Trash2, ShieldCheck, Minimize, Maximize, Download } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import Editor from "@monaco-editor/react"
@@ -49,6 +49,30 @@ export default function JsonFormatterClient() {
         navigator.clipboard.writeText(output)
     }
 
+    const handleDownload = () => {
+        if (!output) return
+        const blob = new Blob([output], { type: "application/json" })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = "formatted.json"
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
+    }
+
+    const handleLoadSample = () => {
+        const sample = {
+            "project": "OpenToolbox",
+            "version": 1.0,
+            "features": ["formatting", "validation", "minification"],
+            "active": true
+        }
+        setInput(JSON.stringify(sample, null, 2))
+        setError(null)
+    }
+
     return (
         <ToolWrapper
             title="JSON Formatter & Validator"
@@ -60,9 +84,14 @@ export default function JsonFormatterClient() {
                 <div className="space-y-2 flex flex-col h-full">
                     <div className="flex items-center justify-between shrink-0">
                         <h3 className="text-lg font-medium">Input JSON</h3>
-                        <Button variant="ghost" size="sm" onClick={handleClear} className="h-8 px-2 text-destructive">
-                            <Trash2 className="mr-2 h-4 w-4" /> Clear
-                        </Button>
+                        <div className="flex gap-2">
+                            <Button variant="outline" size="sm" onClick={handleLoadSample} className="h-8 px-2">
+                                Load Sample
+                            </Button>
+                            <Button variant="ghost" size="sm" onClick={handleClear} className="h-8 px-2 text-destructive">
+                                <Trash2 className="mr-2 h-4 w-4" /> Clear
+                            </Button>
+                        </div>
                     </div>
                     <div className="flex-1 border rounded-md overflow-hidden shadow-sm">
                         <Editor
@@ -83,9 +112,14 @@ export default function JsonFormatterClient() {
                 <div className="space-y-2 flex flex-col h-full">
                     <div className="flex items-center justify-between shrink-0">
                         <h3 className="text-lg font-medium">Output</h3>
-                        <Button variant="outline" size="sm" onClick={handleCopy} disabled={!output} className="h-8 px-2">
-                            <Copy className="mr-2 h-4 w-4" /> Copy
-                        </Button>
+                        <div className="flex gap-2">
+                            <Button variant="outline" size="sm" onClick={handleDownload} disabled={!output} className="h-8 px-2">
+                                <Download className="mr-2 h-4 w-4" /> Download
+                            </Button>
+                            <Button variant="outline" size="sm" onClick={handleCopy} disabled={!output} className="h-8 px-2">
+                                <Copy className="mr-2 h-4 w-4" /> Copy
+                            </Button>
+                        </div>
                     </div>
                     <div className="flex-1 border rounded-md overflow-hidden shadow-sm">
                         <Editor

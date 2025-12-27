@@ -33,6 +33,21 @@ export default function SqlFormatterClient() {
         }
     }
 
+    const handleCopyAsString = (lang: 'java' | 'python' | 'csharp') => {
+        if (!output) return
+        let escaped = output.replace(/"/g, '\\"').replace(/\n/g, '\\n')
+        let code = ""
+
+        // Simple string escaping (can be improved)
+        if (lang === 'java' || lang === 'csharp') {
+            code = `"${escaped}"`
+        } else if (lang === 'python') {
+            code = `"""${output}"""`
+        }
+
+        navigator.clipboard.writeText(code)
+    }
+
     return (
         <ToolWrapper
             title="SQL Formatter"
@@ -75,9 +90,21 @@ export default function SqlFormatterClient() {
                 <div className="space-y-2 flex flex-col h-full">
                     <div className="flex justify-between items-center shrink-0">
                         <h3 className="font-medium">Output</h3>
-                        <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(output)} className="h-8 px-2">
-                            <Copy className="mr-2 h-4 w-4" /> Copy
-                        </Button>
+                        <div className="flex gap-2">
+                            <Select onValueChange={(v) => handleCopyAsString(v as any)}>
+                                <SelectTrigger className="w-[140px] h-8 text-xs">
+                                    <SelectValue placeholder="Copy as Code" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="java">Java String</SelectItem>
+                                    <SelectItem value="csharp">C# String</SelectItem>
+                                    <SelectItem value="python">Python String</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(output)} className="h-8 px-2">
+                                <Copy className="mr-2 h-4 w-4" /> Copy
+                            </Button>
+                        </div>
                     </div>
                     <div className="flex-1 border rounded-md overflow-hidden shadow-sm">
                         <Editor

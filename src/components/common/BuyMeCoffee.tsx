@@ -9,13 +9,19 @@ import { Button } from "@/components/ui/button"
 export function BuyMeCoffee() {
     const [count, setCount] = useState(0)
 
-    const handleDonate = () => {
+    const handleDonate = (e: React.MouseEvent<HTMLButtonElement>) => {
         setCount(prev => prev + 1)
+
+        // Get click coordinates normalized to 0-1 range
+        const x = e.clientX / window.innerWidth
+        const y = e.clientY / window.innerHeight
+
         confetti({
             particleCount: 100,
             spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#FFD700', '#FFA500', '#FF4500']
+            origin: { x, y },
+            colors: ['#FFD700', '#FFA500', '#FF4500'],
+            zIndex: 9999
         })
         window.open("https://buymeacoffee.com/voidcraftr", "_blank")
     }

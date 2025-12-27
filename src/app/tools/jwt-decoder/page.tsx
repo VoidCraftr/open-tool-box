@@ -82,6 +82,37 @@ export default function JwtDecoderPage() {
                         </pre>
                     </div>
                 </div>
+
+                {payload && (
+                    <div className="space-y-4 pt-4 border-t">
+                        <h3 className="font-medium text-lg">Standard Claims</h3>
+                        <div className="grid gap-2 text-sm">
+                            {['iss', 'sub', 'aud', 'exp', 'nbf', 'iat', 'jti'].map(claim => {
+                                if (payload[claim] === undefined) return null;
+                                let value = payload[claim];
+                                let desc = "";
+
+                                switch (claim) {
+                                    case 'iss': desc = "Issuer"; break;
+                                    case 'sub': desc = "Subject"; break;
+                                    case 'aud': desc = "Audience"; break;
+                                    case 'exp': desc = "Expiration Time"; value = new Date(value * 1000).toLocaleString(); break;
+                                    case 'nbf': desc = "Not Before"; value = new Date(value * 1000).toLocaleString(); break;
+                                    case 'iat': desc = "Issued At"; value = new Date(value * 1000).toLocaleString(); break;
+                                    case 'jti': desc = "JWT ID"; break;
+                                }
+
+                                return (
+                                    <div key={claim} className="grid grid-cols-[100px_1fr_200px] gap-4 p-2 rounded-md bg-muted/50 border">
+                                        <span className="font-mono font-bold text-blue-500">{claim}</span>
+                                        <span className="font-mono break-all">{String(value)}</span>
+                                        <span className="text-muted-foreground italic">{desc}</span>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+                )}
             </div>
 
             <ContentSection

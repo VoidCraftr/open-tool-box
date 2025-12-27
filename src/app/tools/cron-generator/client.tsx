@@ -16,12 +16,15 @@ import { ContentSection } from "@/components/tools/ContentSection"
 
 const PRESETS = [
     { label: "Every Minute", value: "* * * * *" },
+    { label: "Every 5 Mins", value: "*/5 * * * *" },
+    { label: "Every 15 Mins", value: "*/15 * * * *" },
     { label: "Every Hour", value: "0 * * * *" },
-    { label: "Every Day at Midnight", value: "0 0 * * *" },
+    { label: "Every Day (Midnight)", value: "0 0 * * *" },
     { label: "Every Morning (6 AM)", value: "0 6 * * *" },
-    { label: "Every Week (Sunday)", value: "0 0 * * 0" },
+    { label: "Workdays (9 AM)", value: "0 9 * * 1-5" },
+    { label: "Every Week (Sun)", value: "0 0 * * 0" },
     { label: "Every Month (1st)", value: "0 0 1 * *" },
-    { label: "Every Year (Jan 1st)", value: "0 0 1 1 *" },
+    { label: "Every Year (Jan 1)", value: "0 0 1 1 *" },
 ]
 
 export function CronGeneratorClient() {
