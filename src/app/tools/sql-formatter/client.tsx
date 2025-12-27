@@ -5,7 +5,8 @@ import { format } from "sql-formatter"
 import { Copy, Trash2, Play } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
+import Editor from "@monaco-editor/react"
+
 import {
     Select,
     SelectContent,
@@ -39,9 +40,9 @@ export default function SqlFormatterClient() {
             toolSlug="sql-formatter"
             adSlot="sql-formatter-slot"
         >
-            <div className="grid gap-6 lg:grid-cols-2">
-                <div className="space-y-2">
-                    <div className="flex justify-between items-center">
+            <div className="grid gap-6 lg:grid-cols-2 h-[500px]">
+                <div className="space-y-2 flex flex-col h-full">
+                    <div className="flex justify-between items-center shrink-0">
                         <Select value={dialect} onValueChange={setDialect}>
                             <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
                             <SelectContent>
@@ -55,27 +56,43 @@ export default function SqlFormatterClient() {
                             <Trash2 className="mr-2 h-4 w-4" /> Clear
                         </Button>
                     </div>
-                    <Textarea
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        placeholder="SELECT * FROM table..."
-                        className="font-mono h-[400px] text-sm"
-                    />
+                    <div className="flex-1 border rounded-md overflow-hidden shadow-sm">
+                        <Editor
+                            height="100%"
+                            defaultLanguage="sql"
+                            theme="vs-dark"
+                            value={input}
+                            onChange={(value) => setInput(value || "")}
+                            options={{
+                                minimap: { enabled: false },
+                                fontSize: 13,
+                                wordWrap: "on",
+                            }}
+                        />
+                    </div>
                 </div>
 
-                <div className="space-y-2">
-                    <div className="flex justify-between items-center">
+                <div className="space-y-2 flex flex-col h-full">
+                    <div className="flex justify-between items-center shrink-0">
                         <h3 className="font-medium">Output</h3>
                         <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(output)} className="h-8 px-2">
                             <Copy className="mr-2 h-4 w-4" /> Copy
                         </Button>
                     </div>
-                    <Textarea
-                        readOnly
-                        value={output}
-                        className="font-mono h-[400px] text-sm bg-muted"
-                        placeholder="Formatted SQL will appear here..."
-                    />
+                    <div className="flex-1 border rounded-md overflow-hidden shadow-sm">
+                        <Editor
+                            height="100%"
+                            defaultLanguage="sql"
+                            theme="vs-dark"
+                            value={output}
+                            options={{
+                                readOnly: true,
+                                minimap: { enabled: false },
+                                fontSize: 13,
+                                wordWrap: "on",
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
 

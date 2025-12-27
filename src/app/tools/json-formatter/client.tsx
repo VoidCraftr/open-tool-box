@@ -4,7 +4,8 @@ import { useState } from "react"
 import { Copy, Trash2, ShieldCheck, Minimize, Maximize } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
+import Editor from "@monaco-editor/react"
+
 import { ToolWrapper } from "@/components/tools/ToolWrapper"
 import { ContentSection } from "@/components/tools/ContentSection"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
@@ -55,47 +56,60 @@ export default function JsonFormatterClient() {
             toolSlug="json-formatter"
             adSlot="json-tool-slot"
         >
-            <div className="grid gap-6 md:grid-cols-2">
-                <div className="space-y-2">
-                    <div className="flex items-center justify-between">
+            <div className="grid gap-6 md:grid-cols-2 h-[500px]">
+                <div className="space-y-2 flex flex-col h-full">
+                    <div className="flex items-center justify-between shrink-0">
                         <h3 className="text-lg font-medium">Input JSON</h3>
                         <Button variant="ghost" size="sm" onClick={handleClear} className="h-8 px-2 text-destructive">
                             <Trash2 className="mr-2 h-4 w-4" /> Clear
                         </Button>
                     </div>
-                    <Textarea
-                        placeholder="Paste your JSON here..."
-                        className="h-[400px] font-mono text-sm"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                    />
+                    <div className="flex-1 border rounded-md overflow-hidden shadow-sm">
+                        <Editor
+                            height="100%"
+                            defaultLanguage="json"
+                            theme="vs-dark"
+                            value={input}
+                            onChange={(value) => setInput(value || "")}
+                            options={{
+                                minimap: { enabled: false },
+                                fontSize: 13,
+                                wordWrap: "on",
+                            }}
+                        />
+                    </div>
                 </div>
 
-                <div className="space-y-2">
-                    <div className="flex items-center justify-between">
+                <div className="space-y-2 flex flex-col h-full">
+                    <div className="flex items-center justify-between shrink-0">
                         <h3 className="text-lg font-medium">Output</h3>
                         <Button variant="outline" size="sm" onClick={handleCopy} disabled={!output} className="h-8 px-2">
                             <Copy className="mr-2 h-4 w-4" /> Copy
                         </Button>
                     </div>
-                    <Textarea
-                        readOnly
-                        className="h-[400px] font-mono text-sm bg-muted"
-                        value={output}
-                        placeholder="Formatted JSON will appear here..."
-                    />
+                    <div className="flex-1 border rounded-md overflow-hidden shadow-sm">
+                        <Editor
+                            height="100%"
+                            defaultLanguage="json"
+                            theme="vs-dark"
+                            value={output}
+                            options={{
+                                readOnly: true,
+                                minimap: { enabled: false },
+                                fontSize: 13,
+                                wordWrap: "on",
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
 
-            <div className="flex flex-wrap gap-4 py-4">
-                <Button onClick={handleFormat}>
+            <div className="flex flex-wrap gap-4 py-4 justify-center">
+                <Button onClick={handleFormat} size="lg">
                     <Maximize className="mr-2 h-4 w-4" /> Format / Prettify
                 </Button>
-                <Button onClick={handleMinify} variant="secondary">
+                <Button onClick={handleMinify} variant="secondary" size="lg">
                     <Minimize className="mr-2 h-4 w-4" /> Minify
-                </Button>
-                <Button onClick={handleFormat} variant="outline" className="hidden">
-                    <ShieldCheck className="mr-2 h-4 w-4" /> Validate
                 </Button>
             </div>
 

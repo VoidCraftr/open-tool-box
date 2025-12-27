@@ -12,6 +12,8 @@ import {
     Keyboard,
     Database,
     RefreshCcw,
+    Binary,
+    Clock,
     LucideIcon
 } from "lucide-react"
 
@@ -60,6 +62,14 @@ export const tools: ToolMetadata[] = [
         description: "Generate random UUIDs (v4) in bulk.",
         category: "developer",
         icon: Fingerprint,
+        isNew: true,
+    },
+    {
+        slug: "cron-generator",
+        name: "Cron Generator",
+        description: "Create and explain cron schedules with next run dates preview.",
+        category: "developer",
+        icon: Clock,
         isNew: true,
     },
     {

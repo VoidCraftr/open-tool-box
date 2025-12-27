@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link";
-import { ArrowRight, Star } from "lucide-react";
+import { ArrowRight, Star, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,7 +25,12 @@ export default function Home() {
           <Link href="/tools">
             <Button size="lg" className="px-8">Explore All Tools</Button>
           </Link>
-          <Button variant="outline" size="lg">Star on GitHub</Button>
+          <a href="https://github.com/voidcraftr/nexus-tools" target="_blank" rel="noreferrer">
+            <Button variant="outline" size="lg">
+              <Github className="mr-2 h-4 w-4" />
+              Star on GitHub
+            </Button>
+          </a>
         </div>
       </section>
 
