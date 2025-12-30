@@ -1,5 +1,6 @@
 import {
     Code,
+    Pen,
     FileImage,
     Lock,
     Type,
@@ -244,6 +245,23 @@ export const tools: ToolMetadata[] = [
         description: "Convert JPG/PNG images to a single PDF document online.",
         category: "pdf",
         icon: FileUp,
+        isNew: true,
+    },
+    {
+        slug: "signature-generator",
+        name: "Signature Generator",
+        description: "Create digital signatures and sign PDF documents online.",
+        category: "pdf",
+        icon: Pen,
+        isNew: true,
+        isPopular: true,
+    },
+    {
+        slug: "sign-pdf",
+        name: "Sign PDF Online",
+        description: "Upload and sign PDF documents. Add signatures to all pages instantly.",
+        category: "pdf",
+        icon: Pen,
         isNew: true,
     },
 
