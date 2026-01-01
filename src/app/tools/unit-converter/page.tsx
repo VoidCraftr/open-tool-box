@@ -106,6 +106,7 @@ export default function UnitConverterPage() {
             title="Unit Converter"
             description="Convert between common measurements for length, weight, and temperature."
             adSlot="unit-converter-slot"
+            toolSlug="unit-converter"
         >
             <Tabs defaultValue="length" onValueChange={(v) => { setCategory(v); setFromUnit(v === 'temperature' ? 'c' : v === 'weight' ? 'kg' : 'm'); setToUnit(v === 'temperature' ? 'f' : v === 'weight' ? 'lb' : 'ft'); }}>
                 <TabsList className="grid w-full grid-cols-3">

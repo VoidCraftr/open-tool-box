@@ -46,6 +46,7 @@ export default function QrCodeGeneratorPage() {
             title="QR Code Generator"
             description="Create customizable QR codes for links, text, and more. Download in high resolution."
             adSlot="qr-code-slot"
+            toolSlug="qr-code-generator"
         >
             <div className="grid gap-8 md:grid-cols-2">
                 <div className="space-y-6">

@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Percent, ArrowRight, ArrowUp, ArrowDown } from "lucide-react"
+import { ToolWrapper } from "@/components/tools/ToolWrapper"
 
 export default function PercentageCalculator() {
     // Mode 1: What is X% of Y?
@@ -57,14 +58,11 @@ export default function PercentageCalculator() {
     }, [m3_from, m3_to])
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8">
-            <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tight">Percentage Calculator</h1>
-                <p className="text-muted-foreground">
-                    Calculate percentages, find what percent a number is of another, and determine percentage increase or decrease.
-                </p>
-            </div>
-
+        <ToolWrapper
+            title="Percentage Calculator"
+            description="Calculate percentages, find what percent a number is of another, and determine percentage increase or decrease."
+            toolSlug="percentage-calculator"
+        >
             <div className="grid gap-8">
                 {/* Mode 1 */}
                 <Card>
@@ -191,6 +189,6 @@ export default function PercentageCalculator() {
                     </CardContent>
                 </Card>
             </div>
-        </div>
+        </ToolWrapper>
     )
 }

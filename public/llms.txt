@@ -1,23 +1,41 @@
-# OpenToolBox project context for LLMs
+# OpenToolBox
 
-title: OpenToolBox
-description: A comprehensive collection of free, open-source, and secure developer tools.
-url: https://tools.voidcraftr.com
+OpenToolBox is a collection of 25+ free, privacy-focused online tools for developers, designers, and creators. All tools run client-side in the browser, ensuring data never leaves the user's device.
 
-# Core Features
-- 100% Client-side processing for privacy
-- Developer Tools: JSON Formatter, SQL Formatter, JWT Decoder, UUID Generator
-- Design Tools: Image Converter, Box Shadow Generator, Gradient Generator
-- Security Tools: Password Generator
-- General Tools: QR Code Generator, Unit Converter
+## Core Tools
 
-# Tech Stack
-- Framework: Next.js 15 (App Router)
-- Language: TypeScript
-- Styling: Tailwind CSS
-- Components: Shadcn/UI
-- Icons: Lucide React
+### Developer
+- **JSON Formatter**: Validator, minifier, and formatter.
+- **SQL Formatter**: Prettify SQL queries.
+- **JWT Decoder**: Decode JSON Web Tokens securely.
+- **UUID Generator**: Generate v4 UUIDs in bulk.
+- **Cron Generator**: Create Cron expressions visually.
 
-# Purpose
-To provide a fast, secure, and beautiful alternative to ad-heavy tool sites. 
-We prioritize user experience and privacy above all.
+### Design & Media
+- **Image Converter**: Convert images to WebP/PNG/JPG.
+- **SVG to PNG**: Convert vector SVGs to raster images.
+- **Box Shadow Generator**: Visual generator for CSS box-shadows.
+- **Gradient Generator**: CSS linear/radial gradient maker.
+
+### Security
+- **Password Generator**: Create secure, random passwords.
+- **Password Strength**: Estimate crack times for passwords.
+
+### Productivity
+- **Pomodoro Timer**: Focus timer with custom intervals.
+- **Unit Converter**: Convert length, weight, temperature, etc.
+- **QR Code Generator**: Create QR codes with logos.
+- **PDF Tools**: Image to PDF, Sign PDF.
+
+### Social
+- **YouTube Thumbnail**: Download video thumbnails.
+- **Tweet to Image**: Create fake tweet screenshots.
+
+## Technical Details
+- URL: https://opentoolbox.online
+- Stack: Next.js 15, React, Tailwind CSS, Shadcn UI.
+- Privacy: 100% Client-side processing. No database for tool data.
+
+## Usage
+Tools are accessible via direct URL structure: `https://opentoolbox.online/tools/[slug]`.
+Example: `https://opentoolbox.online/tools/json-formatter`

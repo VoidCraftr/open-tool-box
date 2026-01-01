@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { MessageCircle, ExternalLink, Copy, Check } from "lucide-react"
+import { ToolWrapper } from "@/components/tools/ToolWrapper"
 
 export default function WhatsAppLink() {
     const [phone, setPhone] = useState("")
@@ -29,14 +30,11 @@ export default function WhatsAppLink() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8">
-            <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tight">WhatsApp Link Generator</h1>
-                <p className="text-muted-foreground">
-                    Create a direct link to a WhatsApp chat with a pre-filled message.
-                </p>
-            </div>
-
+        <ToolWrapper
+            title="WhatsApp Link Generator"
+            description="Create a direct link to a WhatsApp chat with a pre-filled message."
+            toolSlug="whatsapp-link"
+        >
             <div className="grid gap-8 md:grid-cols-2">
                 <Card>
                     <CardHeader>
@@ -95,6 +93,6 @@ export default function WhatsAppLink() {
                     </CardContent>
                 </Card>
             </div>
-        </div>
+        </ToolWrapper>
     )
 }

@@ -33,11 +33,11 @@ export function MobileNav() {
                 </Button>
             </SheetTrigger>
             <SheetContent side="left" className="pr-0 flex flex-col h-full w-[300px] sm:w-[350px]">
-                <SheetHeader className="px-1">
-                    <SheetTitle className="text-left">
-                        <Link href="/" onClick={() => setOpen(false)} className="flex items-center">
-                            <Package2 className="mr-2 h-4 w-4" />
-                            <span className="font-bold">OpenToolbox</span>
+                <SheetHeader className="px-1 pt-6 text-left">
+                    <SheetTitle>
+                        <Link href="/" onClick={() => setOpen(false)} className="flex items-center pl-2">
+                            <Package2 className="mr-2 h-5 w-5 text-primary" />
+                            <span className="font-bold text-lg">OpenToolbox</span>
                         </Link>
                     </SheetTitle>
                 </SheetHeader>

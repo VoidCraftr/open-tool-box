@@ -59,6 +59,7 @@ export default function BoxShadowGeneratorPage() {
             title="Box Shadow Generator"
             description="Create beautiful CSS box shadows visually. Stack multiple layers for realistic depth."
             adSlot="box-shadow-slot"
+            toolSlug="box-shadow-generator"
         >
             <div className="grid gap-8 lg:grid-cols-2">
                 {/* Controls */}

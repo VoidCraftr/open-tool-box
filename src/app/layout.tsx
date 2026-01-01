@@ -49,7 +49,7 @@ export const metadata: Metadata = {
 
     // General / Productivity
     "qr code generator", "unit converter", "word counter", "text diff viewer", "pomodoro timer",
-    "loan calculator", "bmi calculator", "age calculator"
+    "loan calculator", "bmi calculator", "age calculator", "case converter", "text transformer"
   ],
   authors: [{ name: "VoidCraftr", url: "https://github.com/voidcraftr" }],
   creator: "VoidCraftr",

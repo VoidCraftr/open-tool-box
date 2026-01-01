@@ -9,7 +9,17 @@ import { PremiumCard } from "@/components/common/PremiumCard";
 import { motion } from "framer-motion";
 
 export default function Home() {
-  const featuredTools = tools.filter(t => t.isPopular || t.isNew).slice(0, 6);
+  // Hand-picked popular tools for a diverse showcase
+  const featuredSlugs = [
+    "json-formatter",
+    "image-converter",
+    "password-generator",
+    "qr-code-generator",
+    "youtube-thumbnail",
+    "sign-pdf"
+  ];
+
+  const featuredTools = tools.filter(t => featuredSlugs.includes(t.slug));
 
   // Categorize tools for the sliders
   const row1Tools = tools.filter(t => ["developer", "security", "text"].includes(t.category));

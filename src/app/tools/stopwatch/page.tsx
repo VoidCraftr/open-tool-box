@@ -97,6 +97,7 @@ export default function StopwatchPage() {
             title="Stopwatch & Timer"
             description="Simple online stopwatch with laps and countdown timer."
             adSlot="stopwatch-slot"
+            toolSlug="stopwatch"
         >
             <Tabs defaultValue="stopwatch" className="w-full">
                 <TabsList className="grid w-full grid-cols-2 mb-8">

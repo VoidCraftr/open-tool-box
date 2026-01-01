@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts"
 import { DollarSign, Calendar, Percent } from "lucide-react"
+import { ToolWrapper } from "@/components/tools/ToolWrapper"
 
 export default function LoanCalculator() {
     const [amount, setAmount] = useState(10000)
@@ -43,14 +44,11 @@ export default function LoanCalculator() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8">
-            <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tight">Loan Calculator</h1>
-                <p className="text-muted-foreground">
-                    Calculate your monthly loan payments (EMI) and total interest payable.
-                </p>
-            </div>
-
+        <ToolWrapper
+            title="Loan Calculator"
+            description="Calculate your monthly loan payments (EMI) and total interest payable."
+            toolSlug="loan-calculator"
+        >
             <div className="grid gap-8 md:grid-cols-2">
                 <Card>
                     <CardHeader>
@@ -184,6 +182,6 @@ export default function LoanCalculator() {
                     </Card>
                 </div>
             </div>
-        </div>
+        </ToolWrapper>
     )
 }

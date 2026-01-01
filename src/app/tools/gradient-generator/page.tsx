@@ -51,6 +51,7 @@ export default function GradientGeneratorPage() {
             title="Gradient Generator"
             description="Design beautiful CSS gradients. Customize colors, angle, and type."
             adSlot="gradient-slot"
+            toolSlug="gradient-generator"
         >
             <div className="grid gap-8 lg:grid-cols-2">
                 <div className="space-y-6">

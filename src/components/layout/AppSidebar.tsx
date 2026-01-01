@@ -152,6 +152,7 @@ export function AppSidebar({ isCollapsed, setIsCollapsed }: AppSidebarProps) {
                                                                     "w-full justify-start font-normal h-8 text-sm",
                                                                     pathname.includes(tool.slug) ? "bg-accent/50 text-accent-foreground font-medium" : "text-muted-foreground/80 hover:text-foreground"
                                                                 )}
+                                                                onClick={() => setIsCollapsed(true)} // Auto-collapse on selection for focus
                                                             >
                                                                 <span className="truncate">{tool.name}</span>
                                                                 {tool.isNew && <span className="ml-auto text-[9px] uppercase font-bold text-blue-500 bg-blue-500/10 px-1.5 py-0.5 rounded-full">New</span>}

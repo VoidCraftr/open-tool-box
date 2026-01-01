@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Activity, Info } from "lucide-react"
+import { ToolWrapper } from "@/components/tools/ToolWrapper"
 
 export default function BMICalculator() {
     const [unit, setUnit] = useState<"metric" | "imperial">("metric")
@@ -69,14 +70,11 @@ export default function BMICalculator() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8">
-            <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tight">BMI Calculator</h1>
-                <p className="text-muted-foreground">
-                    Calculate your Body Mass Index (BMI) to check if you are in a healthy weight range.
-                </p>
-            </div>
-
+        <ToolWrapper
+            title="BMI Calculator"
+            description="Calculate your Body Mass Index (BMI) to check if you are in a healthy weight range."
+            toolSlug="bmi-calculator"
+        >
             <div className="grid gap-8 md:grid-cols-[1fr_350px]">
                 <Card>
                     <CardHeader>
@@ -195,6 +193,6 @@ export default function BMICalculator() {
                     </CardContent>
                 </Card>
             </div>
-        </div>
+        </ToolWrapper>
     )
 }

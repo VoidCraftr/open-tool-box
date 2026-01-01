@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Calendar, PartyPopper } from "lucide-react"
+import { ToolWrapper } from "@/components/tools/ToolWrapper"
 
 export default function AgeCalculator() {
     const [birthDate, setBirthDate] = useState("")
@@ -61,14 +62,11 @@ export default function AgeCalculator() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8">
-            <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tight">Age Calculator</h1>
-                <p className="text-muted-foreground">
-                    Calculate your exact age in years, months, and days. Find out when your next birthday is.
-                </p>
-            </div>
-
+        <ToolWrapper
+            title="Age Calculator"
+            description="Calculate your exact age in years, months, and days. Find out when your next birthday is."
+            toolSlug="age-calculator"
+        >
             <div className="grid gap-8 md:grid-cols-2">
                 <Card className="h-fit">
                     <CardHeader>
@@ -159,6 +157,6 @@ export default function AgeCalculator() {
                     </div>
                 )}
             </div>
-        </div>
+        </ToolWrapper>
     )
 }
