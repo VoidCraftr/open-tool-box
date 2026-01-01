@@ -23,7 +23,7 @@ export function ToolWrapper({
     className,
 }: ToolWrapperProps) {
     return (
-        <div className={cn("mx-auto max-w-4xl space-y-6", className)}>
+        <div className={cn("mx-auto max-w-4xl space-y-2 md:space-y-6", className)}>
             <div className="space-y-2 text-center md:text-left">
                 <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
                     {title}

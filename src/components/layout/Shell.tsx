@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Coffee } from "lucide-react"
 
 import { CommandMenu } from "@/components/common/CommandMenu"
-import { Search, Github } from "lucide-react"
+import { Search, Github, Package2 } from "lucide-react"
 
 export function Shell({ children }: { children: React.ReactNode }) {
     const [isCollapsed, setIsCollapsed] = useState(true)
@@ -27,9 +27,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
                     isCollapsed ? "md:pl-[60px]" : "md:pl-64 lg:pl-72"
                 )}
             >
-                <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-6">
-                    <div className="md:hidden">
+                <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6">
+                    <div className="md:hidden flex items-center gap-3">
                         <MobileNav />
+                        <Link href="/" className="flex items-center gap-2">
+                            <Package2 className="h-5 w-5" />
+                            <span className="font-semibold text-lg">OpenToolBox</span>
+                        </Link>
                     </div>
 
                     {/* Search Trigger */}
@@ -77,7 +81,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 </header>
 
                 <CommandMenu open={commandOpen} onOpenChange={setCommandOpen} />
-                <main className="flex-1 container py-6 max-w-7xl mx-auto">{children}</main>
+                <main className="flex-1 container py-2 md:py-6 max-w-7xl mx-auto">{children}</main>
                 <Footer />
             </div>
         </div>
