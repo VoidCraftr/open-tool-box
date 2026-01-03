@@ -31,7 +31,10 @@ import {
     Hash,
     Twitter,
     Link,
-    Shuffle
+    Shuffle,
+    Instagram,
+    Facebook,
+    Linkedin
 } from "lucide-react"
 
 export type ToolCategory = "developer" | "design" | "security" | "media" | "text" | "social" | "general" | "math" | "finance" | "health" | "pdf"
@@ -380,6 +383,30 @@ export const tools: ToolMetadata[] = [
         description: "Convert tweets into beautiful shareable images.",
         category: "social",
         icon: Twitter,
+        isNew: true,
+    },
+    {
+        slug: "instagram-post-generator",
+        name: "Instagram Post Generator",
+        description: "Create realistic fake Instagram posts with custom content.",
+        category: "social",
+        icon: Instagram,
+        isNew: true,
+    },
+    {
+        slug: "facebook-post-generator",
+        name: "Facebook Post Generator",
+        description: "Generate lifelike Facebook post mockups with reactions.",
+        category: "social",
+        icon: Facebook,
+        isNew: true,
+    },
+    {
+        slug: "linkedin-post-generator",
+        name: "LinkedIn Post Generator",
+        description: "Create professional fake LinkedIn posts with custom headlines.",
+        category: "social",
+        icon: Linkedin,
         isNew: true,
     },
 

@@ -126,7 +126,7 @@ export default function Base64EncoderClient() {
                                 <Label>Input {mode === "encode" ? "Text" : "Base64"}</Label>
                                 <Textarea
                                     placeholder={mode === "encode" ? "Type text to encode..." : "Paste Base64 string to decode..."}
-                                    className="min-h-[300px] font-mono text-sm"
+                                    className="min-h-[300px] max-h-[500px] overflow-y-auto font-mono text-sm"
                                     value={textInput}
                                     onChange={(e) => setTextInput(e.target.value)}
                                 />
@@ -138,7 +138,7 @@ export default function Base64EncoderClient() {
                                     <Textarea
                                         readOnly
                                         placeholder="Result will appear here..."
-                                        className={`min-h-[300px] font-mono text-sm ${error ? "text-destructive" : "bg-muted"}`}
+                                        className={`min-h-[300px] max-h-[500px] overflow-y-auto font-mono text-sm ${error ? "text-destructive" : "bg-muted"}`}
                                         value={textOutput}
                                     />
                                     <div className="absolute top-2 right-2 flex gap-2">
@@ -197,7 +197,7 @@ export default function Base64EncoderClient() {
                                             <Textarea
                                                 readOnly
                                                 value={imageOutput}
-                                                className="min-h-[200px] font-mono text-sm bg-muted"
+                                                className="min-h-[200px] max-h-[500px] overflow-y-auto font-mono text-sm bg-muted"
                                             />
                                             <div className="absolute top-2 right-2 flex gap-2">
                                                 <Button size="icon" variant="secondary" onClick={copyImageOutput} title="Copy Base64">
@@ -214,7 +214,7 @@ export default function Base64EncoderClient() {
                                     <Label>Paste Base64 String</Label>
                                     <Textarea
                                         placeholder="data:image/png;base64,..."
-                                        className="min-h-[150px] font-mono text-sm"
+                                        className="min-h-[150px] max-h-[500px] overflow-y-auto font-mono text-sm"
                                         onChange={(e) => setImageInput(e.target.value)}
                                         value={imageInput || ""}
                                     />

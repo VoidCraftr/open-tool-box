@@ -38,6 +38,8 @@
     "cronstrue": "^3.9.0",
     "diff": "^8.0.2",
     "framer-motion": "^12.23.26",
+    "html-to-image": "^1.11.13",
+    "html2canvas": "^1.4.1",
     "jspdf": "^3.0.4",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.562.0",
