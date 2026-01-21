@@ -5,7 +5,7 @@
 
 export const adsConfig = {
     // Google AdSense Publisher ID (replace with your actual ID)
-    publisherId: 'ca-pub-XXXXXXXXXXXXXXXX', // TODO: Replace with actual AdSense ID
+    publisherId: 'ca-pub-7580545209042591',
 
     // Ad Unit IDs (create these in your AdSense dashboard)
     adSlots: {
