@@ -148,6 +148,7 @@ export default function Home() {
               description={tool.description}
               isNew={tool.isNew}
               isPopular={tool.isPopular}
+              isPremium={tool.isPremium}
             />
           ))}
         </div>

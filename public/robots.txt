@@ -1,0 +1,145 @@
+# OpenToolBox Robots.txt
+# Privacy-focused online tools platform
+# https://opentoolbox.online
+
+# Default Rules for All Agents
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/static/
+Disallow: /*.json$
+
+# Sitemap References
+Sitemap: https://opentoolbox.online/sitemap.xml
+Sitemap: https://opentoolbox.online/llms.txt
+
+# Google Bot
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0.5
+
+# Google Image Bot
+User-agent: Googlebot-Image
+Allow: /
+Disallow: /_next/
+
+# Bing Bot
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# AI Agent: OpenAI GPT Bot
+User-agent: GPTBot
+Allow: /
+Allow: /tools/
+Allow: /llms.txt
+Allow: /ai.txt
+Crawl-delay: 2
+
+# AI Agent: ChatGPT User (browsing mode)
+User-agent: ChatGPT-User
+Allow: /
+Allow: /tools/
+Allow: /llms.txt
+Allow: /ai.txt
+
+# AI Agent: Anthropic Claude
+User-agent: Claude-Web
+Allow: /
+Allow: /tools/
+Allow: /llms.txt
+Allow: /ai.txt
+Crawl-delay: 2
+
+# AI Agent: Google Bard/Gemini
+User-agent: Google-Extended
+Allow: /
+Allow: /tools/
+Allow: /llms.txt
+Allow: /ai.txt
+
+# AI Agent: Common Crawl (used by many AI models)
+User-agent: CCBot
+Allow: /
+Allow: /llms.txt
+Allow: /ai.txt
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+Allow: /llms.txt
+Allow: /ai.txt
+Crawl-delay: 2
+
+# Brave Search
+User-agent: Brave-Ads-Crawler
+Disallow: /
+
+User-agent: Brave-Search
+Allow: /
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+
+# Yandex
+User-agent: YandexBot
+Allow: /
+Crawl-delay: 2
+
+# Baidu
+User-agent: Baiduspider
+Allow: /
+
+# Facebook/Meta (for Open Graph previews)
+User-agent: facebookexternalhit
+Allow: /
+
+# Twitter/X (for Twitter Cards)
+User-agent: Twitterbot
+Allow: /
+
+# LinkedIn (for social previews)
+User-agent: LinkedInBot
+Allow: /
+
+# Slack (for link previews)
+User-agent: Slackbot
+Allow: /
+
+# Discord (for link embeds)
+User-agent: Discordbot
+Allow: /
+
+# Telegram (for link previews)
+User-agent: TelegramBot
+Allow: /
+
+# WhatsApp (for link previews)
+User-agent: WhatsApp
+Allow: /
+
+# Block Bad Bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Block AI Training Bots (Optional - uncomment if you want to block)
+# User-agent: anthropic-ai
+# Disallow: /
+
+# User-agent: Applebot-Extended
+# Disallow: /
+
+# Additional Information
+# For AI/LLM agents: See /llms.txt and /ai.txt for structured information
+# Privacy Policy: https://opentoolbox.online/privacy
+# Terms of Service: https://opentoolbox.online/terms

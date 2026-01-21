@@ -13,7 +13,7 @@ export default function PrivacyPage() {
             <div className="text-center space-y-4">
                 <h1 className="text-4xl font-extrabold tracking-tight">Privacy Policy</h1>
                 <p className="text-lg text-muted-foreground">
-                    Last updated: December 2025
+                    Last updated: January 2026
                 </p>
             </div>
 
@@ -30,11 +30,11 @@ export default function PrivacyPage() {
                     </div>
                     <div className="flex items-start gap-2">
                         <Eye className="h-4 w-4 mt-0.5 opacity-70" />
-                        <span>We do not track your personal inputs.</span>
+                        <span>We minimize data collection to what is necessary.</span>
                     </div>
                     <div className="flex items-start gap-2">
                         <Server className="h-4 w-4 mt-0.5 opacity-70" />
-                        <span>We do not sell your data.</span>
+                        <span>We do not sell your personal data.</span>
                     </div>
                 </div>
             </div>
@@ -45,39 +45,50 @@ export default function PrivacyPage() {
             <div className="prose prose-slate dark:prose-invert max-w-none prose-ul:list-disc prose-ul:pl-6 prose-li:marker:text-blue-500">
                 <h3>1. Introduction</h3>
                 <p>
-                    OpenToolbox ("we", "us", or "our") operates the OpenToolbox website. We respect your privacy and are committed to protecting it through our compliance with this policy.
+                    OpenToolbox ("we", "us", or "our") operates the OpenToolbox website. We respect your privacy and are committed to protecting it through our compliance with this policy. This policy describes the types of information we may collect from you or that you may provide when you visit our website and our practices for collecting, using, maintaining, protecting, and disclosing that information.
                 </p>
 
                 <h3>2. Information We Collect</h3>
                 <p>
-                    Because OpenToolbox is a client-side first application, we collect minimal data:
+                    OpenToolbox is designed as a client-side first application. This means the vast majority of your data processing happens locally on your device.
                 </p>
                 <ul>
-                    <li><strong>Usage Data:</strong> We may use privacy-friendly analytics (like Vercel Analytics) to understand which tools are popular. This data is anonymized.</li>
-                    <li><strong>No Input Data:</strong> The images you convert, the JSON you format, and the passwords you generate <strong>never leave your device</strong>. They are processed entirely within your browser's memory.</li>
+                    <li><strong>Tool Input Data:</strong> The images you upload, the JSON you format, and the passwords you generate <strong>never leave your device</strong>. They are processed entirely within your browser's memory and are not stored on our servers.</li>
+                    <li><strong>Usage Data:</strong> We collect information about how you interact with our site to improve the user experience. This includes pages visited, tools used, and technical information like your browser type and operating system.</li>
                 </ul>
 
-                <h3>3. Cookies</h3>
+                <h3>3. Third-Party Analytics & Tracking</h3>
                 <p>
-                    We use local storage (localStorage) to save your preferences, such as:
+                    We use several third-party services to monitor and analyze the use of our Service:
+                </p>
+                <ul>
+                    <li><strong>Google Analytics:</strong> A web analytics service offered by Google that tracks and reports website traffic. Google uses the data collected to track and monitor the use of our Service. This data is shared with other Google services. Google may use the collected data to contextualize and personalize the ads of its own advertising network.</li>
+                    <li><strong>Microsoft Clarity:</strong> We partner with Microsoft Clarity and Microsoft Advertising to capture how you use and interact with our website through behavioral metrics, heatmaps, and session replay to improve and market our products/services. For more information about how Microsoft collects and uses your data, visit the <a href="https://privacy.microsoft.com/en-us/privacystatement" target="_blank" rel="noopener noreferrer">Microsoft Privacy Statement</a>.</li>
+                </ul>
+
+                <h3>4. Advertising (Google AdSense)</h3>
+                <p>
+                    We use Google AdSense to serve advertisements on our site. Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to our site and/or other sites on the Internet.
+                </p>
+                <ul>
+                    <li>Users may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Ads Settings</a>.</li>
+                    <li>We comply with Google's Publisher Policies and strive to ensure a high-quality ad experience.</li>
+                </ul>
+
+                <h3>5. Cookies & Local Storage</h3>
+                <p>
+                    We use cookies and similar tracking technologies to track the activity on our Service and hold certain information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.
+                </p>
+                <p>
+                    We also use <strong>Local Storage</strong> to save your preferences, such as:
                 </p>
                 <ul>
                     <li>Dark/Light mode preference</li>
                     <li>Sidebar collapse state</li>
-                    <li>"Pro" simulation toggle</li>
-                </ul>
-                <p>These are strictly necessary for the site to function as you expect.</p>
-
-                <h3>4. Third-Party Services</h3>
-                <p>
-                    We may use third-party services for specific non-critical functions:
-                </p>
-                <ul>
-                    <li><strong>GitHub:</strong> For hosting our open-source code.</li>
-                    <li><strong>Vercel:</strong> For hosting the website infrastructure.</li>
+                    <li>Recent tools history</li>
                 </ul>
 
-                <h3>5. Contact Us</h3>
+                <h3>6. Contact Us</h3>
                 <p>
                     If you have any questions about this Privacy Policy, please contact us at <a href="mailto:satyam.agarwal.ai@gmail.com">satyam.agarwal.ai@gmail.com</a>.
                 </p>

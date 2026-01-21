@@ -34,7 +34,11 @@ import {
     Shuffle,
     Instagram,
     Facebook,
-    Linkedin
+    Linkedin,
+    Video,
+    ImagePlus,
+    Eraser,
+    PaintBucket
 } from "lucide-react"
 
 export type ToolCategory = "developer" | "design" | "security" | "media" | "text" | "social" | "general" | "math" | "finance" | "health" | "pdf"
@@ -418,6 +422,46 @@ export const tools: ToolMetadata[] = [
         category: "general",
         icon: TimerReset,
         isNew: true,
+    },
+
+    // --- NEW: Popular Media Tools ---
+    {
+        slug: "video-enhancer",
+        name: "AI Video Enhancer",
+        description: "Enhance video quality - upscale resolution, reduce noise, stabilize footage online for free.",
+        category: "media",
+        icon: Video,
+        isNew: true,
+        isPopular: true,
+        isPremium: true,
+    },
+    {
+        slug: "photo-enhancer",
+        name: "Photo Enhancer AI",
+        description: "Enhance photo quality with AI - auto color correction, sharpen, denoise, and upscale images online.",
+        category: "media",
+        icon: ImagePlus,
+        isNew: true,
+        isPopular: true,
+        isPremium: true,
+    },
+    {
+        slug: "watermark-remover",
+        name: "Watermark Remover",
+        description: "Remove watermarks from photos and videos online - AI-powered watermark eraser for images.",
+        category: "media",
+        icon: Eraser,
+        isNew: true,
+        isPopular: true,
+    },
+    {
+        slug: "image-editor",
+        name: "Online Image Editor",
+        description: "Free online image editor - crop, resize, add filters, text, shapes, and effects to photos.",
+        category: "design",
+        icon: PaintBucket,
+        isNew: true,
+        isPopular: true,
     },
 ]
 

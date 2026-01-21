@@ -20,7 +20,7 @@ In a web cluttered with ad-heavy, slow, and data-hungry tool sites, **OpenToolBo
 -   **⚡ Blazing Fast:** Built on Next.js 15 for instant page loads and seamless transitions.
 -   **🎨 Beautiful Design:** Modern, dark-mode first UI built with Tailwind CSS 4 and shadcn/ui.
 -   **🛡️ Secure:** No tracking pixels, no hidden scripts. Just pure utility.
--   **📂 Comprehensive:** Over 30+ tools across development, design, security, and media.
+-   **📂 Comprehensive:** Over 50+ tools across development, design, security, media, and more.
 
 ---
 
@@ -39,6 +39,10 @@ We are constantly adding new tools. Here is what's currently available:
 -   **CSS Flexbox Playground:** Visual layout generator.
 
 ### 🎨 Design & Media
+-   **Video Enhancer:** AI-powered video quality improvement - upscale, denoise, and stabilize.
+-   **Photo Enhancer:** Auto-enhance photos with AI - color correction, sharpening, and more.
+-   **Watermark Remover:** Remove watermarks from images with multiple removal methods.
+-   **Image Editor:** Full-featured online image editor with filters, text, and shapes.
 -   **Image Converter:** Convert JPG/PNG to WebP/AVIF.
 -   **Image Resizer:** Pixel-perfect resizing.
 -   **SVG to PNG/JPG:** Vector conversion.

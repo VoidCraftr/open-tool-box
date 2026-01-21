@@ -196,8 +196,21 @@ function ToolCard({ tool, mousePosition }: { tool: any, mousePosition: { x: numb
                         <Icon className="h-6 w-6 text-foreground group-hover:text-primary transition-colors" />
                     </div>
                     <div className="flex gap-2">
-                        {tool.isNew && <span className="flex h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" title="New Code"></span>}
-                        {tool.isPopular && <span className="flex h-2 w-2 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.5)]" title="Popular"></span>}
+                        {tool.isNew && (
+                            <Badge variant="secondary" className="bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 border-blue-500/20 text-[10px] font-bold tracking-wider px-2 py-0">
+                                NEW
+                            </Badge>
+                        )}
+                        {tool.isPopular && (
+                            <Badge variant="secondary" className="bg-orange-500/10 text-orange-500 hover:bg-orange-500/20 border-orange-500/20 text-[10px] font-bold tracking-wider px-2 py-0">
+                                POPULAR
+                            </Badge>
+                        )}
+                        {tool.isPremium && (
+                            <Badge variant="secondary" className="bg-purple-500/10 text-purple-500 hover:bg-purple-500/20 border-purple-500/20 text-[10px] font-bold tracking-wider px-2 py-0">
+                                PREMIUM
+                            </Badge>
+                        )}
                     </div>
                 </div>
 

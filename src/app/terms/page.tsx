@@ -13,7 +13,7 @@ export default function TermsPage() {
             <div className="text-center space-y-4">
                 <h1 className="text-4xl font-extrabold tracking-tight">Terms of Service</h1>
                 <p className="text-lg text-muted-foreground">
-                    Last updated: December 2025
+                    Last updated: January 2026
                 </p>
             </div>
 
@@ -30,11 +30,11 @@ export default function TermsPage() {
                     </div>
                     <div className="flex items-start gap-2">
                         <Scale className="h-4 w-4 mt-0.5 opacity-70" />
-                        <span>You retain rights to your generated content.</span>
+                        <span>The site is ad-supported to remain free.</span>
                     </div>
                     <div className="flex items-start gap-2">
                         <AlertCircle className="h-4 w-4 mt-0.5 opacity-70" />
-                        <span>We are not liable for data loss (client-side).</span>
+                        <span>We are not liable for data loss or tool inaccuracy.</span>
                     </div>
                 </div>
             </div>
@@ -48,32 +48,37 @@ export default function TermsPage() {
                     By accessing OpenToolbox, you agree to be bound by these Terms of Service. If you disagree with any part of these terms, you may not access the service.
                 </p>
 
-                <h3>2. Intellectual Property</h3>
+                <h3>2. Ad-Supported Service</h3>
                 <p>
-                    The service and its original content (excluding content provided by users), features, and functionality are and will remain the exclusive property of OpenToolbox.
+                    OpenToolbox is a free service supported by advertising. To keep our tools free for everyone, we display advertisements provided by third-party networks like Google AdSense. By using the service, you acknowledge that we may display such advertisements.
                 </p>
 
-                <h3>3. User Responsibilities</h3>
+                <h3>3. Intellectual Property</h3>
+                <p>
+                    The service and its original content, features, and functionality are and will remain the exclusive property of OpenToolbox. Users retain full ownership and rights to any content they process or generate using our tools.
+                </p>
+
+                <h3>4. User Responsibilities</h3>
                 <p>You agree not to use the service to:</p>
                 <ul>
                     <li>Process illegal content or generate malicious data.</li>
-                    <li>Attempt to reverse engineer the application code.</li>
-                    <li>Overload our infrastructure with excessive automated requests.</li>
+                    <li>Attempt to disrupt or interfere with the service infrastructure.</li>
+                    <li>Use automated systems (bots) to scrape data or overload the tools.</li>
                 </ul>
 
-                <h3>4. Disclaimer</h3>
+                <h3>5. Disclaimer</h3>
                 <p>
-                    Our tools are provided on an "AS IS" and "AS AVAILABLE" basis. We do not warrant that the results of using the tools will be accurate or reliable for critical production use cases without your own verification.
+                    Our tools are provided on an "AS IS" and "AS AVAILABLE" basis. While we strive for accuracy, we do not warrant that the results of using the tools will be 100% accurate, reliable, or suitable for critical production use cases without independent verification.
                 </p>
 
-                <h3>5. Limitation of Liability</h3>
+                <h3>6. Limitation of Liability</h3>
                 <p>
                     In no event shall OpenToolbox be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of the service.
                 </p>
 
-                <h3>6. Changes</h3>
+                <h3>7. Changes</h3>
                 <p>
-                    We reserve the right to modify or replace these Terms at any time. By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms.
+                    We reserve the right to modify or replace these Terms at any time. By continuing to access our Service after those revisions become effective, you agree to be bound by the revised terms.
                 </p>
             </div>
         </div>

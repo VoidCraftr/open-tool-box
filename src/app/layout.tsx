@@ -6,6 +6,8 @@ import { CommandMenu } from "@/components/common/CommandMenu";
 import { AuthProvider } from "@/components/premium/AuthProvider";
 import { MicrosoftClarity } from "@/components/analytics/MicrosoftClarity";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { AdSenseScript } from "@/components/ads/AdSense";
+import { generateOrganizationSchema, generateWebApplicationSchema } from "@/config/seo.config";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,32 +26,76 @@ export const metadata: Metadata = {
     default: "OpenToolBox - Free Online Developer & Security Tools",
     template: "%s | OpenToolBox"
   },
-  description: "OpenToolBox is the Ultimate Developer Toolbox. A comprehensive collection of 100% free, privacy-focused, and secure online tools. 100% Client-side processing means your data never leaves your browser. JSON Formatter, Base64 Encoder, Image Tools, and more.",
+  description: "OpenToolBox: 50+ free online tools for developers, designers, and creators. JSON formatter, image converter, video enhancer, watermark remover, password generator, and more. Privacy-focused with client-side processing. Ad-supported to stay free forever.",
   keywords: [
-    // Brand
-    "OpenToolbox", "free developers tools", "privacy focused tools", "secure online tools",
+    // Brand & Core
+    "opentoolbox", "free online tools", "developer tools", "media tools", "privacy tools", "free tools online", "web tools", "online utilities",
 
-    // Developer
-    "json formatter", "sql beautifier", "jwt decoder", "uuid generator", "cron schedule generator", "keycode finder",
+    // Developer Tools (30+ keywords)
+    "json formatter", "json validator", "json minifier", "beautify json", "format json online", "json prettifier",
+    "sql formatter", "sql beautifier", "prettify sql", "format sql online", "sql query formatter",
+    "jwt decoder", "jwt debugger", "decode jwt token", "jwt token decoder online", "json web token decoder",
+    "uuid generator", "guid generator", "unique id generator", "uuid v4 generator", "generate uuid online",
+    "base64 encoder", "base64 decoder", "encode base64", "decode base64 online", "base64 converter",
+    "url encoder", "url decoder", "percent encoding", "url encode online", "uri encoder",
+    "cron generator", "cron expression", "crontab generator", "cron schedule generator online",
+    "css flexbox", "flexbox playground", "flexbox generator", "css flexbox tool",
+    "keycode finder", "javascript keycode", "key event viewer",
 
-    // Media & Images
-    "image converter", "webp to png", "svg to png", "image resizer", "youtube thumbnail downloader",
+    // Media Tools (40+ keywords)
+    "image converter", "convert image online", "jpg to png", "png to webp", "webp converter", "image format converter", "convert jpg to png online",
+    "image resizer", "resize image online", "image dimensions", "photo resizer", "resize photo online free",
+    "svg to png", "svg converter", "vector to raster", "convert svg to png online", "svg to jpg converter",
+    "video enhancer", "enhance video quality", "upscale video", "video quality improver", "improve video quality online", "video upscaler", "ai video enhancer",
+    "photo enhancer", "enhance photo", "improve image quality", "ai photo enhancement", "photo quality improver", "enhance image online", "image enhancer ai",
+    "watermark remover", "remove watermark", "erase watermark", "watermark eraser online", "remove watermark from image", "watermark removal tool", "delete watermark",
+    "image editor", "photo editor", "edit image online", "online photo editor free", "free image editor", "edit photos online free", "picture editor",
+    "youtube thumbnail downloader", "download youtube thumbnail", "youtube thumbnail grabber", "yt thumbnail download",
 
-    // PDF
-    "image to pdf", "sign pdf online", "digital signature generator", "pdf tools",
+    // PDF Tools (15+ keywords)
+    "sign pdf", "pdf signature", "sign pdf online", "digital signature", "pdf signer online free", "esign pdf",
+    "image to pdf", "convert image to pdf", "jpg to pdf", "png to pdf converter", "photo to pdf online",
+    "pdf tools", "pdf converter", "online pdf tools", "signature generator", "create signature online",
 
-    // Security
-    "strong password generator", "password strength checker", "secure password",
+    // Security Tools (15+ keywords)
+    "password generator", "strong password", "random password generator", "secure password", "generate password online", "password creator",
+    "password strength checker", "check password strength", "password validator", "test password strength", "password security checker",
 
-    // Web Design
-    "css box shadow generator", "css gradient generator", "css flexbox playground", "ui tools",
+    // Design Tools (15+ keywords)
+    "css box shadow generator", "box shadow css", "shadow generator", "box shadow tool", "css shadow maker",
+    "gradient generator", "css gradient", "linear gradient generator", "gradient maker", "css gradient tool",
+    "flexbox playground", "css flexbox", "flexbox generator",
 
-    // Social
-    "social media preview", "whatsapp link generator", "instagram hashtags", "tweet to image",
+    // Social Tools (20+ keywords)
+    "social media preview", "og tag validator", "meta tag checker", "open graph preview", "social preview tool",
+    "instagram post generator", "fake instagram post", "instagram mockup", "instagram post creator", "fake insta post maker",
+    "tweet to image", "twitter screenshot", "tweet screenshot", "convert tweet to image",
+    "whatsapp link generator", "whatsapp click to chat", "wa link generator", "create whatsapp link",
+    "instagram hashtags", "hashtag generator", "instagram hashtag tool",
+    "facebook post generator", "fake facebook post", "linkedin post generator",
 
-    // General / Productivity
-    "qr code generator", "unit converter", "word counter", "text diff viewer", "pomodoro timer",
-    "loan calculator", "bmi calculator", "age calculator", "case converter", "text transformer"
+    // Text Tools (15+ keywords)
+    "word counter", "character counter", "word count tool", "count characters online", "text counter",
+    "markdown editor", "markdown preview", "md editor online",
+    "diff viewer", "text diff", "compare text online", "text comparison tool",
+    "lorem ipsum generator", "placeholder text", "dummy text generator",
+    "case converter", "text case converter", "uppercase lowercase converter",
+    "text to handwriting", "handwriting generator",
+
+    // General & Productivity (20+ keywords)
+    "qr code generator", "create qr code", "qr code maker", "generate qr code online", "qr generator free",
+    "unit converter", "convert units", "measurement converter", "unit conversion tool",
+    "pomodoro timer", "focus timer", "productivity timer", "pomodoro technique timer",
+    "bmi calculator", "body mass index", "calculate bmi", "bmi calc online",
+    "loan calculator", "emi calculator", "loan emi", "calculate loan payment",
+    "age calculator", "calculate age", "age in days", "how old am i",
+    "percentage calculator", "calculate percentage", "percentage finder",
+    "stopwatch", "online stopwatch", "timer online",
+    "list randomizer", "random list generator", "shuffle list",
+
+    // Technical & Privacy
+    "client side tools", "browser based tools", "privacy focused tools", "offline tools", "secure online tools",
+    "no server processing", "local processing", "safe online tools", "free tools with ads", "ad-supported free tools"
   ],
   authors: [{ name: "VoidCraftr", url: "https://github.com/voidcraftr" }],
   creator: "VoidCraftr",
@@ -70,7 +116,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://opentoolbox.online",
     title: "OpenToolBox - Free Online Developer & Security Tools",
-    description: "Secure, fast, and free online tools for developers and creators. No server-side processing.",
+    description: "Secure, fast, and free online tools for developers and creators. Privacy-focused with client-side processing.",
     siteName: "OpenToolBox",
   },
   alternates: {
@@ -79,7 +125,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "OpenToolBox - Free Online Developer Tools",
-    description: "Secure, fast, and free online tools for developers and creators.",
+    description: "Secure, fast, and free online tools. Privacy-focused client-side processing.",
     creator: "@voidcraftr",
   },
   icons: {
@@ -92,8 +138,23 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Generate JSON-LD schemas
+  const organizationSchema = generateOrganizationSchema();
+  const webAppSchema = generateWebApplicationSchema();
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background font-sans`}
       >
@@ -110,9 +171,12 @@ export default function RootLayout({
             </Shell>
             <MicrosoftClarity />
             <GoogleAnalytics />
+            <AdSenseScript />
           </AuthProvider>
         </ThemeProvider>
       </body>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7580545209042591"
+        crossOrigin="anonymous"></script>
     </html>
   );
 }

@@ -12,6 +12,7 @@ interface PremiumCardProps {
     description: string;
     isNew?: boolean;
     isPopular?: boolean;
+    isPremium?: boolean;
 }
 
 export const PremiumCard = ({
@@ -21,6 +22,7 @@ export const PremiumCard = ({
     description,
     isNew,
     isPopular,
+    isPremium,
 }: PremiumCardProps) => {
     const divRef = useRef<HTMLDivElement>(null);
     const [isFocused, setIsFocused] = useState(false);
@@ -82,13 +84,18 @@ export const PremiumCard = ({
                         </div>
                         <div className="flex gap-2">
                             {isNew && (
-                                <span className="inline-flex items-center rounded-full bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-500 ring-1 ring-inset ring-blue-500/20">
+                                <span className="inline-flex items-center rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] font-bold tracking-wider text-blue-500 ring-1 ring-inset ring-blue-500/20">
                                     NEW
                                 </span>
                             )}
-                            {isPopular && !isNew && (
-                                <span className="inline-flex items-center rounded-full bg-amber-500/10 px-2 py-1 text-xs font-medium text-amber-500 ring-1 ring-inset ring-amber-500/20">
-                                    HOT
+                            {isPopular && (
+                                <span className="inline-flex items-center rounded-full bg-orange-500/10 px-2 py-0.5 text-[10px] font-bold tracking-wider text-orange-500 ring-1 ring-inset ring-orange-500/20">
+                                    POPULAR
+                                </span>
+                            )}
+                            {isPremium && (
+                                <span className="inline-flex items-center rounded-full bg-purple-500/10 px-2 py-0.5 text-[10px] font-bold tracking-wider text-purple-500 ring-1 ring-inset ring-purple-500/20">
+                                    PREMIUM
                                 </span>
                             )}
                         </div>
