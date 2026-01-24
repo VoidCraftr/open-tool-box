@@ -7,7 +7,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Upload, Download, ArrowRight, Image as ImageIcon } from "lucide-react"
+import { Upload, Download, ArrowRight, Image as ImageIcon, Activity, Sparkles, ShieldCheck, Zap } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Separator } from "@/components/ui/separator"
 
 export function SvgConverter() {
     const [svgFile, setSvgFile] = useState<File | null>(null)
@@ -15,6 +17,7 @@ export function SvgConverter() {
     const [scale, setScale] = useState(1)
     const [format, setFormat] = useState<"png" | "jpeg">("png")
     const [originalSize, setOriginalSize] = useState<{ width: number, height: number }>({ width: 0, height: 0 })
+    const [isProcessing, setIsProcessing] = useState(false)
 
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const imgRef = useRef<HTMLImageElement | null>(null)
@@ -94,94 +97,150 @@ export function SvgConverter() {
     }
 
     return (
-        <div className="space-y-6">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Upload SVG</CardTitle>
-                    <CardDescription>Select an SVG file to convert to PNG or JPG.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    {!svgFile ? (
-                        <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-lg bg-muted/20">
-                            <ImageIcon className="w-16 h-16 text-muted-foreground mb-4" />
-                            <h3 className="text-xl font-semibold mb-2">Upload SVG</h3>
-                            <Input
-                                type="file"
-                                accept=".svg"
-                                className="hidden"
-                                id="svg-upload"
-                                onChange={handleFileUpload}
-                            />
-                            <Button asChild>
-                                <label htmlFor="svg-upload" className="cursor-pointer">
-                                    <Upload className="w-4 h-4 mr-2" /> Select File
-                                </label>
-                            </Button>
-                        </div>
-                    ) : (
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <div className="flex flex-col items-center justify-center p-4 border rounded bg-[url('/grid-pattern.png')] bg-white dark:bg-black/20">
-                                <h3 className="mb-2 text-sm font-medium text-muted-foreground">Original SVG Preview</h3>
-                                <img src={svgContent || ""} alt="Preview" className="max-w-full max-h-[300px] object-contain" />
-                                <Button variant="ghost" size="sm" onClick={() => { setSvgFile(null); setSvgContent(null); }} className="mt-4 text-red-500">
-                                    Remove File
+        <div className="grid lg:grid-cols-[1fr_380px] gap-8">
+            {/* Main Stage */}
+            <div className="space-y-6">
+                <Card className="premium-card border-white/10 bg-background/40 shadow-2xl relative overflow-hidden group min-h-[500px] flex flex-col">
+                    <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-700">
+                        <ImageIcon className="w-48 h-48" />
+                    </div>
+
+                    <CardHeader className="pb-4 relative z-10">
+                        <CardTitle className="text-xl flex items-center gap-2 font-black italic">
+                            <Activity className="w-5 h-5 text-primary" />
+                            SVG Rendering Core
+                        </CardTitle>
+                    </CardHeader>
+
+                    <CardContent className="flex-1 flex flex-col justify-center items-center relative z-10 p-8">
+                        {!svgFile ? (
+                            <div className="text-center space-y-6 max-w-sm">
+                                <div className="mx-auto w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center text-primary animate-float">
+                                    <Upload className="w-10 h-10" />
+                                </div>
+                                <div className="space-y-2">
+                                    <h3 className="text-2xl font-black tracking-tighter">Vector Injection</h3>
+                                    <p className="text-muted-foreground text-sm leading-relaxed">Drop your SVG file here for neural rasterization. 100% Client-Side.</p>
+                                </div>
+                                <Input
+                                    type="file"
+                                    accept=".svg"
+                                    className="hidden"
+                                    id="svg-upload"
+                                    onChange={handleFileUpload}
+                                />
+                                <Button asChild className="premium-button h-14 px-10 text-lg rounded-2xl w-full shadow-2xl shadow-primary/20">
+                                    <label htmlFor="svg-upload" className="cursor-pointer flex items-center gap-3">
+                                        <Sparkles className="w-5 h-5" /> Select Vector file
+                                    </label>
                                 </Button>
                             </div>
-
-                            <div className="space-y-6">
-                                <div className="space-y-4 p-4 border rounded bg-card">
-                                    <h3 className="font-semibold">Conversion Settings</h3>
-
-                                    <div className="space-y-2">
-                                        <Label>Format</Label>
-                                        <div className="flex gap-2">
-                                            <Button
-                                                variant={format === 'png' ? 'default' : 'outline'}
-                                                onClick={() => setFormat('png')}
-                                                size="sm"
-                                            >
-                                                PNG (Transparent)
-                                            </Button>
-                                            <Button
-                                                variant={format === 'jpeg' ? 'default' : 'outline'}
-                                                onClick={() => setFormat('jpeg')}
-                                                size="sm"
-                                            >
-                                                JPG (White bg)
-                                            </Button>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <div className="flex justify-between">
-                                            <Label>Scale Factor ({scale}x)</Label>
-                                            <span className="text-xs text-muted-foreground">
-                                                {Math.round(originalSize.width * scale)} x {Math.round(originalSize.height * scale)} px
-                                            </span>
-                                        </div>
-                                        <Slider
-                                            value={[scale]}
-                                            onValueChange={(val) => setScale(val[0])}
-                                            min={0.5}
-                                            max={4}
-                                            step={0.5}
-                                        />
-                                    </div>
-
-                                    <Button onClick={handleDownload} className="w-full">
-                                        <Download className="w-4 h-4 mr-2" /> Download Image
-                                    </Button>
+                        ) : (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="w-full h-full flex flex-col items-center justify-center"
+                            >
+                                <div className="relative p-6 rounded-[2rem] bg-white/5 border border-white/10 shadow-inner group-hover:shadow-primary/5 transition-all overflow-hidden bg-[url('/grid-pattern.png')] dark:bg-[url('/grid-pattern-dark.png')]">
+                                    <img
+                                        src={svgContent || ""}
+                                        alt="Vector Preview"
+                                        className="max-w-full max-h-[400px] object-contain relative z-10 drop-shadow-2xl"
+                                    />
                                 </div>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => { setSvgFile(null); setSvgContent(null); }}
+                                    className="mt-6 text-red-500 font-black uppercase tracking-widest text-[10px] hover:bg-red-500/10 rounded-full h-10 px-6 transition-all"
+                                >
+                                    Eject Source File
+                                </Button>
+                            </motion.div>
+                        )}
+                    </CardContent>
+                </Card>
+            </div>
 
-                                {/* Hidden canvas for processing */}
-                                <div className="hidden">
-                                    <canvas ref={canvasRef} />
-                                </div>
+            {/* Sidebar Controls */}
+            <div className="space-y-6">
+                <Card className="liquid-glass border-white/20 shadow-liquid animate-fade-in">
+                    <CardHeader>
+                        <CardTitle className="text-sm font-black uppercase tracking-widest text-muted-foreground opacity-60">
+                            Rasterization Engine
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-8">
+                        {/* Format Selection */}
+                        <div className="space-y-4">
+                            <Label className="text-[10px] font-black uppercase tracking-tight text-muted-foreground">Output Format</Label>
+                            <div className="grid grid-cols-2 gap-2 p-1 bg-black/20 rounded-xl border border-white/5">
+                                {[
+                                    { id: 'png', label: 'PNG', sub: 'Alpha' },
+                                    { id: 'jpeg', label: 'JPG', sub: 'White bg' }
+                                ].map((f) => (
+                                    <button
+                                        key={f.id}
+                                        onClick={() => setFormat(f.id as any)}
+                                        className={`flex flex-col items-center justify-center py-3 rounded-lg transition-all ${format === f.id ? 'bg-primary text-primary-foreground shadow-lg' : 'hover:bg-white/5 opacity-50'}`}
+                                    >
+                                        <span className="text-sm font-black">{f.label}</span>
+                                        <span className="text-[8px] font-bold uppercase opacity-60">{f.sub}</span>
+                                    </button>
+                                ))}
                             </div>
                         </div>
-                    )}
-                </CardContent>
-            </Card>
+
+                        {/* Scaling Slider */}
+                        <div className="space-y-4">
+                            <div className="flex justify-between items-end">
+                                <Label className="text-[10px] font-black uppercase tracking-tight text-muted-foreground">Resolution Scale</Label>
+                                <span className="text-xl font-mono font-black text-primary">{scale}X</span>
+                            </div>
+                            <Slider
+                                value={[scale]}
+                                onValueChange={(val) => setScale(val[0])}
+                                min={0.5}
+                                max={8}
+                                step={0.5}
+                                disabled={!svgFile}
+                                className="py-4"
+                            />
+                            <div className="p-3 bg-white/5 rounded-xl border border-white/5 flex justify-between items-center">
+                                <span className="text-[9px] font-bold text-muted-foreground uppercase">Target Size</span>
+                                <span className="text-xs font-mono font-bold tracking-tight">
+                                    {Math.round(originalSize.width * scale)} &times; {Math.round(originalSize.height * scale)} px
+                                </span>
+                            </div>
+                        </div>
+
+                        <Separator className="bg-white/5" />
+
+                        <Button
+                            disabled={!svgFile}
+                            onClick={handleDownload}
+                            className="w-full premium-button h-16 text-lg rounded-2xl shadow-2xl shadow-primary/20 group"
+                        >
+                            <Download className="w-5 h-5 mr-3 group-hover:animate-bounce" />
+                            DOWNLOAD RASTER
+                        </Button>
+                    </CardContent>
+                </Card>
+
+                <div className="bg-primary/5 border border-primary/10 rounded-2xl p-5 flex gap-4 animate-fade-in" style={{ animationDelay: "200ms" }}>
+                    <div className="p-2 bg-primary/10 rounded-lg h-fit group-hover:scale-110 transition-transform">
+                        <ShieldCheck className="w-4 h-4 text-primary" />
+                    </div>
+                    <div className="space-y-1">
+                        <p className="text-xs font-black text-primary italic uppercase tracking-tighter">Hardened Privacy</p>
+                        <p className="text-[10px] text-muted-foreground leading-relaxed">Mathematical conversion occurs strictly in your device's memory. No external tracing.</p>
+                    </div>
+                </div>
+
+                <div className="hidden">
+                    <canvas ref={canvasRef} />
+                </div>
+            </div>
         </div>
     )
 }

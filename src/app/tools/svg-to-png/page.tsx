@@ -1,4 +1,5 @@
 import { ToolWrapper } from "@/components/tools/ToolWrapper"
+import { ContentSection } from "@/components/tools/ContentSection"
 import { Metadata } from "next"
 import { SvgConverter } from "./components/SvgConverter"
 
@@ -17,17 +18,39 @@ export default function SvgConverterPage() {
         >
             <SvgConverter />
 
-            <div className="mt-12 space-y-8 text-muted-foreground">
-                <section>
-                    <h2 className="text-2xl font-semibold text-foreground mb-4">How to convert SVG to Image?</h2>
-                    <ul className="list-disc pl-6 space-y-2">
-                        <li>Upload: Select your .svg file.</li>
-                        <li>Scale: Increase the scale factor (2x, 4x) to get a higher resolution image without blur.</li>
-                        <li>Format: Choose PNG for transparency or JPG for a smaller file size (white background).</li>
-                        <li>Privacy: Conversion happens entirely in your browser. Your files are never sent to our servers.</li>
-                    </ul>
-                </section>
-            </div>
+            <ContentSection
+                title="Professional SVG to High-Resolution Raster Conversion"
+                description="Converting SVG vectors to PNG or JPG images requires precision to maintain the crispness of your original artwork. Our tool allows you to scale your vectors by up to 400% (4x) to generate high-resolution raster images for print, web, and social media without the traditional blur of browser rescaling."
+                features={[
+                    "📐 **Infinite Scale Control**: Increase your SVG scale factor (2x, 4x, etc.) to export ultra-sharp, high-resolution PNGs.",
+                    "🌈 **Transparency Support**: Export to PNG to maintain original alpha mathematical transparency.",
+                    "🖼️ **JPG Optimization**: Instantly convert to high-quality JPG with automatic white background fill for standard compatibility.",
+                    "🔒 **End-to-End Privacy**: Your vectors never reach our server. 100% client-side rendering ensures absolute data safety.",
+                    "⚡ **High-Speed Rendering**: Near-instant conversion even for complex paths and heavy XML vectors.",
+                    "✨ **Neuromorphic Glass UI**: A premium, distraction-free environment for professional designers and developers."
+                ]}
+                howToUse={[
+                    "Upload your source **.svg** file using the select button or drag-and-drop zone.",
+                    "Select your target export format: **PNG (Transparent)** or **JPG (White Background)**.",
+                    "Adjust the **Scale Factor** slider (up to 4x) to determine the output resolution and dimensions.",
+                    "Observe the real-time preview to verify the rendering accuracy of your vector paths.",
+                    "Click **Download Image** to save the processed high-resolution raster file to your local device."
+                ]}
+                faq={[
+                    {
+                        question: "Why should I use a higher scale factor?",
+                        answer: "SVGs are vectors and have no fixed resolution. By increasing the scale factor (e.g., 4x), you tell our engine to render the vector at 4 times its original size, resulting in a significantly sharper and larger PNG suitable for high-DPI displays or print."
+                    },
+                    {
+                        question: "Does this support complex SVGs with filters or gradients?",
+                        answer: "Yes. We use a high-performance browser-native rendering pipeline that supports the majority of modern SVG specifications, including linear and radial gradients."
+                    },
+                    {
+                        question: "Is there any limit to the SVG file size?",
+                        answer: "The tool can process very large vector files, though performance depends on your local hardware. Since no uploading is required, there are no network timeouts to worry about."
+                    }
+                ]}
+            />
         </ToolWrapper>
     )
 }

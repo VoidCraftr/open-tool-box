@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Star, Github, Zap, Shield, Globe, Lock, Code2, Cpu } from "lucide-react";
+import { ArrowRight, Star, Github, Zap, Shield, Globe, Lock, Code2, Cpu, Type } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { tools, categories } from "@/config/tools";
 import { ToolsSlider } from "@/components/home/ToolsSlider";
@@ -9,22 +9,13 @@ import { PremiumCard } from "@/components/common/PremiumCard";
 import { motion } from "framer-motion";
 
 export default function Home() {
-  // Hand-picked popular tools for a diverse showcase
-  const featuredSlugs = [
-    "json-formatter",
-    "image-converter",
-    "password-generator",
-    "qr-code-generator",
-    "youtube-thumbnail",
-    "sign-pdf"
-  ];
+  // Categorize tools for the sliders (Human-First Rows)
+  // Consolidating to 3 rows for a cleaner layout
+  const row1Tools = tools.filter(t => ["text", "social", "media", "design"].includes(t.category));
+  const row2Tools = tools.filter(t => ["developer", "security", "pdf"].includes(t.category));
+  const row3Tools = tools.filter(t => ["math", "finance", "health", "general"].includes(t.category));
 
-  const featuredTools = tools.filter(t => featuredSlugs.includes(t.slug));
-
-  // Categorize tools for the sliders
-  const row1Tools = tools.filter(t => ["developer", "security", "text"].includes(t.category));
-  const row2Tools = tools.filter(t => ["design", "media", "social"].includes(t.category));
-  const row3Tools = tools.filter(t => ["general", "math", "finance", "health", "pdf"].includes(t.category));
+  const featuredTools = tools.filter(t => t.isNew || t.isPopular).slice(0, 6);
 
   return (
     <div className="flex flex-col gap-16 md:gap-24 overflow-hidden">
@@ -48,15 +39,15 @@ export default function Home() {
           </div>
 
           <h1 className="text-5xl font-bold tracking-tighter sm:text-6xl md:text-7xl lg:text-8xl bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/50">
-            The Ultimate <br className="hidden sm:inline" />
+            Simple Tools for <br className="hidden sm:inline" />
             <span className="bg-gradient-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent animate-gradient bg-300%">
-              Developer Toolbox
+              Everyday Tasks
             </span>
           </h1>
 
           <p className="mx-auto max-w-[800px] text-muted-foreground md:text-xl lg:text-2xl font-light leading-relaxed">
-            Beautifully designed, privacy-focused toolset for modern developers. <br className="hidden md:inline" />
-            <span className="text-foreground font-medium">Free forever. No tracking. Just code.</span>
+            Beautifully designed, secure tools that respect your privacy. <br className="hidden md:inline" />
+            <span className="text-foreground font-medium">No uploads. No tracking. Just results.</span>
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 pt-6">
@@ -75,19 +66,19 @@ export default function Home() {
           <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
           <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-          {/* Row 1: Code & Security */}
-          <div className="-rotate-1 origin-center hover:rotate-0 transition-transform duration-500 opacity-80 hover:opacity-100">
-            <ToolsSlider tools={row1Tools} direction="right" duration={80} />
+          {/* Row 1: Creation & Media */}
+          <div className="-rotate-1 origin-center hover:rotate-0 transition-transform duration-500 opacity-90 hover:opacity-100">
+            <ToolsSlider tools={row1Tools} direction="right" duration={100} />
           </div>
 
-          {/* Row 2: Design & Media */}
-          <div className="rotate-1 origin-center hover:rotate-0 transition-transform duration-500 opacity-90 hover:opacity-100 scale-105">
-            <ToolsSlider tools={row2Tools} direction="left" duration={60} />
+          {/* Row 2: Dev & Security */}
+          <div className="rotate-1 origin-center hover:rotate-0 transition-transform duration-500 opacity-100 scale-105">
+            <ToolsSlider tools={row2Tools} direction="left" duration={80} />
           </div>
 
-          {/* Row 3: Utilities */}
-          <div className="-rotate-1 origin-center hover:rotate-0 transition-transform duration-500 opacity-80 hover:opacity-100">
-            <ToolsSlider tools={row3Tools} direction="right" duration={90} />
+          {/* Row 3: Math & Life */}
+          <div className="-rotate-1 origin-center hover:rotate-0 transition-transform duration-500 opacity-90 hover:opacity-100">
+            <ToolsSlider tools={row3Tools} direction="right" duration={120} />
           </div>
         </div>
       </section>
@@ -160,43 +151,136 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Categories Grid - Keeping it clean but premium */}
+      {/* Intent-Driven Hubs */}
       <section className="container max-w-7xl mx-auto px-4 pb-20">
-        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl mb-10 text-center">Browse by Category</h2>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {categories.map((category) => {
-            const categoryTools = tools.filter(t => t.category === category.id)
-            if (categoryTools.length === 0) return null
+        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl mb-10 text-center">What do you want to do?</h2>
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
 
-            return (
-              <div key={category.id} className="group relative overflow-hidden rounded-2xl border border-white/5 bg-gradient-to-b from-white/5 to-transparent p-6 hover:border-primary/20 transition-colors">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                <div className="relative z-10">
-                  <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3 text-primary">
-                    <category.icon className="h-6 w-6" />
-                  </div>
-                  <h3 className="mb-2 text-xl font-bold">{category.label}</h3>
-                  <p className="mb-4 text-sm text-muted-foreground">{categoryTools.length} tools available</p>
-
-                  <ul className="space-y-2">
-                    {categoryTools.slice(0, 3).map(t => (
-                      <li key={t.slug}>
-                        <Link href={`/tools/${t.slug}`} className="text-sm text-foreground/80 hover:text-primary transition-colors flex items-center">
-                          <ArrowRight className="mr-2 h-3 w-3 opacity-0 -ml-5 group-hover/link:opacity-100 group-hover/link:ml-0 transition-all" />
-                          {t.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Link href={`/tools#${category.id}`} className="mt-6 inline-flex items-center text-sm font-medium text-primary hover:underline">
-                    View all <ArrowRight className="ml-1 h-3 w-3" />
-                  </Link>
-                </div>
+          {/* Hub 1: Text & Writing */}
+          <div className="group relative overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-b from-white/5 to-transparent p-8 hover:border-primary/20 transition-all duration-500 liquid-shadow hover:-translate-y-1">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative z-10">
+              <div className="mb-6 inline-flex rounded-2xl bg-primary/10 p-4 text-primary">
+                <Type className="h-8 w-8" />
               </div>
-            )
-          })}
+              <h3 className="mb-4 text-2xl font-bold">Fix My Text</h3>
+              <p className="mb-6 text-muted-foreground leading-relaxed">Clean up messy lists, count words, or format your notes perfectly.</p>
+              <ul className="space-y-3">
+                {tools.filter(t => t.category === "text").slice(0, 4).map(t => (
+                  <li key={t.slug}>
+                    <Link href={`/tools/${t.slug}`} className="text-foreground/80 hover:text-primary transition-colors flex items-center gap-2 group/link">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary/40 group-hover/link:bg-primary group-hover/link:scale-125 transition-all" />
+                      {t.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <Link href="/tools#text" className="mt-8 inline-flex items-center text-sm font-semibold text-primary hover:underline group/btn">
+                All Text Tools <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Hub 2: Photos & Images */}
+          <div className="group relative overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-b from-white/5 to-transparent p-8 hover:border-primary/20 transition-all duration-500 liquid-shadow hover:-translate-y-1">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative z-10">
+              <div className="mb-6 inline-flex rounded-2xl bg-blue-500/10 p-4 text-blue-500">
+                <Globe className="h-8 w-8" />
+              </div>
+              <h3 className="mb-4 text-2xl font-bold">Creative Studio</h3>
+              <p className="mb-6 text-muted-foreground leading-relaxed">Create viral memes, cinematic quote posts, and professional social assets instantly.</p>
+              <ul className="space-y-3">
+                {tools.filter(t => t.category === "design").slice(0, 4).map(t => (
+                  <li key={t.slug}>
+                    <Link href={`/tools/${t.slug}`} className="text-foreground/80 hover:text-blue-500 transition-colors flex items-center gap-2 group/link">
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500/40 group-hover/link:bg-blue-500 group-hover/link:scale-125 transition-all" />
+                      {t.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <Link href="/tools#design" className="mt-8 inline-flex items-center text-sm font-semibold text-blue-500 hover:underline group/btn">
+                All Studio Tools <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Hub 3: Data & Privacy */}
+          <div className="group relative overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-b from-white/5 to-transparent p-8 hover:border-primary/20 transition-all duration-500 liquid-shadow hover:-translate-y-1">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative z-10">
+              <div className="mb-6 inline-flex rounded-2xl bg-purple-500/10 p-4 text-purple-500">
+                <Shield className="h-8 w-8" />
+              </div>
+              <h3 className="mb-4 text-2xl font-bold">Secure My Data</h3>
+              <p className="mb-6 text-muted-foreground leading-relaxed">Generate passwords, format code, and protect your digital life.</p>
+              <ul className="space-y-3">
+                {tools.filter(t => t.category === "security").slice(0, 4).map(t => (
+                  <li key={t.slug}>
+                    <Link href={`/tools/${t.slug}`} className="text-foreground/80 hover:text-purple-500 transition-colors flex items-center gap-2 group/link">
+                      <div className="w-1.5 h-1.5 rounded-full bg-purple-500/40 group-hover/link:bg-purple-500 group-hover/link:scale-125 transition-all" />
+                      {t.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <Link href="/tools#security" className="mt-8 inline-flex items-center text-sm font-semibold text-purple-500 hover:underline group/btn">
+                All Privacy Tools <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Hub 4: Math & Finance */}
+          <div className="group relative overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-b from-white/5 to-transparent p-8 hover:border-primary/20 transition-all duration-500 liquid-shadow hover:-translate-y-1">
+            <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative z-10">
+              <div className="mb-6 inline-flex rounded-2xl bg-green-500/10 p-4 text-green-500">
+                <ArrowRight className="h-8 w-8" />
+              </div>
+              <h3 className="mb-4 text-2xl font-bold">Business Hub</h3>
+              <p className="mb-6 text-muted-foreground leading-relaxed">Generate professional invoices, quotes, receipts, and estimates for your clients.</p>
+              <ul className="space-y-3">
+                {tools.filter(t => t.category === "finance").slice(0, 4).map(t => (
+                  <li key={t.slug}>
+                    <Link href={`/tools/${t.slug}`} className="text-foreground/80 hover:text-green-500 transition-colors flex items-center gap-2 group/link">
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-500/40 group-hover/link:bg-green-500 group-hover/link:scale-125 transition-all" />
+                      {t.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <Link href="/tools#finance" className="mt-8 inline-flex items-center text-sm font-semibold text-green-500 hover:underline group/btn">
+                All Money Tools <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Hub 5: Health & Productivity */}
+          <div className="group relative overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-b from-white/5 to-transparent p-8 hover:border-primary/20 transition-all duration-500 liquid-shadow hover:-translate-y-1">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative z-10">
+              <div className="mb-6 inline-flex rounded-2xl bg-orange-500/10 p-4 text-orange-500">
+                <Zap className="h-8 w-8" />
+              </div>
+              <h3 className="mb-4 text-2xl font-bold">Stay Productive</h3>
+              <p className="mb-6 text-muted-foreground leading-relaxed">Calculate your age, track focus, or check your health stats.</p>
+              <ul className="space-y-3">
+                {tools.filter(t => t.category === "general").slice(0, 4).map(t => (
+                  <li key={t.slug}>
+                    <Link href={`/tools/${t.slug}`} className="text-foreground/80 hover:text-orange-500 transition-colors flex items-center gap-2 group/link">
+                      <div className="w-1.5 h-1.5 rounded-full bg-orange-500/40 group-hover/link:bg-orange-500 group-hover/link:scale-125 transition-all" />
+                      {t.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <Link href="/tools#general" className="mt-8 inline-flex items-center text-sm font-semibold text-orange-500 hover:underline group/btn">
+                All Pro Tools <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+              </Link>
+            </div>
+          </div>
+
         </div>
       </section>
 

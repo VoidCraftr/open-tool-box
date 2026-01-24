@@ -1,5 +1,4 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Nothing_You_Could_Do } from "next/font/google";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
 import { Shell } from "@/components/layout/Shell";
 import { CommandMenu } from "@/components/common/CommandMenu";
@@ -8,6 +7,7 @@ import { MicrosoftClarity } from "@/components/analytics/MicrosoftClarity";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { AdSenseScript } from "@/components/ads/AdSense";
 import { generateOrganizationSchema, generateWebApplicationSchema } from "@/config/seo.config";
+import type { Metadata } from "next";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -20,13 +20,19 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const nothingYouCouldDo = Nothing_You_Could_Do({
+  variable: "--font-nothing-you-could-do",
+  weight: "400",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://opentoolbox.online"),
   title: {
     default: "OpenToolBox - Free Online Developer & Security Tools",
     template: "%s | OpenToolBox"
   },
-  description: "OpenToolBox: 50+ free online tools for developers, designers, and creators. JSON formatter, image converter, video enhancer, watermark remover, password generator, and more. Privacy-focused with client-side processing. Ad-supported to stay free forever.",
+  description: "OpenToolBox: 56+ free online tools for developers, designers, and creators. JSON formatter, image converter, video enhancer, watermark remover, password generator, and more. Privacy-focused with client-side processing. Ad-supported to stay free forever.",
   keywords: [
     // Brand & Core
     "opentoolbox", "free online tools", "developer tools", "media tools", "privacy tools", "free tools online", "web tools", "online utilities",
@@ -156,7 +162,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background font-sans`}
+        className={`${geistSans.variable} ${geistMono.variable} ${nothingYouCouldDo.variable} antialiased min-h-screen bg-background font-sans`}
       >
         <ThemeProvider
           attribute="class"

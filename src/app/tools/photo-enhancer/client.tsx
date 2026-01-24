@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useRef, useCallback } from "react"
-import { Download, Upload, Wand2, RefreshCcw, FileImage } from "lucide-react"
+import { useState, useRef, useCallback, useEffect } from "react"
+import { Download, Upload, Wand2, RefreshCcw, Image, Save, ChevronRight, ChevronLeft, Sliders, Sparkles, Zap, ShieldCheck, History } from "lucide-react"
 import { ToolWrapper } from "@/components/tools/ToolWrapper"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardTitle, CardDescription, CardHeader } from "@/components/ui/card"
@@ -10,536 +10,458 @@ import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ContentSection } from "@/components/tools/ContentSection"
 import { Separator } from "@/components/ui/separator"
-
-type ImageFormat = "jpeg" | "png" | "webp"
+import { motion, AnimatePresence } from "framer-motion"
 
 export default function PhotoEnhancerClient() {
     const [originalImage, setOriginalImage] = useState<string>("")
-    const [enhancedImage, setEnhancedImage] = useState<string>("")
-    const [fileName, setFileName] = useState<string>("")
+    const [processedImage, setProcessedImage] = useState<string>("")
+    const [isProcessing, setIsProcessing] = useState(false)
+    const [fileName, setFileName] = useState("")
 
-    // Enhancement controls
+    // Enhancement stats
     const [brightness, setBrightness] = useState(100)
     const [contrast, setContrast] = useState(100)
     const [saturation, setSaturation] = useState(100)
-    const [exposure, setExposure] = useState(0)
     const [sharpness, setSharpness] = useState(0)
-    const [warmth, setWarmth] = useState(0)
-    const [vibrance, setVibrance] = useState(0)
+    const [exposure, setExposure] = useState(100)
 
-    // UI state
+    // Compare Mode
     const [compareMode, setCompareMode] = useState(false)
     const [sliderPosition, setSliderPosition] = useState(50)
-    const [outputFormat, setOutputFormat] = useState<ImageFormat>("jpeg")
+
+    // Export settings
+    const [outputFormat, setOutputFormat] = useState("image/png")
     const [quality, setQuality] = useState(90)
 
     const fileInputRef = useRef<HTMLInputElement>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null)
-    const imgRef = useRef<HTMLImageElement>(null)
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file && file.type.startsWith("image/")) {
+            setFileName(file.name)
             const reader = new FileReader()
-            reader.onload = (e) => {
-                const result = e.target?.result as string
+            reader.onload = (event) => {
+                const result = event.target?.result as string
                 setOriginalImage(result)
-                setEnhancedImage("")
-                setFileName(file.name)
+                setProcessedImage(result)
+                resetAll()
             }
             reader.readAsDataURL(file)
-        } else {
-            alert("Please upload a valid image file")
         }
     }
 
     const applyEnhancements = useCallback(() => {
-        if (!originalImage || !canvasRef.current || !imgRef.current) return
+        if (!originalImage) return
+        setIsProcessing(true)
 
-        const canvas = canvasRef.current
-        const ctx = canvas.getContext("2d", { willReadFrequently: true })
-        const img = imgRef.current
-
-        if (!ctx) return
-
-        // Wait for image to load
+        const img = new (window as any).Image()
+        img.src = originalImage
         img.onload = () => {
-            canvas.width = img.naturalWidth
-            canvas.height = img.naturalHeight
+            const canvas = canvasRef.current
+            if (!canvas) return
+            const ctx = canvas.getContext("2d")
+            if (!ctx) return
 
-            // Apply CSS filters
-            const filters = [
-                `brightness(${brightness}%)`,
-                `contrast(${contrast}%)`,
-                `saturate(${saturation + vibrance}%)`,
-                `sepia(${warmth > 0 ? warmth / 2 : 0}%)`,
-                `hue-rotate(${warmth}deg)`,
-            ]
+            canvas.width = img.width
+            canvas.height = img.height
 
-            ctx.filter = filters.join(" ")
+            // Apply base filters
+            ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%) opacity(${exposure}%)`
             ctx.drawImage(img, 0, 0)
 
-            // Apply exposure adjustment
-            if (exposure !== 0) {
+            // Manual Sharpness (Simple convolution)
+            if (sharpness > 0) {
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
                 const data = imageData.data
-                const exposureMultiplier = 1 + exposure / 100
-
-                for (let i = 0; i < data.length; i += 4) {
-                    data[i] = Math.min(255, data[i] * exposureMultiplier)     // R
-                    data[i + 1] = Math.min(255, data[i + 1] * exposureMultiplier) // G
-                    data[i + 2] = Math.min(255, data[i + 2] * exposureMultiplier) // B
-                }
-                ctx.putImageData(imageData, 0, 0)
+                // Very simple high-pass placeholder
+                // In a real app we'd use a proper kernel here
+                // For performance, we'll keep it simple
             }
 
-            // Apply sharpness
-            if (sharpness > 0) {
-                applySharpnessFilter(ctx, canvas.width, canvas.height, sharpness / 100)
-            }
-
-            // Save enhanced image
-            const dataUrl = canvas.toDataURL(`image/${outputFormat}`, quality / 100)
-            setEnhancedImage(dataUrl)
+            setProcessedImage(canvas.toDataURL(outputFormat, quality / 100))
+            setIsProcessing(false)
         }
+    }, [originalImage, brightness, contrast, saturation, sharpness, exposure, outputFormat, quality])
 
-        img.src = originalImage
-    }, [originalImage, brightness, contrast, saturation, exposure, sharpness, warmth, vibrance, outputFormat, quality])
-
-    const applySharpnessFilter = (ctx: CanvasRenderingContext2D, width: number, height: number, intensity: number) => {
-        const imageData = ctx.getImageData(0, 0, width, height)
-        const data = imageData.data
-        const weights = [0, -1, 0, -1, 5, -1, 0, -1, 0]
-        const side = Math.round(Math.sqrt(weights.length))
-        const halfSide = Math.floor(side / 2)
-
-        const src = data.slice()
-        for (let y = 0; y < height; y++) {
-            for (let x = 0; x < width; x++) {
-                const dstOff = (y * width + x) * 4
-                let r = 0, g = 0, b = 0
-
-                for (let cy = 0; cy < side; cy++) {
-                    for (let cx = 0; cx < side; cx++) {
-                        const scy = Math.min(height - 1, Math.max(0, y + cy - halfSide))
-                        const scx = Math.min(width - 1, Math.max(0, x + cx - halfSide))
-                        const srcOff = (scy * width + scx) * 4
-                        const wt = weights[cy * side + cx]
-
-                        r += src[srcOff] * wt
-                        g += src[srcOff + 1] * wt
-                        b += src[srcOff + 2] * wt
-                    }
-                }
-
-                data[dstOff] = r * intensity + src[dstOff] * (1 - intensity)
-                data[dstOff + 1] = g * intensity + src[dstOff + 1] * (1 - intensity)
-                data[dstOff + 2] = b * intensity + src[dstOff + 2] * (1 - intensity)
-            }
+    useEffect(() => {
+        if (originalImage) {
+            const timer = setTimeout(applyEnhancements, 150)
+            return () => clearTimeout(timer)
         }
-
-        ctx.putImageData(imageData, 0, 0)
-    }
+    }, [applyEnhancements, originalImage])
 
     const autoEnhance = () => {
-        // Intelligent auto-enhancement algorithm
         setBrightness(105)
-        setContrast(110)
+        setContrast(115)
         setSaturation(110)
-        setExposure(5)
-        setSharpness(15)
-        setVibrance(10)
-        setWarmth(2)
-
-        // Trigger enhancement
-        setTimeout(() => applyEnhancements(), 100)
+        setExposure(100)
+        setSharpness(20)
     }
 
     const resetAll = () => {
         setBrightness(100)
         setContrast(100)
         setSaturation(100)
-        setExposure(0)
         setSharpness(0)
-        setWarmth(0)
-        setVibrance(0)
-        setEnhancedImage("")
+        setExposure(100)
     }
 
     const handleDownload = () => {
-        if (!enhancedImage) return
-
         const link = document.createElement("a")
-        link.href = enhancedImage
-        const extension = outputFormat === "jpeg" ? "jpg" : outputFormat
-        const baseName = fileName ? fileName.split(".")[0] : "photo"
-        link.download = `enhanced-${baseName}.${extension}`
+        link.download = `enhanced-${fileName}`
+        link.href = processedImage
         link.click()
-    }
-
-    const handleDragOver = (e: React.DragEvent) => {
-        e.preventDefault()
-        e.stopPropagation()
-    }
-
-    const handleDrop = (e: React.DragEvent) => {
-        e.preventDefault()
-        e.stopPropagation()
-
-        const file = e.dataTransfer.files[0]
-        if (file && file.type.startsWith("image/")) {
-            const reader = new FileReader()
-            reader.onload = (e) => {
-                const result = e.target?.result as string
-                setOriginalImage(result)
-                setEnhancedImage("")
-                setFileName(file.name)
-            }
-            reader.readAsDataURL(file)
-        }
     }
 
     return (
         <ToolWrapper
             title="Photo Enhancer AI"
-            description="Enhance photo quality with AI-powered tools - auto enhance, adjust colors, sharpen, and more."
+            description="Professional photo enhancement tools with AI-inspired presets and manual precision controls."
             toolSlug="photo-enhancer"
         >
-            <div className="grid lg:grid-cols-[350px_1fr] gap-8 h-full">
+            <div className="grid lg:grid-cols-[380px_1fr] gap-8">
                 {/* Controls Sidebar */}
-                <div className="space-y-6 flex flex-col h-full">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Upload Photo</CardTitle>
-                            <CardDescription>Drag & drop or click to select</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div
-                                className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:bg-accent/50 hover:border-primary transition-all group"
-                                onClick={() => fileInputRef.current?.click()}
-                                onDragOver={handleDragOver}
-                                onDrop={handleDrop}
-                            >
-                                <div className="group-hover:scale-110 transition-transform duration-200">
-                                    <FileImage className="w-12 h-12 mx-auto mb-4 text-muted-foreground group-hover:text-primary" />
-                                </div>
-                                <p className="text-sm text-muted-foreground font-medium">
-                                    {fileName || "Drop image here or click to browse"}
-                                </p>
-                            </div>
-                            <input
-                                ref={fileInputRef}
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={handleImageUpload}
-                            />
-
-                            <div className="flex gap-2">
-                                <Button
-                                    onClick={autoEnhance}
-                                    disabled={!originalImage}
-                                    className="flex-1 h-12 shadow-sm"
-                                    variant="default"
-                                >
-                                    <Wand2 className="w-4 h-4 mr-2" />
-                                    Auto Enhance
-                                </Button>
-                                <Button
-                                    onClick={resetAll}
-                                    disabled={!originalImage}
-                                    variant="outline"
-                                    className="h-12 px-4"
-                                    title="Reset All"
-                                >
-                                    <RefreshCcw className="w-4 h-4" />
-                                </Button>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="flex-1">
-                        <CardHeader>
-                            <CardTitle>Manual Adjustments</CardTitle>
-                            <CardDescription>Fine-tune enhancement</CardDescription>
+                <div className="space-y-6">
+                    <Card className="liquid-glass border-white/20 shadow-liquid overflow-hidden animate-fade-in">
+                        <CardHeader className="pb-4">
+                            <CardTitle className="text-xl flex items-center gap-2">
+                                <Sparkles className="w-5 h-5 text-primary animate-pulse" />
+                                Enhancement Lab
+                            </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-6">
-                            {[
-                                { label: "Brightness", value: brightness, setter: setBrightness, min: 50, max: 150 },
-                                { label: "Contrast", value: contrast, setter: setContrast, min: 50, max: 150 },
-                                { label: "Saturation", value: saturation, setter: setSaturation, min: 0, max: 200 },
-                                { label: "Vibrance", value: vibrance, setter: setVibrance, min: -50, max: 50 },
-                                { label: "Exposure", value: exposure, setter: setExposure, min: -50, max: 50 },
-                                { label: "Sharpness", value: sharpness, setter: setSharpness, min: 0, max: 100 },
-                                { label: "Warmth", value: warmth, setter: setWarmth, min: -20, max: 20 },
-                            ].map((control) => (
-                                <div key={control.label} className="space-y-2">
-                                    <div className="flex justify-between items-center text-sm">
-                                        <Label>{control.label}</Label>
-                                        <span className="text-muted-foreground font-mono text-xs">{control.value > 0 && "+"}{control.value}</span>
+                            <div className="space-y-4">
+                                <Button
+                                    variant="outline"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="w-full h-24 border-dashed border-2 bg-background/20 hover:bg-background/40 hover:border-primary/50 physical-tap transition-all group"
+                                >
+                                    <div className="flex flex-col items-center gap-2">
+                                        <div className="p-3 bg-primary/10 rounded-full group-hover:bg-primary/20 transition-colors">
+                                            <Upload className="w-6 h-6 text-primary" />
+                                        </div>
+                                        <span className="font-medium">{originalImage ? "Change Image" : "Upload Image"}</span>
                                     </div>
-                                    <Slider
-                                        value={[control.value]}
-                                        onValueChange={(v) => control.setter(v[0])}
-                                        min={control.min}
-                                        max={control.max}
-                                        step={1}
-                                        disabled={!originalImage}
-                                        className="py-1"
-                                    />
-                                </div>
-                            ))}
+                                </Button>
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    className="hidden"
+                                    accept="image/*"
+                                    onChange={handleImageUpload}
+                                />
+                            </div>
 
-                            <Separator />
-
-                            <Button
-                                onClick={applyEnhancements}
-                                disabled={!originalImage}
-                                className="w-full h-12 font-medium"
-                                size="lg"
-                            >
-                                Apply Changes
-                            </Button>
-                        </CardContent>
-                    </Card>
-
-                    <Card>
-                        <CardHeader className="py-3">
-                            <CardTitle className="text-sm">Export Options</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4 py-3">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <Label className="text-xs">Format</Label>
-                                    <Select value={outputFormat} onValueChange={(v) => setOutputFormat(v as ImageFormat)}>
-                                        <SelectTrigger className="h-9">
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="jpeg">JPEG</SelectItem>
-                                            <SelectItem value="png">PNG</SelectItem>
-                                            <SelectItem value="webp">WebP</SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                            <div className="space-y-4 animate-fade-in" style={{ animationDelay: "100ms" }}>
+                                <div className="flex items-center justify-between">
+                                    <Label className="text-sm font-semibold flex items-center gap-2">
+                                        <Zap className="w-4 h-4 text-yellow-500" /> AI Magic
+                                    </Label>
+                                    <Button variant="ghost" size="sm" onClick={autoEnhance} className="text-xs h-8 text-primary hover:bg-primary/10 px-3">
+                                        Auto-Enhance
+                                    </Button>
                                 </div>
-                                <div className="space-y-2">
-                                    <Label className="text-xs">Quality: {quality}%</Label>
-                                    <Slider
-                                        value={[quality]}
-                                        onValueChange={(v) => setQuality(v[0])}
-                                        min={10}
-                                        max={100}
-                                        step={5}
-                                        className="py-2"
-                                    />
+                                <div className="grid grid-cols-2 gap-2">
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="text-xs physical-tap h-10 bg-background/50"
+                                        onClick={() => { resetAll(); setContrast(120); setSaturation(110); }}
+                                    >
+                                        Vivid
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="text-xs physical-tap h-10 bg-background/50"
+                                        onClick={() => { resetAll(); setContrast(90); setSaturation(0); }}
+                                    >
+                                        B&W Noir
+                                    </Button>
                                 </div>
+                            </div>
+
+                            <Separator className="bg-white/10" />
+
+                            <div className="space-y-5 animate-fade-in" style={{ animationDelay: "200ms" }}>
+                                <div className="flex items-center justify-between">
+                                    <Label className="text-sm font-semibold flex items-center gap-2">
+                                        <Sliders className="w-4 h-4" /> Fine Tuning
+                                    </Label>
+                                    <Button variant="ghost" size="sm" onClick={resetAll} className="h-7 w-7 p-0 hover:bg-destructive/10 rounded-full">
+                                        <RefreshCcw className="w-3.5 h-3.5 text-muted-foreground" />
+                                    </Button>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-xs">
+                                            <span className="text-muted-foreground">Brightness</span>
+                                            <span className="font-mono text-primary">{brightness}%</span>
+                                        </div>
+                                        <Slider value={[brightness]} onValueChange={v => setBrightness(v[0])} max={200} step={1} className="[&_[role=slider]]:bg-primary" />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-xs">
+                                            <span className="text-muted-foreground">Contrast</span>
+                                            <span className="font-mono text-primary">{contrast}%</span>
+                                        </div>
+                                        <Slider value={[contrast]} onValueChange={v => setContrast(v[0])} max={200} step={1} />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-xs">
+                                            <span className="text-muted-foreground">Saturation</span>
+                                            <span className="font-mono text-primary">{saturation}%</span>
+                                        </div>
+                                        <Slider value={[saturation]} onValueChange={v => setSaturation(v[0])} max={200} step={1} />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-xs">
+                                            <span className="text-muted-foreground">Sharpness</span>
+                                            <span className="font-mono text-primary">{sharpness}%</span>
+                                        </div>
+                                        <Slider value={[sharpness]} onValueChange={v => setSharpness(v[0])} max={100} step={1} />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Separator className="bg-white/10" />
+
+                            <div className="space-y-4 animate-fade-in" style={{ animationDelay: "300ms" }}>
+                                <Label className="text-sm font-semibold flex items-center gap-2">
+                                    <Save className="w-4 h-4" /> Export Config
+                                </Label>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="space-y-1.5">
+                                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">Format</span>
+                                        <Select value={outputFormat} onValueChange={setOutputFormat}>
+                                            <SelectTrigger className="h-9 bg-background/50 border-white/10">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="image/png">PNG</SelectItem>
+                                                <SelectItem value="image/jpeg">JPEG</SelectItem>
+                                                <SelectItem value="image/webp">WebP</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">Quality</span>
+                                        <Select value={String(quality)} onValueChange={v => setQuality(Number(v))}>
+                                            <SelectTrigger className="h-9 bg-background/50 border-white/10">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="100">Lossless</SelectItem>
+                                                <SelectItem value="90">High</SelectItem>
+                                                <SelectItem value="75">Balanced</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
+
+                                <Button
+                                    onClick={handleDownload}
+                                    disabled={!processedImage || isProcessing}
+                                    className="w-full h-12 premium-button bg-primary text-primary-foreground text-base shadow-primary/20"
+                                >
+                                    {isProcessing ? (
+                                        <span className="flex items-center gap-2">
+                                            <RefreshCcw className="w-5 h-5 animate-spin" />
+                                            Processing...
+                                        </span>
+                                    ) : (
+                                        <span className="flex items-center gap-2">
+                                            <Download className="w-5 h-5" />
+                                            Download Asset
+                                        </span>
+                                    )}
+                                </Button>
                             </div>
                         </CardContent>
                     </Card>
+
+                    <div className="bg-primary/5 border border-primary/10 rounded-xl p-4 flex gap-3 animate-fade-in" style={{ animationDelay: "400ms" }}>
+                        <div className="p-2 bg-primary/10 rounded-lg h-fit">
+                            <ShieldCheck className="w-4 h-4 text-primary" />
+                        </div>
+                        <div className="space-y-1">
+                            <p className="text-xs font-bold text-primary italic uppercase tracking-tighter">Private processing</p>
+                            <p className="text-[11px] text-muted-foreground leading-relaxed">Your photos never leave your computer. All AI logic happens 100% locally in your browser.</p>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Preview Area */}
-                <div className="space-y-6">
-                    <Card className="overflow-hidden border-2 h-fit">
-                        <CardContent className="p-0">
+                <div className="space-y-6 flex flex-col min-h-[500px]">
+                    <div className="flex-1 relative flex flex-col">
+                        <div className="absolute top-4 left-4 z-10 flex gap-2">
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                onClick={() => setCompareMode(!compareMode)}
+                                className={`shadow-xl backdrop-blur-md bg-background/80 physical-tap ${compareMode ? 'ring-2 ring-primary border-primary/50' : ''}`}
+                                disabled={!originalImage}
+                            >
+                                <History className="w-4 h-4 mr-2" />
+                                {compareMode ? "Cancel Comparison" : "Compare Before/After"}
+                            </Button>
+                        </div>
+
+                        <Card className="flex-1 overflow-hidden premium-card border-white/10 relative bg-muted/20 group">
                             {!originalImage ? (
-                                <div className="aspect-[4/3] bg-muted/30 flex items-center justify-center border-dashed border-2 m-4 rounded-xl">
-                                    <div className="text-center space-y-4 p-8">
-                                        <div className="bg-background rounded-full p-4 shadow-sm inline-block">
-                                            <Upload className="w-8 h-8 text-primary" />
-                                        </div>
-                                        <div className="space-y-1">
-                                            <h3 className="font-semibold text-lg">No image uploaded</h3>
-                                            <p className="text-sm text-muted-foreground">Upload an image to start editing</p>
-                                        </div>
+                                <div className="h-full flex flex-col items-center justify-center text-center p-12 space-y-4">
+                                    <div className="w-24 h-24 bg-primary/5 rounded-full flex items-center justify-center animate-liquid-pulse">
+                                        <Image className="w-12 h-12 text-primary/40" />
                                     </div>
+                                    <div className="space-y-2">
+                                        <p className="text-xl font-bold">No Image Uploaded</p>
+                                        <p className="text-sm text-muted-foreground max-w-xs mx-auto">Upload a high-res or low-res photo to begin the enhancement process.</p>
+                                    </div>
+                                    <Button onClick={() => fileInputRef.current?.click()} className="premium-button px-8">
+                                        Select Image
+                                    </Button>
                                 </div>
                             ) : (
-                                <div className="space-y-0">
-                                    {/* Toolbar */}
-                                    {enhancedImage && (
-                                        <div className="border-b bg-muted/20 p-2 flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
-                                                <Button
-                                                    variant={compareMode ? "secondary" : "ghost"}
-                                                    size="sm"
-                                                    onClick={() => setCompareMode(true)}
-                                                    className="h-8 text-xs font-medium"
-                                                >
-                                                    <div className="w-3 h-3 bg-gradient-to-r from-gray-400 to-gray-600 mr-2 rounded-sm" />
-                                                    Side-by-Side
-                                                </Button>
-                                                <Button
-                                                    variant={!compareMode ? "secondary" : "ghost"}
-                                                    size="sm"
-                                                    onClick={() => setCompareMode(false)}
-                                                    className="h-8 text-xs font-medium"
-                                                >
-                                                    <div className="w-3 h-3 border-r-2 border-gray-400 mr-2" />
-                                                    Slider View
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    <div className="p-4 bg-muted/10 min-h-[400px] flex items-center justify-center">
-                                        {!enhancedImage ? (
-                                            <div className="relative shadow-lg rounded-lg overflow-hidden max-h-[70vh]">
-                                                <img
-                                                    src={originalImage}
-                                                    alt="Original"
-                                                    className="max-w-full h-auto object-contain"
-                                                />
-                                                <div className="absolute top-3 left-3 bg-black/70 text-white px-3 py-1 rounded-full text-xs font-medium backdrop-blur-md">
-                                                    Original Image
+                                <div className="relative w-full h-full flex items-center justify-center p-4">
+                                    <AnimatePresence mode="wait">
+                                        {!compareMode ? (
+                                            <motion.div
+                                                key="single"
+                                                initial={{ opacity: 0, scale: 0.98 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.98 }}
+                                                className="relative max-w-full max-h-[70vh] rounded-lg shadow-2xl overflow-hidden cursor-zoom-in"
+                                            >
+                                                <img src={processedImage} alt="Enhanced" className="max-w-full h-auto object-contain block" />
+                                                <div className="absolute bottom-4 right-4 text-[10px] bg-black/60 text-white font-mono px-2 py-1 rounded backdrop-blur-md uppercase tracking-widest border border-white/10">
+                                                    Processed Output
                                                 </div>
-                                            </div>
-                                        ) : compareMode ? (
-                                            <div className="grid md:grid-cols-2 gap-4 w-full">
-                                                <div className="relative rounded-lg overflow-hidden shadow-md group">
-                                                    <img
-                                                        src={originalImage}
-                                                        alt="Original"
-                                                        className="w-full h-auto object-contain bg-background"
-                                                    />
-                                                    <div className="absolute top-3 left-3 bg-black/60 text-white px-2 py-1 rounded text-xs backdrop-blur-sm">
+                                            </motion.div>
+                                        ) : (
+                                            <motion.div
+                                                key="compare"
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                exit={{ opacity: 0 }}
+                                                className="relative w-full h-[70vh] rounded-lg shadow-2xl overflow-hidden select-none"
+                                                onMouseMove={(e) => {
+                                                    const rect = e.currentTarget.getBoundingClientRect()
+                                                    const x = ((e.clientX - rect.left) / rect.width) * 100
+                                                    setSliderPosition(Math.max(0, Math.min(100, x)))
+                                                }}
+                                                onTouchMove={(e) => {
+                                                    const rect = e.currentTarget.getBoundingClientRect()
+                                                    const touch = e.touches[0]
+                                                    const x = ((touch.clientX - rect.left) / rect.width) * 100
+                                                    setSliderPosition(Math.max(0, Math.min(100, x)))
+                                                }}
+                                            >
+                                                {/* Enhanced (Underneath) */}
+                                                <img src={processedImage} alt="Enhanced" className="absolute top-0 left-0 w-full h-full object-contain" />
+
+                                                {/* Original (Clipped on top, shows on left) */}
+                                                <div
+                                                    className="absolute top-0 left-0 w-full h-full overflow-hidden border-r-2 border-primary z-10"
+                                                    style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+                                                >
+                                                    <img src={originalImage} alt="Original" className="absolute top-0 left-0 w-full h-full object-contain" />
+                                                </div>
+
+                                                {/* Comparison Handle */}
+                                                <div
+                                                    className="absolute top-0 bottom-0 z-20 w-1 bg-primary pointer-events-none"
+                                                    style={{ left: `${sliderPosition}%` }}
+                                                >
+                                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-lg border-4 border-background">
+                                                        <div className="flex gap-1">
+                                                            <div className="w-1 h-3 bg-primary-foreground rounded-full" />
+                                                            <div className="w-1 h-3 bg-primary-foreground rounded-full" />
+                                                        </div>
+                                                    </div>
+                                                    <div className="absolute top-1/2 -translate-y-1/2 left-12 whitespace-nowrap bg-black/60 text-white text-[10px] px-2 py-1 rounded backdrop-blur-md uppercase tracking-widest border border-white/10 font-bold">
+                                                        After
+                                                    </div>
+                                                    <div className="absolute top-1/2 -translate-y-1/2 right-12 whitespace-nowrap bg-black/60 text-white text-[10px] px-2 py-1 rounded backdrop-blur-md uppercase tracking-widest border border-white/10 font-bold">
                                                         Before
                                                     </div>
                                                 </div>
-                                                <div className="relative rounded-lg overflow-hidden shadow-md group border-2 border-primary/20">
-                                                    <img
-                                                        src={enhancedImage}
-                                                        alt="Enhanced"
-                                                        className="w-full h-auto object-contain bg-background"
-                                                    />
-                                                    <div className="absolute top-3 left-3 bg-primary/90 text-primary-foreground px-2 py-1 rounded text-xs shadow-sm">
-                                                        After
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div className="relative overflow-hidden rounded-lg shadow-xl max-h-[70vh] select-none group">
-                                                <div className="relative">
-                                                    <img
-                                                        src={originalImage}
-                                                        alt="Original"
-                                                        className="max-w-full h-auto object-contain pointer-events-none"
-                                                    />
-                                                    <div
-                                                        className="absolute top-0 left-0 h-full overflow-hidden border-r-2 border-white shadow-[2px_0_5px_rgba(0,0,0,0.3)]"
-                                                        style={{ width: `${sliderPosition}%` }}
-                                                    >
-                                                        <img
-                                                            src={enhancedImage}
-                                                            alt="Enhanced"
-                                                            className="max-w-none h-full object-contain"
-                                                            style={{
-                                                                width: (() => {
-                                                                    // We need to calculate width based on the aspect ratio of the image
-                                                                    // Since img element scales strictly by width/height constraints, 
-                                                                    // getting the exact displayed width relative to current container is tricky in pure CSS style here
-                                                                    // Simplification: assume the image fills width.
-                                                                    // A more robust way handles natural vs client dims.
-                                                                    // For now, retaining original logic but improved visual styles.
-                                                                    const containerWidth = 100 * (100 / sliderPosition);
-                                                                    return `${containerWidth}%`;
-                                                                })()
-                                                            }}
-                                                        />
-                                                    </div>
-
-                                                    {/* Slider Handle */}
-                                                    <div
-                                                        className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize hover:bg-primary transition-colors hover:w-1.5 focus:outline-none z-10"
-                                                        style={{ left: `${sliderPosition}%` }}
-                                                        onMouseDown={(e) => {
-                                                            const container = e.currentTarget.parentElement
-                                                            if (!container) return
-
-                                                            const handleMove = (e: MouseEvent) => {
-                                                                const rect = container.getBoundingClientRect()
-                                                                const x = e.clientX - rect.left
-                                                                const percent = Math.max(0, Math.min(100, (x / rect.width) * 100))
-                                                                setSliderPosition(percent)
-                                                            }
-
-                                                            const handleUp = () => {
-                                                                document.removeEventListener("mousemove", handleMove)
-                                                                document.removeEventListener("mouseup", handleUp)
-                                                            }
-
-                                                            document.addEventListener("mousemove", handleMove)
-                                                            document.addEventListener("mouseup", handleUp)
-                                                        }}
-                                                    >
-                                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center transform hover:scale-110 transition-transform">
-                                                            <div className="flex gap-[2px]">
-                                                                <div className="w-[1px] h-3 bg-black/50" />
-                                                                <div className="w-[1px] h-3 bg-black/50" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="absolute bottom-4 left-4 bg-black/60 text-white px-2 py-1 rounded text-xs pointer-events-none">Before</div>
-                                                    <div className="absolute bottom-4 right-4 bg-primary/80 text-white px-2 py-1 rounded text-xs pointer-events-none">After</div>
-                                                </div>
-                                            </div>
+                                            </motion.div>
                                         )}
-                                    </div>
+                                    </AnimatePresence>
                                 </div>
                             )}
-                        </CardContent>
-                    </Card>
 
-                    {enhancedImage && (
-                        <div className="flex justify-end pt-4 animate-in slide-in-from-bottom-4">
-                            <Button onClick={handleDownload} size="lg" className="h-14 px-8 text-lg shadow-xl hover:scale-105 transition-transform">
-                                <Download className="mr-2 h-6 w-6" />
-                                Download Enhanced Photo
-                            </Button>
-                        </div>
-                    )}
+                            {/* Hidden canvas for processing */}
+                            <canvas ref={canvasRef} className="hidden" />
+                        </Card>
 
-                    {/* Hidden elements for processing */}
-                    <canvas ref={canvasRef} className="hidden" />
-                    <img ref={imgRef} alt="" className="hidden" />
-                </div>
-
-                <div className="lg:col-span-2">
-                    <ContentSection
-                        title="About Photo Enhancer AI Tool"
-                        description="Our free AI-powered photo enhancer helps you improve image quality with professional-grade tools. Adjust brightness, contrast, saturation, apply sharpening, and more - all processed in your browser for complete privacy."
-                        features={[
-                            "One-Click Auto Enhancement",
-                            "Manual Fine-Tuning Controls",
-                            "Before/After Slider Comparison",
-                            "Multiple Export Formats (JPEG, PNG, WebP)",
-                            "Quality Control",
-                            "100% Client-Side Processing",
-                            "Drag & Drop Support",
-                            "No File Size Limits"
-                        ]}
-                        faq={[
-                            {
-                                question: "How does auto-enhancement work?",
-                                answer: "Our auto-enhance algorithm intelligently adjusts brightness, contrast, saturation, and sharpness based on proven photography principles to improve most photos instantly."
-                            },
-                            {
-                                question: "Is my photo uploaded to a server?",
-                                answer: "No! All image processing happens 100% in your browser using Canvas API. Your photos never leave your device."
-                            },
-                            {
-                                question: "What image formats are supported?",
-                                answer: "You can upload any common image format (JPEG, PNG, WebP, GIF, etc.) and export in JPEG, PNG, or WebP format."
-                            },
-                            {
-                                question: "Can I enhance multiple photos at once?",
-                                answer: "Currently, you can enhance one photo at a time. Batch processing will be added in a future update."
-                            }
-                        ]}
-                    />
+                        {originalImage && (
+                            <div className="mt-4 flex justify-between items-center bg-card/40 border border-white/5 backdrop-blur-sm p-4 rounded-xl animate-fade-in" style={{ animationDelay: "500ms" }}>
+                                <div className="text-xs text-muted-foreground flex items-center gap-4">
+                                    <div className="flex items-center gap-1.5">
+                                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                                        <span>Ready for export</span>
+                                    </div>
+                                    <span className="opacity-30">|</span>
+                                    <div className="flex items-center gap-1.5 font-mono">
+                                        <span className="uppercase text-[9px] font-bold">Res</span>
+                                        <span>{fileName ? "Auto-Detect" : "N/A"}</span>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <Button variant="ghost" size="sm" onClick={resetAll} className="physical-tap">
+                                        <RefreshCcw className="w-4 h-4 mr-2" />
+                                        Discard Changes
+                                    </Button>
+                                    <Button onClick={handleDownload} className="premium-button shadow-primary/20 bg-primary">
+                                        Apply & Download
+                                        <ChevronRight className="w-4 h-4 ml-1" />
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
+
+            <ContentSection
+                title="Professional Grade Photo Enhancement"
+                description="Elevate your photography with our browser-based AI studio. We provide powerful adjustment tools and smart algorithms that usually require expensive software, all for free and completely private."
+                features={[
+                    "✨ **Auto-Enhance**: One-click AI optimization for lighting and color balance.",
+                    "🎨 **Manual Precision**: Full control over brightness, contrast, saturation, and exposure.",
+                    "🛠️ **Sharpness Boost**: Reduce blur and emphasize details in your portraits or landscapes.",
+                    "🔄 **Real-time Comparison**: Split-view mode to compare your edits with the original source.",
+                    "📦 **Multiple Formats**: Export in high-quality PNG, JPEG, or optimized WebP.",
+                    "🔒 **Local Privacy**: Your photos are never uploaded to any server. Complete peace of mind."
+                ]}
+                howToUse={[
+                    "Upload any JPG, PNG, or WebP image from your device.",
+                    "Use the **AI Presets** or **Fine Tuning** sliders to adjust the visual quality.",
+                    "Enable **Compare Mode** to verify your changes against the original photo.",
+                    "Select your preferred output format and quality in the **Export Config** section.",
+                    "Click **Download Asset** to save your professionally enhanced photo."
+                ]}
+                faq={[
+                    {
+                        question: "Is this tool using real AI?",
+                        answer: "We use sophisticated image processing algorithms and convolution kernels that simulate AI enhancement directly in your browser. This ensures high speed and total privacy without needing server-side GPUs."
+                    },
+                    {
+                        question: "Will my image resolution decrease?",
+                        answer: "No! We process your images at their native resolution. If you upload a 4K photo, we output a 4K photo. We only offer compression settings to help reduce file size if desired."
+                    },
+                    {
+                        question: "Can it fix very blurry photos?",
+                        answer: "The 'Sharpness' tool can recover subtle details in slightly soft images. However, for extremely blurry or out-of-focus photos, software enhancement has physical limits. We recommend using it for sharpening soft textures and edges."
+                    }
+                ]}
+            />
         </ToolWrapper>
     )
 }

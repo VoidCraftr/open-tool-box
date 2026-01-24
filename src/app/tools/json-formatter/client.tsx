@@ -1,19 +1,21 @@
 "use client"
 
 import { useState } from "react"
-import { Copy, Trash2, ShieldCheck, Minimize, Maximize, Download } from "lucide-react"
-
+import { Copy, Trash2, ShieldCheck, Minimize, Maximize, Download, Activity, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Editor from "@monaco-editor/react"
-
 import { ToolWrapper } from "@/components/tools/ToolWrapper"
 import { ContentSection } from "@/components/tools/ContentSection"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { motion, AnimatePresence } from "framer-motion"
+import { Separator } from "@/components/ui/separator"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function JsonFormatterClient() {
     const [input, setInput] = useState("")
     const [output, setOutput] = useState("")
     const [error, setError] = useState<string | null>(null)
+    const [copied, setCopied] = useState(false)
 
     const handleFormat = () => {
         try {
@@ -22,7 +24,7 @@ export default function JsonFormatterClient() {
             setOutput(JSON.stringify(parsed, null, 2))
             setError(null)
         } catch (err) {
-            setError("Invalid JSON: " + (err as Error).message)
+            setError((err as Error).message)
             setOutput("")
         }
     }
@@ -34,7 +36,7 @@ export default function JsonFormatterClient() {
             setOutput(JSON.stringify(parsed))
             setError(null)
         } catch (err) {
-            setError("Invalid JSON: " + (err as Error).message)
+            setError((err as Error).message)
             setOutput("")
         }
     }
@@ -46,7 +48,10 @@ export default function JsonFormatterClient() {
     }
 
     const handleCopy = () => {
+        if (!output) return
         navigator.clipboard.writeText(output)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
     }
 
     const handleDownload = () => {
@@ -67,7 +72,14 @@ export default function JsonFormatterClient() {
             "project": "OpenToolbox",
             "version": 1.0,
             "features": ["formatting", "validation", "minification"],
-            "active": true
+            "meta": {
+                "author": "Open Source Community",
+                "license": "MIT"
+            },
+            "stats": {
+                "active_users": 5000,
+                "uptime": "99.9%"
+            }
         }
         setInput(JSON.stringify(sample, null, 2))
         setError(null)
@@ -75,85 +87,133 @@ export default function JsonFormatterClient() {
 
     return (
         <ToolWrapper
-            title="JSON Formatter & Validator"
-            description="Format, prettify, and validate your JSON data. Secure, client-side processing."
+            title="Professional JSON Logic Suite"
+            description="High-performance JSON formatter, validator, and minifier with real-time syntax highlighting. Secure, localized, and developer-grade."
             toolSlug="json-formatter"
             adSlot="json-tool-slot"
             className="max-w-7xl"
         >
-            <div className="grid gap-6 md:grid-cols-2 h-[500px] lg:h-[calc(100vh-350px)] min-h-[400px]">
-                <div className="space-y-2 flex flex-col h-full">
-                    <div className="flex items-center justify-between shrink-0">
-                        <h3 className="text-lg font-medium">Input JSON</h3>
-                        <div className="flex gap-2">
-                            <Button variant="outline" size="sm" onClick={handleLoadSample} className="h-8 px-2">
-                                Load Sample
+            <div className="flex flex-col h-[calc(100vh-200px)] min-h-[750px] gap-6 relative">
+                {/* Fixed Control Deck at Top */}
+                <div className="sticky top-0 z-30 flex flex-col md:flex-row items-center justify-between gap-6 py-4 px-6 bg-background/80 backdrop-blur-xl border border-white/10 rounded-3xl liquid-shadow animate-fade-in shrink-0">
+                    <div className="flex items-center gap-6">
+                        <div className="flex flex-col">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Engine Status</span>
+                            <div className="flex items-center gap-2">
+                                <div className={`w-2 h-2 rounded-full ${error ? 'bg-red-500 animate-pulse' : input ? 'bg-green-500' : 'bg-primary/20'}`} />
+                                <span className="text-xs font-bold">{error ? "Syntax Hazard Detected" : input ? "Ready for Synthesis" : "Awaiting Input"}</span>
+                            </div>
+                        </div>
+                        <Separator orientation="vertical" className="h-8 bg-white/10" />
+                        <div className="flex gap-3">
+                            <Button onClick={handleFormat} size="lg" className="h-12 px-8 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-black shadow-lg shadow-primary/20 active:scale-95 transition-all">
+                                <Maximize className="mr-2 h-4 w-4" /> PRETTIFY
                             </Button>
-                            <Button variant="ghost" size="sm" onClick={handleClear} className="h-8 px-2 text-destructive">
-                                <Trash2 className="mr-2 h-4 w-4" /> Clear
+                            <Button onClick={handleMinify} variant="secondary" size="lg" className="h-12 px-6 rounded-xl bg-white/5 hover:bg-white/10 text-foreground font-black active:scale-95 transition-all border border-white/5">
+                                <Minimize className="mr-2 h-4 w-4" /> MINIFY
                             </Button>
                         </div>
                     </div>
-                    <div className="flex-1 border rounded-md overflow-hidden shadow-sm">
-                        <Editor
-                            height="100%"
-                            defaultLanguage="json"
-                            theme="vs-dark"
-                            value={input}
-                            onChange={(value) => setInput(value || "")}
-                            options={{
-                                minimap: { enabled: false },
-                                fontSize: 13,
-                                wordWrap: "on",
-                            }}
-                        />
-                    </div>
-                </div>
 
-                <div className="space-y-2 flex flex-col h-full">
-                    <div className="flex items-center justify-between shrink-0">
-                        <h3 className="text-lg font-medium">Output</h3>
-                        <div className="flex gap-2">
-                            <Button variant="outline" size="sm" onClick={handleDownload} disabled={!output} className="h-8 px-2">
-                                <Download className="mr-2 h-4 w-4" /> Download
-                            </Button>
-                            <Button variant="outline" size="sm" onClick={handleCopy} disabled={!output} className="h-8 px-2">
-                                <Copy className="mr-2 h-4 w-4" /> Copy
-                            </Button>
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-primary/10 rounded-lg">
+                            <ShieldCheck className="w-4 h-4 text-primary" />
                         </div>
-                    </div>
-                    <div className="flex-1 border rounded-md overflow-hidden shadow-sm">
-                        <Editor
-                            height="100%"
-                            defaultLanguage="json"
-                            theme="vs-dark"
-                            value={output}
-                            options={{
-                                readOnly: true,
-                                minimap: { enabled: false },
-                                fontSize: 13,
-                                wordWrap: "on",
-                            }}
-                        />
+                        <p className="text-[10px] text-muted-foreground italic font-medium uppercase tracking-tighter">Localized Processing Zero Cloud Logging</p>
                     </div>
                 </div>
-            </div>
 
-            <div className="flex flex-wrap gap-4 py-4 justify-center">
-                <Button onClick={handleFormat} size="lg">
-                    <Maximize className="mr-2 h-4 w-4" /> Format / Prettify
-                </Button>
-                <Button onClick={handleMinify} variant="secondary" size="lg">
-                    <Minimize className="mr-2 h-4 w-4" /> Minify
-                </Button>
-            </div>
+                <AnimatePresence>
+                    {error && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="z-20"
+                        >
+                            <Alert variant="destructive" className="bg-red-500/10 border-red-500/20 rounded-2xl">
+                                <AlertTitle className="font-black uppercase tracking-widest text-xs flex items-center gap-2">
+                                    <Activity className="w-4 h-4" /> Logic Regression Detected
+                                </AlertTitle>
+                                <AlertDescription className="font-mono text-xs opacity-80">{error}</AlertDescription>
+                            </Alert>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
-            {error && (
-                <Alert variant="destructive">
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription>{error}</AlertDescription>
-                </Alert>
-            )}
+                {/* Master Grid - Growing below fixed header */}
+                <div className="grid lg:grid-cols-2 lg:flex-1 gap-6 min-h-0">
+                    {/* Input Node */}
+                    <Card className="liquid-glass border-white/20 shadow-liquid flex flex-col min-h-0 overflow-hidden group">
+                        <CardHeader className="py-4 px-6 border-b border-white/5 flex flex-row items-center justify-between shrink-0">
+                            <div>
+                                <CardTitle className="text-sm font-black uppercase tracking-widest text-primary flex items-center gap-2">
+                                    <Activity className="w-4 h-4" /> Source JSON
+                                </CardTitle>
+                            </div>
+                            <div className="flex gap-2">
+                                <Button variant="ghost" size="sm" onClick={handleLoadSample} className="h-8 text-[10px] font-black tracking-widest hover:bg-primary/10 hover:text-primary transition-all">
+                                    LOAD SAMPLE
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={handleClear} className="h-8 text-[10px] font-black tracking-widest text-red-400 hover:bg-red-400/10 transition-all">
+                                    <Trash2 className="w-3 h-3 mr-1.5" /> CLEAR
+                                </Button>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="flex-1 p-0 min-h-0 bg-black/20">
+                            <Editor
+                                height="100%"
+                                defaultLanguage="json"
+                                theme="vs-dark"
+                                value={input}
+                                onChange={(value) => setInput(value || "")}
+                                options={{
+                                    minimap: { enabled: false },
+                                    fontSize: 14,
+                                    wordWrap: "on",
+                                    padding: { top: 20, bottom: 20 },
+                                    lineNumbersMinChars: 3,
+                                    renderLineHighlight: "none"
+                                }}
+                            />
+                        </CardContent>
+                    </Card>
+
+                    {/* Output Node */}
+                    <Card className="liquid-glass border-white/20 shadow-liquid flex flex-col min-h-0 overflow-hidden group">
+                        <CardHeader className="py-4 px-6 border-b border-white/5 flex flex-row items-center justify-between shrink-0">
+                            <CardTitle className="text-sm font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                                <Zap className="w-4 h-4" /> Formatted Result
+                            </CardTitle>
+                            <div className="flex gap-2">
+                                <Button variant="ghost" size="sm" onClick={handleDownload} disabled={!output} className="h-8 text-[10px] font-black tracking-widest hover:bg-primary/10 transition-all">
+                                    <Download className="w-3 h-3 mr-1.5" /> DOWNLOAD
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={handleCopy} disabled={!output} className="h-8 text-[10px] font-black tracking-widest hover:bg-primary/10 transition-all">
+                                    <Copy className="w-3 h-3 mr-1.5" /> {copied ? "COPIED" : "COPY"}
+                                </Button>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="flex-1 p-0 min-h-0 bg-black/40">
+                            <Editor
+                                height="100%"
+                                defaultLanguage="json"
+                                theme="vs-dark"
+                                value={output}
+                                options={{
+                                    readOnly: true,
+                                    minimap: { enabled: false },
+                                    fontSize: 14,
+                                    wordWrap: "on",
+                                    padding: { top: 20, bottom: 20 },
+                                    lineNumbersMinChars: 3,
+                                    renderLineHighlight: "none"
+                                }}
+                            />
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
 
             <ContentSection
                 title="The Ultimate JSON Formatter & Validator"

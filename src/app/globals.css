@@ -45,85 +45,95 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  --shadow-liquid: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
 }
 
 :root {
   --radius: 0.75rem;
   /* More rounded premium feel */
   /* Premium Zinc Light */
-  --background: oklch(0.99 0.005 260);
-  /* Very Subtle Cool White */
-  --foreground: oklch(0.13 0.02 260);
-  /* Deep Zinc */
+  /* Premium Friendly Light - Warmer & Softer */
+  --background: oklch(0.985 0.002 240);
+  /* Soft Slate/Stone */
+  --foreground: oklch(0.14 0.02 240);
+  /* Crisp but soft white */
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.13 0.02 260);
+  --card-foreground: oklch(0.14 0.02 240);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.13 0.02 260);
-  --primary: oklch(0.5 0.25 260);
-  /* Vibrant Indigo */
+  --popover-foreground: oklch(0.14 0.02 240);
+
+  /* Primary: Vibrant but accessible Indigo/Violet */
+  --primary: oklch(0.55 0.22 260);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.96 0.01 260);
-  --secondary-foreground: oklch(0.25 0.05 260);
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.45 0.02 260);
-  --accent: oklch(0.96 0.01 260);
-  --accent-foreground: oklch(0.25 0.05 260);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.92 0.01 260);
-  --input: oklch(0.92 0.01 260);
-  --ring: oklch(0.5 0.25 260);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0.005 260);
-  --sidebar-foreground: oklch(0.13 0.02 260);
-  --sidebar-primary: oklch(0.5 0.25 260);
+
+  --secondary: oklch(0.96 0.01 240);
+  --secondary-foreground: oklch(0.25 0.04 240);
+
+  --muted: oklch(0.96 0.01 240);
+  --muted-foreground: oklch(0.45 0.03 240);
+
+  --accent: oklch(0.95 0.02 240);
+  --accent-foreground: oklch(0.25 0.04 240);
+
+  --destructive: oklch(0.6 0.2 25);
+  --border: oklch(0.92 0.01 240);
+  --input: oklch(0.92 0.01 240);
+  --ring: oklch(0.55 0.22 260);
+
+  /* Friendly Charts */
+  --chart-1: oklch(0.6 0.18 250);
+  --chart-2: oklch(0.55 0.15 180);
+  --chart-3: oklch(0.8 0.15 80);
+  --chart-4: oklch(0.7 0.2 300);
+  --chart-5: oklch(0.65 0.2 30);
+
+  --sidebar: oklch(0.99 0.002 240);
+  --sidebar-foreground: oklch(0.14 0.02 240);
+  --sidebar-primary: oklch(0.55 0.22 260);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.95 0.01 260);
-  --sidebar-accent-foreground: oklch(0.25 0.05 260);
-  --sidebar-border: oklch(0.92 0.01 260);
-  --sidebar-ring: oklch(0.5 0.25 260);
+  --sidebar-accent: oklch(0.96 0.01 240);
+  --sidebar-accent-foreground: oklch(0.25 0.04 240);
+  --sidebar-border: oklch(0.92 0.01 240);
+  --sidebar-ring: oklch(0.55 0.22 260);
 }
 
 .dark {
-  /* Premium Zinc Dark - "Midnight SaaS" */
-  --background: oklch(0.11 0.02 260);
-  /* Deep Slate/Zinc */
-  --foreground: oklch(0.98 0.01 260);
-  --card: oklch(0.13 0.025 260);
-  /* Slightly lighter than bg */
-  --card-foreground: oklch(0.98 0.01 260);
-  --popover: oklch(0.12 0.025 260);
-  --popover-foreground: oklch(0.98 0.01 260);
-  --primary: oklch(0.6 0.20 260);
-  /* Electric Indigo */
+  /* Midnight SaaS - Deep Blue-Black but readable */
+  --background: oklch(0.12 0.03 260);
+  --foreground: oklch(0.96 0.01 240);
+
+  /* Slightly elevated card bg */
+  --card: oklch(0.15 0.035 260);
+  --card-foreground: oklch(0.96 0.01 240);
+  --popover: oklch(0.15 0.035 260);
+  --popover-foreground: oklch(0.96 0.01 240);
+
+  --primary: oklch(0.65 0.2 260);
   --primary-foreground: oklch(0 0 0);
+
   --secondary: oklch(0.2 0.04 260);
-  --secondary-foreground: oklch(0.98 0.01 260);
+  --secondary-foreground: oklch(0.96 0.01 240);
+
   --muted: oklch(0.2 0.04 260);
-  --muted-foreground: oklch(0.7 0.03 260);
+  --muted-foreground: oklch(0.7 0.03 240);
+
   --accent: oklch(0.2 0.04 260);
-  --accent-foreground: oklch(0.98 0.01 260);
-  --destructive: oklch(0.4 0.15 25);
-  --border: oklch(0.25 0.03 260);
-  /* Subtle Indigo borders */
-  --input: oklch(0.25 0.03 260);
-  --ring: oklch(0.5 0.25 260);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.12 0.025 260);
-  --sidebar-foreground: oklch(0.98 0 0);
-  --sidebar-primary: oklch(0.6 0.2 260);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --accent-foreground: oklch(0.96 0.01 240);
+
+  --destructive: oklch(0.5 0.15 25);
+  --border: oklch(0.22 0.04 260);
+  --input: oklch(0.22 0.04 260);
+  --ring: oklch(0.65 0.2 260);
+
+  --sidebar: oklch(0.14 0.035 260);
+  --sidebar-foreground: oklch(0.96 0.01 240);
+  --sidebar-primary: oklch(0.65 0.2 260);
+  --sidebar-primary-foreground: oklch(0 0 0);
   --sidebar-accent: oklch(0.2 0.04 260);
-  --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(0.25 0.03 260);
-  --sidebar-ring: oklch(0.5 0.25 260);
+  --sidebar-accent-foreground: oklch(0.96 0.01 240);
+  --sidebar-border: oklch(0.22 0.04 260);
+  --sidebar-ring: oklch(0.65 0.2 260);
 }
 
 @layer base {
@@ -173,28 +183,64 @@
   }
 }
 
-.animate-float {
+@keyframes liquid-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@utility animate-float {
   animation: float 6s ease-in-out infinite;
 }
 
-.animate-sprite {
+@utility animate-sprite {
   animation: sprite-typing 0.8s steps(3) infinite;
 }
 
-.animate-fade-in {
+@utility animate-fade-in {
   animation: fade-in 0.4s ease-out forwards;
 }
 
-/* Glassmorphism utility */
-.glass {
-  @apply bg-background/70 backdrop-blur-lg border border-border/50;
+@utility animate-liquid-pulse {
+  animation: liquid-pulse 2s ease-in-out infinite;
 }
 
-/* Component Enhancements */
-.premium-card {
-  @apply bg-card border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-primary/20 hover:-translate-y-1 rounded-xl;
+/* Liquid UI Studio */
+@utility glass {
+  @apply bg-background/80 backdrop-blur-md border border-border/50;
 }
 
-.premium-button {
-  @apply shadow-lg hover:shadow-primary/25 active:scale-95 transition-all duration-200 font-medium;
+@utility liquid-glass {
+  @apply bg-background/60 backdrop-blur-xl border-white/20 shadow-liquid dark:border-white/5;
+}
+
+@utility liquid-shadow {
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.05);
+}
+
+@utility progressive-blur {
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+
+@utility physical-tap {
+  @apply transition-transform duration-200 active:scale-95 hover:scale-[1.02] hover:shadow-lg;
+}
+
+@utility premium-card {
+  @apply bg-card border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-primary/20 hover:-translate-y-1 rounded-2xl;
+}
+
+@utility premium-button {
+  @apply shadow-lg hover:shadow-primary/25 physical-tap font-medium rounded-full;
 }
