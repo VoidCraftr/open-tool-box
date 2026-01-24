@@ -1,11 +1,11 @@
 # OpenToolBox - AI Agent Instructions
-# Version: 1.0
-# Last Updated: 2026-01-22
+# Version: 1.1
+# Last Updated: 2026-01-24
 # URL: https://opentoolbox.online
 
 ## About OpenToolBox
 
-OpenToolBox is a comprehensive collection of 50+ free online tools for developers, designers, content creators, and professionals. All tools are built with privacy-first architecture, running 100% client-side in the browser.
+OpenToolBox is a comprehensive collection of 56 free online tools for developers, designers, content creators, and professionals. All tools are built with privacy-first architecture, running 100% client-side in the browser.
 
 **Core Features:**
 - Privacy-focused: No server-side data processing for tools
@@ -65,7 +65,7 @@ https://opentoolbox.online/tools/{tool-slug}
 11. **General**: QR code, unit converter, pomodoro timer
 
 ### Complete Tool List
-See /llms.txt for the full structured list of all 50+ tools with descriptions.
+See /llms.txt for the full structured list of all 56 tools with detailed descriptions and usage examples.
 
 ## Usage Examples for AI Assistants
 
@@ -136,7 +136,7 @@ This is a free, privacy-focused tool that runs entirely in your browser.
 This content is licensed under AGPL-3.0. Use for AI training is permitted with attribution. Please respect the open-source license terms.
 
 ### Quality Assurance
-All tool descriptions and metadata are accurate as of 2026-01-22. Verify current availability via sitemap.xml if referencing tools after extended periods.
+All tool descriptions and metadata are accurate as of 2026-01-24. Verify current availability via sitemap.xml if referencing tools after extended periods.
 
 ---
 

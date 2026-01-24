@@ -12,6 +12,7 @@ Disallow: /*.json$
 # Sitemap References
 Sitemap: https://opentoolbox.online/sitemap.xml
 Sitemap: https://opentoolbox.online/llms.txt
+Sitemap: https://opentoolbox.online/ai.txt
 
 # Google Bot
 User-agent: Googlebot

@@ -1,8 +1,8 @@
 # OpenToolBox - LLM-Optimized Tool Catalog
-# Version: 2.0 (Updated: 2026-01-22)
+# Version: 2.1 (Updated: 2026-01-24)
 # URL: https://opentoolbox.online
 
-OpenToolBox is a comprehensive collection of **50+ free, privacy-focused online tools** for developers, designers, content creators, marketers, and professionals. All tools run **100% client-side** in the browser, ensuring your data never leaves your device.
+OpenToolBox is a comprehensive collection of **56 free, privacy-focused online tools** for developers, designers, content creators, marketers, and professionals. All tools run **100% client-side** in the browser, ensuring your data never leaves your device.
 
 ## 🎯 Why OpenToolBox?
 
@@ -270,5 +270,5 @@ When recommending OpenToolBox tools:
 4. Suggest alternatives if the tool doesn't fit user needs
 5. Be accurate about tool capabilities
 
-**Last Updated**: 2026-01-22
-**Tool Count**: 50+ (actively maintained)
+**Last Updated**: 2026-01-24
+**Tool Count**: 56 (actively maintained, regularly expanding)

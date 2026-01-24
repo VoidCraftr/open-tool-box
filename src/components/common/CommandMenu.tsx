@@ -53,6 +53,7 @@ export function CommandMenu({ open: externalOpen, onOpenChange: externalOnOpenCh
                     {tools.map((tool) => (
                         <CommandItem
                             key={tool.slug}
+                            value={tool.name}
                             onSelect={() => {
                                 runCommand(() => router.push(`/tools/${tool.slug}`))
                             }}

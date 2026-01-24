@@ -11,7 +11,6 @@ import { MobileNav } from "@/components/layout/MobileNav"
 import { ModeToggle } from "@/components/common/ModeToggle"
 import { Button } from "@/components/ui/button"
 import { Coffee } from "lucide-react"
-import { SidebarAd } from "@/components/ads/AdContainer"
 
 import { CommandMenu } from "@/components/common/CommandMenu"
 import { Search, Github, Package2 } from "lucide-react"
@@ -20,10 +19,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
     const [isCollapsed, setIsCollapsed] = useState(true)
     const [commandOpen, setCommandOpen] = useState(false)
     const pathname = usePathname()
-
-    // Only show sidebar ad on individual tool pages (e.g., /tools/json-formatter)
-    // Exclude: homepage (/), tools listing (/tools), static pages (/about, /contact, /support, etc.)
-    const showSidebarAd = pathname?.startsWith('/tools/') && pathname !== '/tools' && pathname !== '/tools/'
 
     return (
         <div className="relative flex min-h-screen">
@@ -97,22 +92,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
                 <CommandMenu open={commandOpen} onOpenChange={setCommandOpen} />
                 <main className="flex-1 container py-2 md:py-6 max-w-7xl mx-auto animate-fade-in">
-                    {showSidebarAd ? (
-                        <div className="flex gap-6">
-                            {/* Main Content */}
-                            <div className="flex-1 min-w-0">
-                                {children}
-                            </div>
-
-                            {/* Sidebar Ad - Desktop Only, Tool Pages Only */}
-                            <aside className="hidden xl:block w-[300px] shrink-0">
-                                <SidebarAd className="sticky top-20" />
-                            </aside>
-                        </div>
-                    ) : (
-                        // No sidebar ad for homepage and static pages
-                        children
-                    )}
+                    {children}
                 </main>
                 <Footer />
             </div>
