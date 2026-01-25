@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, Star, Github, Zap, Shield, Globe, Lock, Code2, Cpu, Type } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { tools, categories } from "@/config/tools";
+import { tools, categories, ToolMetadata } from "@/config/tools";
 import { ToolsSlider } from "@/components/home/ToolsSlider";
 import { PremiumCard } from "@/components/common/PremiumCard";
 import { motion } from "framer-motion";
@@ -15,7 +15,18 @@ export default function Home() {
   const row2Tools = tools.filter(t => ["developer", "security", "pdf"].includes(t.category));
   const row3Tools = tools.filter(t => ["math", "finance", "health", "general"].includes(t.category));
 
-  const featuredTools = tools.filter(t => t.isNew || t.isPopular).slice(0, 6);
+  // Featured tools (manually curated)
+  const featuredToolSlugs = [
+    "sign-pdf",
+    "photo-enhancer",
+    "watermark-remover",
+    "instagram-post-generator",
+    "invoice-generator",
+    "qr-code-generator"
+  ];
+  const featuredTools = featuredToolSlugs
+    .map(slug => tools.find(t => t.slug === slug))
+    .filter(Boolean) as ToolMetadata[];
 
   return (
     <div className="flex flex-col gap-16 md:gap-24 overflow-hidden">
