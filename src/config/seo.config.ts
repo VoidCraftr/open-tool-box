@@ -47,6 +47,10 @@ export function generateOrganizationSchema() {
             'https://linkedin.com/in/voidcraftr',
             'https://instagram.com/voidcraftr',
             'https://facebook.com/voidcraftr',
+            'https://peerlist.io/satyamagarwalin/project/opentoolbox',
+            'https://producthunt.com/products/opentoolbox',
+            'https://saashub.com/opentoolbox-alternatives',
+            'https://devhunt.org/tool/opentoolbox',
         ],
     };
 }

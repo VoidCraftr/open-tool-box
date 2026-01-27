@@ -244,3 +244,21 @@
 @utility premium-button {
   @apply shadow-lg hover:shadow-primary/25 physical-tap font-medium rounded-full;
 }
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@utility animate-scroll {
+  animation: scroll 40s linear infinite;
+}
+
+@utility mask-gradient-x {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}

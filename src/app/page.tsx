@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { tools, categories, ToolMetadata } from "@/config/tools";
 import { ToolsSlider } from "@/components/home/ToolsSlider";
 import { PremiumCard } from "@/components/common/PremiumCard";
+import { LaunchShowcase } from "@/components/home/LaunchShowcase";
 import { motion } from "framer-motion";
 
 export default function Home() {
@@ -155,12 +156,10 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="mt-8 flex sm:hidden justify-center">
-          <Link href="/tools" className="flex items-center text-primary font-medium hover:underline">
-            View directory <ArrowRight className="ml-1 h-4 w-4" />
-          </Link>
-        </div>
       </section>
+
+      {/* Launch Showcase */}
+      <LaunchShowcase />
 
       {/* Intent-Driven Hubs */}
       <section className="container max-w-7xl mx-auto px-4 pb-20">
