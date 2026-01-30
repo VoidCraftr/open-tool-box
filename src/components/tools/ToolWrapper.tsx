@@ -51,7 +51,7 @@ export function ToolWrapper({
                         </div>
                     )}
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tighter md:text-4xl text-foreground">
+                        <h1 className="text-2xl font-bold tracking-tighter md:text-4xl text-foreground">
                             {title}
                         </h1>
                         <p className="text-lg text-muted-foreground mt-2">{description}</p>

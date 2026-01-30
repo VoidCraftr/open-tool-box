@@ -70,7 +70,7 @@ export function ToolsDashboard() {
                         {tools.length} Professional Utilities Online
                     </motion.div>
 
-                    <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-foreground max-w-4xl leading-[1.1]">
+                    <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-foreground max-w-4xl leading-[1.1]">
                         The Ultimate <br />
                         <span className="bg-gradient-to-r from-primary via-blue-500 to-emerald-500 bg-clip-text text-transparent italic animate-gradient">Developer Arsenal</span>
                     </h1>

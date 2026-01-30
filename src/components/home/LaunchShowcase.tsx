@@ -56,7 +56,7 @@ export function LaunchShowcase() {
     const marqueeGroup = [...launches, ...launches, ...launches, ...launches];
 
     return (
-        <section className="py-20 overflow-hidden bg-muted/5 border-y border-white/5 relative">
+        <section className="py-10 md:py-20 overflow-hidden bg-muted/5 border-y border-white/5 relative">
             <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
             <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
 

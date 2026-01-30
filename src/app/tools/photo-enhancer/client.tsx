@@ -401,8 +401,8 @@ export default function PhotoEnhancerClient() {
                         </Card>
 
                         {originalImage && (
-                            <div className="mt-4 flex justify-between items-center bg-card/40 border border-white/5 backdrop-blur-sm p-4 rounded-xl animate-fade-in" style={{ animationDelay: "500ms" }}>
-                                <div className="text-xs text-muted-foreground flex items-center gap-4">
+                            <div className="mt-4 flex flex-col md:flex-row justify-between items-center bg-card/40 border border-white/5 backdrop-blur-sm p-4 rounded-xl animate-fade-in gap-4" style={{ animationDelay: "500ms" }}>
+                                <div className="text-xs text-muted-foreground flex items-center gap-4 w-full justify-center md:justify-start">
                                     <div className="flex items-center gap-1.5">
                                         <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                                         <span>Ready for export</span>

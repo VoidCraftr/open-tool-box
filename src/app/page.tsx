@@ -30,12 +30,12 @@ export default function Home() {
     .filter(Boolean) as ToolMetadata[];
 
   return (
-    <div className="flex flex-col gap-16 md:gap-24 overflow-hidden">
+    <div className="flex flex-col gap-8 md:gap-24 overflow-hidden">
 
       {/* Hero Section */}
       <section className="relative pt-12 lg:pt-24 pb-12 text-center space-y-8">
         {/* Background Gradients */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] opacity-30 pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] md:w-[1000px] h-[300px] md:h-[500px] opacity-30 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-blue-500/20 to-purple-500/20 blur-[100px] rounded-full mix-blend-screen" />
         </div>
 
@@ -50,7 +50,7 @@ export default function Home() {
             v1.0 is now live!
           </div>
 
-          <h1 className="text-5xl font-bold tracking-tighter sm:text-6xl md:text-7xl lg:text-8xl bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/50">
+          <h1 className="text-3xl font-bold tracking-tighter sm:text-6xl md:text-7xl lg:text-8xl bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/50">
             Simple Tools for <br className="hidden sm:inline" />
             <span className="bg-gradient-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent animate-gradient bg-300%">
               Everyday Tasks
