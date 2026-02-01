@@ -8,54 +8,78 @@ import {
     Type,
     RefreshCcw,
     Sparkles,
-    Maximize2,
     Square,
     Smartphone,
     Layers,
     Type as Typography,
-    Check
+    Check,
+    AlignLeft,
+    AlignCenter,
+    AlignRight
 } from "lucide-react"
 import { ToolWrapper } from "@/components/tools/ToolWrapper"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardTitle, CardDescription, CardHeader } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ContentSection } from "@/components/tools/ContentSection"
 import { Separator } from "@/components/ui/separator"
-import { motion, AnimatePresence } from "framer-motion"
+import { Slider } from "@/components/ui/slider"
+import { motion } from "framer-motion"
 import html2canvas from "html2canvas"
 import { cn } from "@/lib/utils"
-// Shared components
 import { ToolLayout } from "@/components/tools/ui/ToolLayout"
 import { ControlCard } from "@/components/tools/ui/ControlCard"
 
 const BACKGROUNDS = [
-    { id: "mesh-1", name: "Cyber Sunset", class: "bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500" },
-    { id: "mesh-2", name: "Deep Sea", class: "bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900" },
-    { id: "mesh-3", name: "Golden Hour", class: "bg-gradient-to-br from-orange-400 via-rose-400 to-amber-500" },
-    { id: "mesh-4", name: "Emerald Dream", class: "bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500" },
-    { id: "solid-dark", name: "Void Black", class: "bg-zinc-950" },
-    { id: "solid-light", name: "Paper White", class: "bg-slate-50 text-slate-950" },
+    { id: "mesh-1", name: "Cyber Sunset", gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" },
+    { id: "mesh-2", name: "Deep Sea", gradient: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)" },
+    { id: "mesh-3", name: "Golden Hour", gradient: "linear-gradient(135deg, #ff6b6b 0%, #feca57 100%)" },
+    { id: "mesh-4", name: "Emerald Dream", gradient: "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)" },
+    { id: "mesh-5", name: "Purple Rain", gradient: "linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)" },
+    { id: "mesh-6", name: "Ocean Blue", gradient: "linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)" },
+    { id: "solid-dark", name: "Void Black", gradient: "#18181b" },
+    { id: "solid-light", name: "Paper White", gradient: "#f8fafc" },
 ]
 
-const FONTS = [
-    { name: "Cinematic Serif", class: "font-serif" },
-    { name: "Modern Sans", class: "font-sans" },
-    { name: "Classic Mono", class: "font-mono" },
-    { name: "Black Italic", class: "font-black italic" },
+const FONT_FAMILIES = [
+    { name: "Inter", style: "'Inter', sans-serif" },
+    { name: "Playfair Display", style: "'Playfair Display', serif" },
+    { name: "Roboto Mono", style: "'Roboto Mono', monospace" },
+    { name: "Poppins", style: "'Poppins', sans-serif" },
+    { name: "Merriweather", style: "'Merriweather', serif" },
+    { name: "Lora", style: "'Lora', serif" },
+    { name: "Montserrat", style: "'Montserrat', sans-serif" },
+    { name: "Open Sans", style: "'Open Sans', sans-serif" },
+    { name: "Raleway", style: "'Raleway', sans-serif" },
+    { name: "Oswald", style: "'Oswald', sans-serif" },
+]
+
+const FONT_WEIGHTS = [
+    { name: "Light", value: "300" },
+    { name: "Regular", value: "400" },
+    { name: "Medium", value: "500" },
+    { name: "Semi Bold", value: "600" },
+    { name: "Bold", value: "700" },
+    { name: "Extra Bold", value: "800" },
+    { name: "Black", value: "900" },
 ]
 
 export default function QuoteGeneratorClient() {
     const [quote, setQuote] = useState("Innovation distinguishes between a leader and a follower.")
     const [author, setAuthor] = useState("Steve Jobs")
     const [background, setBackground] = useState(BACKGROUNDS[0])
-    const [font, setFont] = useState(FONTS[3])
+    const [fontFamily, setFontFamily] = useState(FONT_FAMILIES[0])
+    const [fontWeight, setFontWeight] = useState(FONT_WEIGHTS[4])
     const [aspectRatio, setAspectRatio] = useState<"1:1" | "9:16">("1:1")
     const [isGenerating, setIsGenerating] = useState(false)
     const [fontSize, setFontSize] = useState(48)
     const [branding, setBranding] = useState("@opentoolbox")
+    const [textAlign, setTextAlign] = useState<"left" | "center" | "right">("center")
+    const [letterSpacing, setLetterSpacing] = useState(0)
+    const [padding, setPadding] = useState(64)
+    const [isItalic, setIsItalic] = useState(false)
 
     const canvasRef = useRef<HTMLDivElement>(null)
 
@@ -63,268 +87,415 @@ export default function QuoteGeneratorClient() {
         if (!canvasRef.current) return
         setIsGenerating(true)
         try {
+            // Wait a bit for fonts to load
+            await new Promise(resolve => setTimeout(resolve, 100))
+
             const canvas = await html2canvas(canvasRef.current, {
                 scale: 3,
                 useCORS: true,
+                allowTaint: true,
                 backgroundColor: null,
+                logging: false,
+                onclone: (clonedDoc) => {
+                    // Ensure all elements are visible in the clone
+                    const clonedElement = clonedDoc.querySelector('[data-quote-canvas]') as HTMLElement
+                    if (clonedElement) {
+                        clonedElement.style.transform = 'none'
+                    }
+                }
             })
+
             const link = document.createElement('a')
             link.download = `quote-${Date.now()}.png`
-            link.href = canvas.toDataURL("image/png")
+            link.href = canvas.toDataURL("image/png", 1.0)
             link.click()
         } catch (err) {
-            console.error(err)
+            console.error('Export error:', err)
+            alert('Failed to export image. Please try again.')
         } finally {
             setIsGenerating(false)
         }
     }
 
+    const textColor = background.id === "solid-light" ? "#0f172a" : "#ffffff"
+
     return (
         <ToolWrapper
             title="Social Quote Creator"
-            description="Turn quotes into beautiful cinematic posts for Instagram and social media."
+            description="Create beautiful quote graphics for Instagram, Twitter, and other social platforms."
             toolSlug="social-quote-generator"
         >
             <ToolLayout
                 sidebar={
-                    <div className="space-y-6">
-                        <ControlCard
-                            title="Visual Director"
-                            icon={Typography}
-                            className="space-y-6"
-                        >
-                            {/* Text Input */}
+                    <div className="space-y-4">
+                        <ControlCard title="Content" icon={Typography}>
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">The Narrative</Label>
+                                    <Label className="text-xs font-medium">Quote Text</Label>
                                     <Textarea
-                                        className="min-h-[100px] bg-muted/40 border-input text-xs font-medium focus:ring-primary/20 p-4 rounded-2xl resize-none text-foreground"
-                                        placeholder="What's the message?"
+                                        className="min-h-[100px] resize-none"
+                                        placeholder="Enter your quote..."
                                         value={quote}
                                         onChange={e => setQuote(e.target.value)}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">The Voice (Author)</Label>
+                                    <Label className="text-xs font-medium">Author</Label>
                                     <Input
-                                        className="h-10 bg-muted/40 border-input text-xs font-bold px-4 rounded-xl text-foreground"
-                                        placeholder="Name of author..."
+                                        placeholder="Author name..."
                                         value={author}
                                         onChange={e => setAuthor(e.target.value)}
                                     />
                                 </div>
                             </div>
-
-                            <Separator className="bg-border/50" />
-
-                            {/* Appearance */}
-                            <div className="space-y-4">
-                                <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Cinemascope & Grid</Label>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <Button
-                                        variant={aspectRatio === "1:1" ? "default" : "outline"}
-                                        className="h-12 text-[10px] font-black uppercase tracking-widest border-border"
-                                        onClick={() => setAspectRatio("1:1")}
-                                    >
-                                        <Square className="w-4 h-4 mr-2" /> 1:1 Post
-                                    </Button>
-                                    <Button
-                                        variant={aspectRatio === "9:16" ? "default" : "outline"}
-                                        className="h-12 text-[10px] font-black uppercase tracking-widest border-border"
-                                        onClick={() => setAspectRatio("9:16")}
-                                    >
-                                        <Smartphone className="w-4 h-4 mr-2" /> 9:16 Story
-                                    </Button>
-                                </div>
-                            </div>
-
-                            <div className="space-y-4">
-                                <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Atmosphere Select</Label>
-                                <div className="grid grid-cols-3 gap-2">
-                                    {BACKGROUNDS.map((bg) => (
-                                        <button
-                                            key={bg.id}
-                                            onClick={() => setBackground(bg)}
-                                            className={cn(
-                                                "aspect-square rounded-xl border-2 transition-all p-1 group/bg relative overflow-hidden",
-                                                background.id === bg.id ? "border-primary scale-95" : "border-border/30 hover:border-primary/50"
-                                            )}
-                                        >
-                                            <div className={cn("w-full h-full rounded-lg shadow-inner", bg.class)} />
-                                            {background.id === bg.id && (
-                                                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                                                    <Check className="w-4 h-4 text-white" />
-                                                </div>
-                                            )}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className="space-y-4">
-                                <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Style Library</Label>
-                                <Select value={font.name} onValueChange={(v) => setFont(FONTS.find(f => f.name === v)!)}>
-                                    <SelectTrigger className="h-12 bg-muted/40 border-input text-xs font-bold rounded-xl text-foreground">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {FONTS.map(f => (
-                                            <SelectItem key={f.name} value={f.name} className="text-xs">{f.name}</SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-
-                            <Button
-                                onClick={handleDownload}
-                                className="w-full h-14 premium-button text-lg bg-primary text-primary-foreground shadow-primary/20 group relative overflow-hidden"
-                                disabled={isGenerating}
-                            >
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                                {isGenerating ? (
-                                    <span className="flex items-center gap-2">
-                                        <RefreshCcw className="w-5 h-5 animate-spin" /> Finalizing...
-                                    </span>
-                                ) : (
-                                    <span className="flex items-center gap-2 font-black italic uppercase tracking-tighter">
-                                        <Download className="w-5 h-5" /> Export Asset
-                                    </span>
-                                )}
-                            </Button>
                         </ControlCard>
 
-                        <ControlCard title="Identity Watermark" icon={Layers}>
+                        <ControlCard title="Typography" icon={Type}>
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label className="text-xs font-medium">Font Family</Label>
+                                    <Select value={fontFamily.name} onValueChange={(v) => setFontFamily(FONT_FAMILIES.find(f => f.name === v)!)}>
+                                        <SelectTrigger className="h-9">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {FONT_FAMILIES.map(f => (
+                                                <SelectItem key={f.name} value={f.name}>
+                                                    <span style={{ fontFamily: f.style }}>{f.name}</span>
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="space-y-2">
+                                        <Label className="text-xs font-medium">Weight</Label>
+                                        <Select value={fontWeight.value} onValueChange={(v) => setFontWeight(FONT_WEIGHTS.find(w => w.value === v)!)}>
+                                            <SelectTrigger className="h-9">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {FONT_WEIGHTS.map(w => (
+                                                    <SelectItem key={w.value} value={w.value}>{w.name}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label className="text-xs font-medium">Style</Label>
+                                        <Button
+                                            variant={isItalic ? "default" : "outline"}
+                                            size="sm"
+                                            onClick={() => setIsItalic(!isItalic)}
+                                            className="w-full h-9 italic"
+                                        >
+                                            Italic
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <div className="flex justify-between">
+                                        <Label className="text-xs font-medium">Size</Label>
+                                        <span className="text-xs text-muted-foreground">{fontSize}px</span>
+                                    </div>
+                                    <Slider
+                                        value={[fontSize]}
+                                        onValueChange={(val) => setFontSize(val[0])}
+                                        min={24}
+                                        max={120}
+                                        step={4}
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <div className="flex justify-between">
+                                        <Label className="text-xs font-medium">Letter Spacing</Label>
+                                        <span className="text-xs text-muted-foreground">{letterSpacing}px</span>
+                                    </div>
+                                    <Slider
+                                        value={[letterSpacing]}
+                                        onValueChange={(val) => setLetterSpacing(val[0])}
+                                        min={-5}
+                                        max={20}
+                                        step={1}
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label className="text-xs font-medium">Alignment</Label>
+                                    <div className="grid grid-cols-3 gap-2">
+                                        <Button
+                                            variant={textAlign === "left" ? "default" : "outline"}
+                                            size="sm"
+                                            onClick={() => setTextAlign("left")}
+                                        >
+                                            <AlignLeft className="w-4 h-4" />
+                                        </Button>
+                                        <Button
+                                            variant={textAlign === "center" ? "default" : "outline"}
+                                            size="sm"
+                                            onClick={() => setTextAlign("center")}
+                                        >
+                                            <AlignCenter className="w-4 h-4" />
+                                        </Button>
+                                        <Button
+                                            variant={textAlign === "right" ? "default" : "outline"}
+                                            size="sm"
+                                            onClick={() => setTextAlign("right")}
+                                        >
+                                            <AlignRight className="w-4 h-4" />
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </ControlCard>
+
+                        <ControlCard title="Layout" icon={Palette}>
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label className="text-xs font-medium">Format</Label>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <Button
+                                            variant={aspectRatio === "1:1" ? "default" : "outline"}
+                                            size="sm"
+                                            onClick={() => setAspectRatio("1:1")}
+                                        >
+                                            <Square className="w-3.5 h-3.5 mr-2" /> 1:1
+                                        </Button>
+                                        <Button
+                                            variant={aspectRatio === "9:16" ? "default" : "outline"}
+                                            size="sm"
+                                            onClick={() => setAspectRatio("9:16")}
+                                        >
+                                            <Smartphone className="w-3.5 h-3.5 mr-2" /> 9:16
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <div className="flex justify-between">
+                                        <Label className="text-xs font-medium">Padding</Label>
+                                        <span className="text-xs text-muted-foreground">{padding}px</span>
+                                    </div>
+                                    <Slider
+                                        value={[padding]}
+                                        onValueChange={(val) => setPadding(val[0])}
+                                        min={32}
+                                        max={128}
+                                        step={8}
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label className="text-xs font-medium">Background</Label>
+                                    <div className="grid grid-cols-4 gap-2">
+                                        {BACKGROUNDS.map((bg) => (
+                                            <button
+                                                key={bg.id}
+                                                onClick={() => setBackground(bg)}
+                                                className={cn(
+                                                    "aspect-square rounded-md border-2 transition-all relative overflow-hidden",
+                                                    background.id === bg.id ? "border-primary ring-2 ring-primary/20" : "border-border hover:border-primary/50"
+                                                )}
+                                                style={{ background: bg.gradient }}
+                                                title={bg.name}
+                                            >
+                                                {background.id === bg.id && (
+                                                    <div className="absolute inset-0 flex items-center justify-center bg-black/10">
+                                                        <Check className="w-3.5 h-3.5 text-white drop-shadow" />
+                                                    </div>
+                                                )}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </ControlCard>
+
+                        <ControlCard title="Branding" icon={Layers}>
                             <Input
-                                className="h-10 bg-muted/40 border-input text-xs font-mono opacity-80 rounded-xl text-foreground"
-                                placeholder="Social Handle..."
+                                placeholder="@yourhandle"
                                 value={branding}
                                 onChange={e => setBranding(e.target.value)}
                             />
                         </ControlCard>
+
+                        <Button
+                            onClick={handleDownload}
+                            className="w-full h-11"
+                            disabled={isGenerating}
+                            size="lg"
+                        >
+                            {isGenerating ? (
+                                <>
+                                    <RefreshCcw className="w-4 h-4 mr-2 animate-spin" />
+                                    Generating...
+                                </>
+                            ) : (
+                                <>
+                                    <Download className="w-4 h-4 mr-2" />
+                                    Download Image
+                                </>
+                            )}
+                        </Button>
                     </div>
                 }
             >
                 {/* Preview Area */}
-                <div className="space-y-10">
-                    <div className="relative group/asset max-w-xl mx-auto w-full">
-                        <div className="absolute -inset-10 bg-primary/10 blur-[120px] rounded-full opacity-50 group-hover/asset:opacity-100 transition duration-1000" />
-
+                <div className="space-y-6">
+                    <div className="flex items-center justify-center min-h-[600px]">
                         <div
                             ref={canvasRef}
-                            className={cn(
-                                "relative w-full rounded-[3.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] overflow-hidden transition-all duration-700 hover:scale-[1.01] flex flex-col items-center justify-center p-16 text-center border-border/50 border",
-                                background.class,
-                                aspectRatio === "1:1" ? "aspect-square" : "aspect-[9/16]"
-                            )}
+                            data-quote-canvas
+                            style={{
+                                position: 'relative',
+                                overflow: 'hidden',
+                                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                background: background.gradient,
+                                padding: `${padding}px`,
+                                borderRadius: '24px',
+                                width: aspectRatio === "1:1" ? '600px' : '400px',
+                                height: aspectRatio === "1:1" ? '600px' : '711px',
+                                maxWidth: '100%'
+                            }}
                         >
-                            <div className="absolute top-12 left-12 opacity-20">
-                                <Quote className="w-16 h-16 text-white" />
+                            {/* Decorative Quote Icon */}
+                            <div style={{
+                                position: 'absolute',
+                                top: '32px',
+                                left: '32px',
+                                opacity: 0.1
+                            }}>
+                                <Quote style={{ width: '48px', height: '48px', color: textColor }} />
                             </div>
 
+                            {/* Quote Content */}
                             <motion.div
-                                key={quote}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                className="relative z-10 space-y-8"
+                                key={quote + textAlign}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                style={{
+                                    position: 'relative',
+                                    zIndex: 10,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '24px',
+                                    textAlign: textAlign
+                                }}
                             >
-                                <h2 className={cn(
-                                    "text-white leading-[1.1] tracking-tighter transition-all duration-300",
-                                    font.class,
-                                    fontSize > 40 ? "text-4xl md:text-5xl lg:text-6xl" : "text-2xl md:text-3xl lg:text-4xl",
-                                    background.id === "solid-light" && "text-slate-950"
-                                )}>
+                                <h2
+                                    style={{
+                                        fontFamily: fontFamily.style,
+                                        fontWeight: fontWeight.value,
+                                        fontSize: `${fontSize}px`,
+                                        letterSpacing: `${letterSpacing}px`,
+                                        color: textColor,
+                                        lineHeight: '1.25',
+                                        fontStyle: isItalic ? 'italic' : 'normal',
+                                        margin: 0
+                                    }}
+                                >
                                     "{quote}"
                                 </h2>
 
-                                <div className="space-y-2">
-                                    <div className={cn(
-                                        "h-px w-24 mx-auto",
-                                        background.id === "solid-light" ? "bg-slate-950/20" : "bg-white/20"
-                                    )} />
-                                    <p className={cn(
-                                        "font-black tracking-widest text-sm uppercase italic opacity-60",
-                                        background.id === "solid-light" && "text-slate-950"
-                                    )}>{author || "Unknown Source"}</p>
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '8px',
+                                    alignItems: textAlign === 'center' ? 'center' : textAlign === 'right' ? 'flex-end' : 'flex-start'
+                                }}>
+                                    <div
+                                        style={{
+                                            height: '2px',
+                                            width: '64px',
+                                            backgroundColor: textColor,
+                                            opacity: 0.3
+                                        }}
+                                    />
+                                    <p
+                                        style={{
+                                            fontWeight: '600',
+                                            fontSize: '14px',
+                                            textTransform: 'uppercase',
+                                            letterSpacing: '0.1em',
+                                            color: textColor,
+                                            opacity: 0.7,
+                                            margin: 0
+                                        }}
+                                    >
+                                        {author || "Unknown"}
+                                    </p>
                                 </div>
                             </motion.div>
 
+                            {/* Watermark */}
                             {branding && (
-                                <div className={cn(
-                                    "absolute bottom-10 font-mono text-[10px] tracking-[0.4em] uppercase opacity-30",
-                                    background.id === "solid-light" && "text-slate-950"
-                                )}>
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        bottom: '24px',
+                                        left: '50%',
+                                        transform: 'translateX(-50%)',
+                                        fontFamily: 'monospace',
+                                        fontSize: '12px',
+                                        letterSpacing: '0.15em',
+                                        textTransform: 'uppercase',
+                                        color: textColor,
+                                        opacity: 0.25
+                                    }}
+                                >
                                     {branding}
                                 </div>
-                            )}
-
-                            {/* Mesh Shimmer Effect */}
-                            {background.id.startsWith('mesh') && (
-                                <div className="absolute inset-0 bg-white/5 opacity-20 filter blur-3xl pointer-events-none animate-pulse" />
                             )}
                         </div>
                     </div>
 
-                    <div className="grid sm:grid-cols-2 gap-4">
-                        <div className="bg-card border border-border/50 rounded-3xl p-6 flex flex-col gap-4 shadow-sm">
-                            <div className="flex items-center gap-3">
-                                <div className="p-2 bg-primary/10 rounded-xl">
-                                    <Maximize2 className="w-4 h-4 text-primary" />
-                                </div>
-                                <span className="text-[10px] font-black uppercase tracking-widest text-foreground/80">Text Scaling</span>
-                            </div>
-                            <input
-                                type="range"
-                                min="20"
-                                max="100"
-                                value={fontSize}
-                                onChange={(e) => setFontSize(Number(e.target.value))}
-                                className="w-full accent-primary bg-muted/40 rounded-lg h-2 cursor-pointer"
-                            />
-                        </div>
-                        <div className="bg-card border border-border/50 rounded-3xl p-6 flex items-center gap-4 shadow-sm">
-                            <div className="p-2 bg-yellow-500/10 rounded-xl">
-                                <Sparkles className="w-4 h-4 text-yellow-500" />
-                            </div>
-                            <div className="space-y-1">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-foreground/80 leading-none">High-Dynamic Export</p>
-                                <p className="text-[9px] text-muted-foreground">3x Supersampling enabled for retina-ready social posts.</p>
-                            </div>
-                        </div>
+                    <div className="bg-muted/50 border border-border rounded-lg p-4 text-center">
+                        <p className="text-xs text-muted-foreground">
+                            <Sparkles className="w-3.5 h-3.5 inline mr-1.5" />
+                            Images exported at 3x resolution for high-quality social media posts
+                        </p>
                     </div>
                 </div>
             </ToolLayout>
 
             <ContentSection
-                title="Designer Typography for Digital Influence"
-                description="Bridge the gap between raw text and viral visual communication. Our Quote Engine provides high-fidelity mesh gradients and curated font parings specifically engineered to capture attention on modern engagement-driven feeds like Instagram and TikTok."
+                title="Create Beautiful Quote Graphics"
+                description="Transform quotes into stunning visual content for social media. Perfect for Instagram posts, stories, and other platforms."
                 features={[
-                    "✨ **Mesh Atmosphere**: Intelligent gradient generation using professional color theory for cinematic depth.",
-                    "📐 **Ratio Control**: Instant switching between 1:1 post and 9:16 story formats with automated text re-centering.",
-                    "🖋️ **Hegemony Typography**: Access high-end serif and sans-serif typefaces typically reserved for premium design suites.",
-                    "🔍 **Adaptive Scaling**: Dynamic font resizing engine to ensure your quote perfectly fits the visual frame.",
-                    "🔖 **White-Label Identity**: Native support for custom watermarking and social handle branding.",
-                    "🚀 **Direct Export**: 100% vector-mapped PNG exports with ultra-high supersampling for professional resolution."
+                    "🎨 **Custom Backgrounds**: Choose from 8 beautiful gradients and solid colors",
+                    "✍️ **Typography Control**: 10 Google Fonts with 7 weight options",
+                    "📐 **Flexible Layouts**: Toggle between 1:1 posts and 9:16 stories",
+                    "🔍 **Fine-tune Text**: Adjust size, spacing, alignment, and style",
+                    "🔖 **Brand Watermarks**: Add your social handle for attribution",
+                    "🚀 **HD Export**: Download 3x resolution images for crisp quality"
                 ]}
                 howToUse={[
-                    "Enter your **Quote & Author** into the Visual Director panel.",
-                    "Select an **Atmosphere** (Background) that suits the mood of the message.",
-                    "Toggle the **Aspect Ratio** based on your target social platform.",
-                    "Refine the visual weight using the **Text Scaling** slider and font selector.",
-                    "Embed your **Identity / Watermark** to ensure brand attribution.",
-                    "Execute the **Asset Export** to download your high-fidelity image."
+                    "Enter your **quote and author** in the content panel",
+                    "Choose a **font family and weight** that matches your brand",
+                    "Adjust **typography settings** like size, spacing, and alignment",
+                    "Select a **background** and configure the aspect ratio",
+                    "Add your **social handle** as a watermark",
+                    "Click **Download Image** to export your graphic"
                 ]}
                 faq={[
                     {
+                        question: "Can I use custom fonts?",
+                        answer: "Currently we offer 10 carefully selected Google Fonts. More font options will be added in future updates."
+                    },
+                    {
+                        question: "What resolution are the exported images?",
+                        answer: "Images are exported at 3x the display resolution (supersampling) to ensure they look crisp on all devices, including retina displays."
+                    },
+                    {
                         question: "Can I use these for commercial purposes?",
-                        answer: "Absolutely. Any asset generated on OpenToolBox belongs to you. We do not restrict usage or claim ownership of your exports."
-                    },
-                    {
-                        question: "Will the text wrap automatically?",
-                        answer: "Yes. Our engine uses an intelligent flex-mapping system that ensures your quote wraps naturally while maintaining cinematic balance."
-                    },
-                    {
-                        question: "Why is the export size so large?",
-                        answer: "We use 3x supersampling on export to ensure your images look crisp even on high-density displays like iPhone Pro or 4K monitors."
+                        answer: "Yes! All graphics you create are yours to use however you'd like, including commercial projects."
                     }
                 ]}
             />

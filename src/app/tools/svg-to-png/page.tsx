@@ -22,12 +22,12 @@ export default function SvgConverterPage() {
                 title="Professional SVG to High-Resolution Raster Conversion"
                 description="Converting SVG vectors to PNG or JPG images requires precision to maintain the crispness of your original artwork. Our tool allows you to scale your vectors by up to 400% (4x) to generate high-resolution raster images for print, web, and social media without the traditional blur of browser rescaling."
                 features={[
-                    "📐 **Infinite Scale Control**: Increase your SVG scale factor (2x, 4x, etc.) to export ultra-sharp, high-resolution PNGs.",
-                    "🌈 **Transparency Support**: Export to PNG to maintain original alpha mathematical transparency.",
-                    "🖼️ **JPG Optimization**: Instantly convert to high-quality JPG with automatic white background fill for standard compatibility.",
-                    "🔒 **End-to-End Privacy**: Your vectors never reach our server. 100% client-side rendering ensures absolute data safety.",
-                    "⚡ **High-Speed Rendering**: Near-instant conversion even for complex paths and heavy XML vectors.",
-                    "✨ **Neuromorphic Glass UI**: A premium, distraction-free environment for professional designers and developers."
+                    "📐 **Custom Scale Control**: Increase your SVG scale factor (2x, 4x, 8x) to export ultra-sharp, high-resolution PNGs.",
+                    "🌈 **Transparency Support**: Export to PNG to maintain original alpha transparency.",
+                    "🖼️ **JPG Optimization**: Convert to high-quality JPG with automatic white background fill for standard compatibility.",
+                    "🔒 **Complete Privacy**: Your vectors never reach our server. 100% client-side rendering ensures absolute data safety.",
+                    "⚡ **Fast Rendering**: Near-instant conversion even for complex paths and vectors.",
+                    "✨ **Clean Interface**: A simple, distraction-free environment for quick conversions."
                 ]}
                 howToUse={[
                     "Upload your source **.svg** file using the select button or drag-and-drop zone.",
