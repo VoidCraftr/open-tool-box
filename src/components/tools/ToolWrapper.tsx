@@ -2,6 +2,8 @@ import { ShareButton } from "@/components/tools/ShareButton"
 import { Separator } from "@/components/ui/separator"
 import { RelatedTools } from "@/components/tools/RelatedTools"
 import { DonationSection } from "@/components/common/DonationSection"
+import { AdSense } from "@/components/ads/AdSense"
+import { adsConfig } from "@/config/ads.config"
 
 import { cn } from "@/lib/utils"
 
@@ -79,9 +81,16 @@ export function ToolWrapper({
                 <DonationSection />
             </div>
 
-            {/* <div className="mt-12">
-                <AdBanner slot="bottom-ad" />
-            </div> */}
+            {/* Bottom Ad Banner */}
+            <div className="mt-8">
+                <AdSense
+                    slot={adsConfig.adSlots.toolPageBanner}
+                    format="auto"
+                    responsive={true}
+                    className="rounded-lg overflow-hidden"
+                />
+            </div>
         </div>
     )
 }
+

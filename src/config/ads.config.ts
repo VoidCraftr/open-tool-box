@@ -13,7 +13,7 @@ export const adsConfig = {
         sidebarSquare: '1234567891', // TODO: Replace
         footerBanner: '1234567892', // TODO: Replace
         inArticle: '1234567893', // TODO: Replace
-        toolPageBanner: '1234567894', // TODO: Replace
+        toolPageBanner: '1196989297', // opentoolbox_horizontal_ad_unit
     },
 
     // Ad Formats
@@ -92,7 +92,8 @@ export const adsConfig = {
     // Testing
     test: {
         // Enable test mode (shows test ads, no real impressions)
-        enabled: process.env.NODE_ENV === 'development',
+        // Set to false to show real ads in development
+        enabled: false,
 
         // Test ad client ID
         testClientId: 'ca-pub-0000000000000000',
@@ -103,11 +104,6 @@ export const adsConfig = {
  * Check if ads should be shown on current page
  */
 export function shouldShowAds(pathname: string): boolean {
-    // Don't show ads in development unless explicitly enabled
-    if (process.env.NODE_ENV === 'development' && !adsConfig.test.enabled) {
-        return false;
-    }
-
     // Check if page is excluded
     if (adsConfig.display.excludePages.some(page => pathname.startsWith(page))) {
         return false;
