@@ -101,7 +101,22 @@ export const metadata: Metadata = {
 
     // Technical & Privacy
     "client side tools", "browser based tools", "privacy focused tools", "offline tools", "secure online tools",
-    "no server processing", "local processing", "safe online tools", "free tools with ads", "ad-supported free tools"
+    "no server processing", "local processing", "safe online tools", "free tools with ads", "ad-supported free tools",
+
+    // Conversational / Long-tail Queries (NEW)
+    "how to format json online free", "best free online tools no download", "free image editor no sign up",
+    "password generator without account", "secure tools that dont upload files", "tools for developers free",
+    "how do i enhance photos without photoshop", "what is the best free qr code generator",
+    "can i remove watermarks for free", "how to convert images without quality loss",
+    "best privacy-first online tools", "free tools for freelancers", "online tools for students",
+    "developer utilities browser based", "image tools for social media", "business document templates free",
+    "tools that work offline", "no registration online tools", "client-side image processing",
+    "free invoice generator with tax support", "ai photo enhancer free no watermark",
+    "convert video quality online free", "design tools for beginners", "free alternative to paid tools",
+    "how to improve blurry photos free", "best json validator online", "password strength tester free",
+    "create professional invoices online", "pdf signer no email required", "qr code with custom logo",
+    "social media mockup generator", "instagram post preview tool", "free css generator tools",
+    "text formatting utilities online", "unit conversion calculator", "productivity timer for work"
   ],
   authors: [{ name: "VoidCraftr", url: "https://github.com/voidcraftr" }],
   creator: "VoidCraftr",
