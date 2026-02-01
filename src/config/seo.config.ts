@@ -201,6 +201,58 @@ function getCategoryType(category: string): string {
 }
 
 /**
+ * Generate ItemList Schema for Tool Categories
+ * Helps search engines understand tool organization
+ */
+export function generateToolCategorySchema(category: {
+    name: string;
+    tools: Array<{ name: string; slug: string; description: string }>;
+}) {
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: `${category.name} - Free Online Tools`,
+        description: `Collection of free ${category.name.toLowerCase()} tools for professionals and creators`,
+        numberOfItems: category.tools.length,
+        itemListElement: category.tools.map((tool, idx) => ({
+            '@type': 'ListItem',
+            position: idx + 1,
+            item: {
+                '@type': 'SoftwareApplication',
+                name: tool.name,
+                url: `${SITE_URL}/tools/${tool.slug}`,
+                description: tool.description,
+                applicationCategory: 'WebApplication',
+                offers: {
+                    '@type': 'Offer',
+                    price: '0',
+                    priceCurrency: 'USD',
+                },
+            },
+        })),
+    };
+}
+
+/**
+ * Generate CollectionPage Schema for All Tools
+ */
+export function generateToolsCollectionSchema(totalToolCount: number) {
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: 'All Tools - OpenToolBox',
+        description: `Browse all ${totalToolCount} free online tools for developers, designers, and creators`,
+        url: `${SITE_URL}/tools`,
+        isPartOf: {
+            '@type': 'WebSite',
+            name: 'OpenToolBox',
+            url: SITE_URL,
+        },
+        numberOfItems: totalToolCount,
+    };
+}
+
+/**
  * Generate enhanced meta tags for a tool
  */
 export function generateToolMetaTags(tool: {

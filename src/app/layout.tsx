@@ -152,6 +152,18 @@ export const metadata: Metadata = {
   icons: {
     shortcut: "/assets/favicon.ico",
   },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+  },
+  // Add your verification codes here after claiming in Search Console/Bing Webmaster
+  // verification: {
+  //   google: 'your-google-verification-code',
+  //   other: {
+  //     'msvalidate.01': 'your-bing-verification-code',
+  //   },
+  // },
 };
 
 export default function RootLayout({

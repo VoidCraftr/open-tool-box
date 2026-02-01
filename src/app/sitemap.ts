@@ -3,12 +3,41 @@ import { MetadataRoute } from 'next';
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://opentoolbox.online';
 
+// Priority levels based on tool popularity and strategic importance
+const highPriorityTools = [
+    'json-formatter',
+    'password-generator',
+    'qr-code-generator',
+    'image-converter',
+    'photo-enhancer',
+    'watermark-remover'
+];
+
+const mediumPriorityTools = [
+    'video-enhancer',
+    'sign-pdf',
+    'invoice-generator',
+    'sql-formatter',
+    'image-resizer',
+    'jwt-decoder',
+    'uuid-generator',
+    'base64-encoder',
+    'image-editor',
+    'word-counter'
+];
+
+function getToolPriority(slug: string): number {
+    if (highPriorityTools.includes(slug)) return 0.9;
+    if (mediumPriorityTools.includes(slug)) return 0.85;
+    return 0.8; // Default for all other tools
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
     const toolUrls = tools.map((tool) => ({
         url: `${baseUrl}/tools/${tool.slug}`,
         lastModified: new Date(),
         changeFrequency: 'weekly' as const,
-        priority: 0.8,
+        priority: getToolPriority(tool.slug),
     }));
 
     return [
