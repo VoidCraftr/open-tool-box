@@ -51,34 +51,38 @@
 
 :root {
   --radius: 0.75rem;
-  /* More rounded premium feel */
-  /* Premium Zinc Light */
-  /* Premium Friendly Light - Warmer & Softer */
-  --background: oklch(0.985 0.002 240);
-  /* Soft Slate/Stone */
-  --foreground: oklch(0.14 0.02 240);
-  /* Crisp but soft white */
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.14 0.02 240);
+
+  /* --- "Whitish" Clean Light Mode --- */
+  /* Pure White Background for that clean look */
+  --background: oklch(1 0 0);
+  /* Deep, sharp text for readability */
+  --foreground: oklch(0.12 0.01 240);
+
+  /* Very subtle off-white for cards/panels */
+  --card: oklch(0.99 0.002 240);
+  --card-foreground: oklch(0.12 0.01 240);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.14 0.02 240);
+  --popover-foreground: oklch(0.12 0.01 240);
 
-  /* Primary: Vibrant but accessible Indigo/Violet */
+  /* Primary: Vibrant Indigo/Violet - Stands out against white */
   --primary: oklch(0.55 0.22 260);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.99 0 0);
 
-  --secondary: oklch(0.96 0.01 240);
+  /* Secondary: Very light grey/blue tint */
+  --secondary: oklch(0.97 0.01 240);
   --secondary-foreground: oklch(0.25 0.04 240);
 
-  --muted: oklch(0.96 0.01 240);
-  --muted-foreground: oklch(0.45 0.03 240);
+  /* Muted: Subtle cool grey */
+  --muted: oklch(0.97 0.01 240);
+  --muted-foreground: oklch(0.55 0.03 240);
 
-  --accent: oklch(0.95 0.02 240);
+  --accent: oklch(0.96 0.01 240);
   --accent-foreground: oklch(0.25 0.04 240);
 
   --destructive: oklch(0.6 0.2 25);
-  --border: oklch(0.92 0.01 240);
-  --input: oklch(0.92 0.01 240);
+  /* Crisp, faint borders */
+  --border: oklch(0.94 0.005 240);
+  --input: oklch(0.94 0.005 240);
   --ring: oklch(0.55 0.22 260);
 
   /* Friendly Charts */
@@ -99,40 +103,41 @@
 }
 
 .dark {
-  /* Midnight SaaS - Deep Blue-Black but readable */
-  --background: oklch(0.12 0.03 260);
-  --foreground: oklch(0.96 0.01 240);
+  /* --- Deep Dark Mode --- */
+  /* Not pitch black, but very deep blue-black for depth */
+  --background: oklch(0.1 0.01 240);
+  --foreground: oklch(0.98 0.01 240);
 
-  /* Slightly elevated card bg */
-  --card: oklch(0.15 0.035 260);
-  --card-foreground: oklch(0.96 0.01 240);
-  --popover: oklch(0.15 0.035 260);
-  --popover-foreground: oklch(0.96 0.01 240);
+  /* Slightly lighter panels */
+  --card: oklch(0.14 0.02 240);
+  --card-foreground: oklch(0.98 0.01 240);
+  --popover: oklch(0.14 0.02 240);
+  --popover-foreground: oklch(0.98 0.01 240);
 
   --primary: oklch(0.65 0.2 260);
   --primary-foreground: oklch(0 0 0);
 
-  --secondary: oklch(0.2 0.04 260);
-  --secondary-foreground: oklch(0.96 0.01 240);
+  --secondary: oklch(0.18 0.03 240);
+  --secondary-foreground: oklch(0.98 0.01 240);
 
-  --muted: oklch(0.2 0.04 260);
+  --muted: oklch(0.18 0.03 240);
   --muted-foreground: oklch(0.7 0.03 240);
 
-  --accent: oklch(0.2 0.04 260);
-  --accent-foreground: oklch(0.96 0.01 240);
+  --accent: oklch(0.18 0.03 240);
+  --accent-foreground: oklch(0.98 0.01 240);
 
   --destructive: oklch(0.5 0.15 25);
-  --border: oklch(0.22 0.04 260);
-  --input: oklch(0.22 0.04 260);
+  --border: oklch(0.2 0.03 240);
+  --input: oklch(0.2 0.03 240);
   --ring: oklch(0.65 0.2 260);
 
-  --sidebar: oklch(0.14 0.035 260);
-  --sidebar-foreground: oklch(0.96 0.01 240);
+  --sidebar: oklch(0.12 0.02 240);
+  --sidebar-foreground: oklch(0.98 0.01 240);
   --sidebar-primary: oklch(0.65 0.2 260);
   --sidebar-primary-foreground: oklch(0 0 0);
-  --sidebar-accent: oklch(0.2 0.04 260);
-  --sidebar-accent-foreground: oklch(0.96 0.01 240);
-  --sidebar-border: oklch(0.22 0.04 260);
+  --sidebar-accent: oklch(0.18 0.03 240);
+  --sidebar-accent-foreground: oklch(0.98 0.01 240);
+  --sidebar-border: oklch(0.2 0.03 240);
   --sidebar-ring: oklch(0.65 0.2 260);
 }
 
@@ -261,4 +266,8 @@
 
 @utility mask-gradient-x {
   mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+@utility input-premium {
+  @apply h-11 bg-background/50 border-white/10 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 rounded-xl transition-all duration-200 text-sm font-medium shadow-inner;
 }

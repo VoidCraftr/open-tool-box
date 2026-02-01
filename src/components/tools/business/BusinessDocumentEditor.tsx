@@ -64,6 +64,10 @@ export function BusinessDocumentEditor({
     const [font, setFont] = useState<"sans" | "serif" | "mono">("sans")
     const [status, setStatus] = useState<"Draft" | "Sent" | "Pending" | "Paid" | "Overdue" | "Cancelled">("Draft")
 
+    // Tax System
+    const [taxSystem, setTaxSystem] = useState<"simple" | "gst_in">("simple")
+    const [gstType, setGstType] = useState<"intra_state" | "inter_state">("intra_state")
+
     // Logo
     const [logo, setLogo] = useState<string | null>(null)
     const fileInputRef = useRef<HTMLInputElement>(null)
@@ -111,7 +115,27 @@ export function BusinessDocumentEditor({
     }
 
     const subtotal = calculateSubtotal()
-    const taxAmount = subtotal * (taxRate / 100)
+
+    // Tax Calculations
+    let taxAmount = 0
+    let cgstAmount = 0
+    let sgstAmount = 0
+    let igstAmount = 0
+
+    if (taxSystem === "gst_in") {
+        if (gstType === "intra_state") {
+            const splitRate = taxRate / 2
+            cgstAmount = subtotal * (splitRate / 100)
+            sgstAmount = subtotal * (splitRate / 100)
+            taxAmount = cgstAmount + sgstAmount
+        } else {
+            igstAmount = subtotal * (taxRate / 100)
+            taxAmount = igstAmount
+        }
+    } else {
+        taxAmount = subtotal * (taxRate / 100)
+    }
+
     const total = subtotal + taxAmount
 
     const handleDownloadPDF = async () => {
@@ -158,7 +182,7 @@ export function BusinessDocumentEditor({
 
 
             const canvas = await html2canvas(docRef.current, {
-                scale: 2, // Crisp scale for professional quality
+                scale: 4, // Crisp scale for professional quality
                 useCORS: true,
                 backgroundColor: theme === "professional" || theme === "minimal" ? "#ffffff" : null,
                 logging: false, // Disable logging for cleaner output
@@ -372,6 +396,58 @@ export function BusinessDocumentEditor({
                             </div>
                         </div>
 
+                        {/* Tax System Settings (Creative Addition) */}
+                        <div className="p-4 rounded-xl bg-orange-500/5 border border-orange-500/10 space-y-4">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs font-bold text-orange-600 uppercase tracking-wide flex items-center gap-2">
+                                    <ShieldCheck className="w-4 h-4" /> Tax System
+                                </Label>
+                                <Select value={taxSystem} onValueChange={(v: "simple" | "gst_in") => setTaxSystem(v)}>
+                                    <SelectTrigger className="h-7 w-[140px] text-[10px] uppercase font-bold bg-background/50 border-orange-200 text-orange-700">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="simple">Simple Tax</SelectItem>
+                                        <SelectItem value="gst_in">Indian GST</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            {taxSystem === "gst_in" && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: "auto" }}
+                                    className="space-y-3 pt-2"
+                                >
+                                    <div className="flex p-1 bg-background/50 rounded-lg border border-orange-200/50">
+                                        <button
+                                            onClick={() => setGstType("intra_state")}
+                                            className={cn(
+                                                "flex-1 py-1.5 text-[10px] font-bold uppercase transition-all rounded-md",
+                                                gstType === "intra_state" ? "bg-orange-500 text-white shadow-sm" : "text-muted-foreground hover:bg-orange-500/10"
+                                            )}
+                                        >
+                                            Intra-State (CGST+SGST)
+                                        </button>
+                                        <button
+                                            onClick={() => setGstType("inter_state")}
+                                            className={cn(
+                                                "flex-1 py-1.5 text-[10px] font-bold uppercase transition-all rounded-md",
+                                                gstType === "inter_state" ? "bg-orange-500 text-white shadow-sm" : "text-muted-foreground hover:bg-orange-500/10"
+                                            )}
+                                        >
+                                            Inter-State (IGST)
+                                        </button>
+                                    </div>
+                                    <p className="text-[10px] text-muted-foreground leading-relaxed px-1">
+                                        {gstType === "intra_state"
+                                            ? "For sales within the same state. Tax is split equally between Central (CGST) and State (SGST)."
+                                            : "For sales outside the state. Integrated Tax (IGST) applies fully."}
+                                    </p>
+                                </motion.div>
+                            )}
+                        </div>
+
                         {/* Status Row */}
                         <div className="space-y-2">
                             <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
@@ -545,7 +621,9 @@ export function BusinessDocumentEditor({
                             </div>
                             <div className="space-y-4 pt-4 border-t border-border/10">
                                 <div className="flex items-center justify-between gap-4">
-                                    <Label className="text-xs font-semibold text-muted-foreground whitespace-nowrap">Tax Rate %</Label>
+                                    <Label className="text-xs font-semibold text-muted-foreground whitespace-nowrap">
+                                        {taxSystem === "gst_in" ? "GST Rate %" : "Tax Rate %"}
+                                    </Label>
                                     <div className="relative w-32">
                                         <Input
                                             type="number"
@@ -762,39 +840,63 @@ export function BusinessDocumentEditor({
                                     <span>Subtotal</span>
                                     <span className="font-mono">{currency} {subtotal.toLocaleString()}</span>
                                 </div>
-                                <div className="flex justify-between text-sm" style={{ opacity: 0.7, ...currentTheme.muted }}>
-                                    <span>Tax ({taxRate}%)</span>
-                                    <span className="font-mono">{currency} {taxAmount.toLocaleString()}</span>
-                                </div>
+
+                                {taxSystem === "simple" ? (
+                                    <div className="flex justify-between text-sm" style={{ opacity: 0.7, ...currentTheme.muted }}>
+                                        <span>Tax ({taxRate}%)</span>
+                                        <span className="font-mono">{currency} {taxAmount.toLocaleString()}</span>
+                                    </div>
+                                ) : (
+                                    <>
+                                        {gstType === "intra_state" ? (
+                                            <>
+                                                <div className="flex justify-between text-sm" style={{ opacity: 0.7, ...currentTheme.muted }}>
+                                                    <span>CGST ({taxRate / 2}%)</span>
+                                                    <span className="font-mono">{currency} {cgstAmount.toLocaleString()}</span>
+                                                </div>
+                                                <div className="flex justify-between text-sm" style={{ opacity: 0.7, ...currentTheme.muted }}>
+                                                    <span>SGST ({taxRate / 2}%)</span>
+                                                    <span className="font-mono">{currency} {sgstAmount.toLocaleString()}</span>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <div className="flex justify-between text-sm" style={{ opacity: 0.7, ...currentTheme.muted }}>
+                                                <span>IGST ({taxRate}%)</span>
+                                                <span className="font-mono">{currency} {igstAmount.toLocaleString()}</span>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
                                 <div className="pt-4 flex justify-between items-center font-bold" style={{ borderTopWidth: '1px', borderStyle: 'dashed', borderColor: 'rgba(128,128,128,0.2)', ...currentTheme.header }}>
                                     <span className="uppercase tracking-widest text-[10px]" style={{ opacity: 0.8 }}>Total</span>
                                     <span className="text-3xl tracking-tight">{currency} {total.toLocaleString()}</span>
                                 </div>
                             </div>
                         </div>
-
-                        {/* Footer Watermark */}
-                        <div className="mt-16 pt-8 flex items-center justify-center text-center gap-2" style={{ ...currentTheme.border, borderTopWidth: '1px', borderStyle: 'solid', opacity: 0.4 }}>
-
-                            <p className="font-bold uppercase tracking-widest" style={{ fontSize: '10px', ...currentTheme.muted }}>
-                                PDF generated by <span style={currentTheme.header}>
-                                    {/* <img src="/assets/OpenToolBox_Logo.png" alt="Logo" className="w-4 h-4 rounded-sm grayscale opacity-70" /> */}
-                                    <a href="https://opentoolbox.online" target="_blank" rel="noopener noreferrer">
-                                        opentoolbox.online
-                                    </a>
-                                </span>
-                            </p>
-                        </div>
-
-                        {/* Decorative Background - Ignored by html2canvas */}
-                        <div
-                            className="absolute top-0 right-0 w-96 h-96 blur-[100px] rounded-full pointer-events-none opacity-50"
-                            style={{ backgroundColor: 'rgba(0,0,0,0.05)' }} // Safe fallback for preview
-                            data-html2canvas-ignore
-                        />
                     </div>
+
+                    {/* Footer Watermark */}
+                    <div className="mt-16 pt-8 flex items-center justify-center text-center gap-2" style={{ ...currentTheme.border, borderTopWidth: '1px', borderStyle: 'solid', opacity: 0.4 }}>
+
+                        <p className="font-bold uppercase tracking-widest" style={{ fontSize: '10px', ...currentTheme.muted }}>
+                            PDF generated by <span style={currentTheme.header}>
+                                {/* <img src="/assets/OpenToolBox_Logo.png" alt="Logo" className="w-4 h-4 rounded-sm grayscale opacity-70" /> */}
+                                <a href="https://opentoolbox.online" target="_blank" rel="noopener noreferrer">
+                                    opentoolbox.online
+                                </a>
+                            </span>
+                        </p>
+                    </div>
+
+                    {/* Decorative Background - Ignored by html2canvas */}
+                    <div
+                        className="absolute top-0 right-0 w-96 h-96 blur-[100px] rounded-full pointer-events-none opacity-50"
+                        style={{ backgroundColor: 'rgba(0,0,0,0.05)' }} // Safe fallback for preview
+                        data-html2canvas-ignore
+                    />
                 </div>
             </div>
         </div>
+
     )
 }

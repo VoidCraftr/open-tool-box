@@ -1,29 +1,45 @@
 "use client"
 
 import { useState } from "react"
-import { format } from "sql-formatter"
-import { Copy, Trash2, Play, ShieldCheck } from "lucide-react"
-import { Separator } from "@/components/ui/separator"
-import { Label } from "@/components/ui/label"
-
+import { Editor } from "@monaco-editor/react"
+import { Play, Copy, Download, Trash2, Database, ShieldCheck, Check, Code, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import Editor from "@monaco-editor/react"
-
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { ToolLayout } from "@/components/tools/ui/ToolLayout"
+import { ControlCard } from "@/components/tools/ui/ControlCard"
 import { ToolWrapper } from "@/components/tools/ToolWrapper"
 import { ContentSection } from "@/components/tools/ContentSection"
+import { format } from "sql-formatter"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AnimatePresence, motion } from "framer-motion"
+import { cn } from "@/lib/utils"
+
+// Simple Pill Selector Component
+const PillSelector = ({ value, onChange, options, className }: { value: string, onChange: (v: string) => void, options: { value: string, label: string }[], className?: string }) => (
+    <div className={cn("flex gap-1 p-1 bg-muted/40 rounded-lg", className)}>
+        {options.map((opt) => (
+            <button
+                key={opt.value}
+                onClick={() => onChange(opt.value)}
+                className={cn(
+                    "flex-1 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-md transition-all",
+                    value === opt.value
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "text-muted-foreground hover:bg-background/50 hover:text-foreground"
+                )}
+            >
+                {opt.label}
+            </button>
+        ))}
+    </div>
+)
 
 export default function SqlFormatterClient() {
     const [input, setInput] = useState("")
     const [output, setOutput] = useState("")
     const [dialect, setDialect] = useState("sql")
     const [error, setError] = useState<string | null>(null)
+    const [copied, setCopied] = useState(false)
 
     const handleFormat = () => {
         try {
@@ -31,8 +47,15 @@ export default function SqlFormatterClient() {
             setOutput(formatted)
             setError(null)
         } catch (err) {
-            setError("Invalid SQL")
+            setError("Invalid SQL Syntax")
         }
+    }
+
+    const handleCopy = () => {
+        if (!output) return
+        navigator.clipboard.writeText(output)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
     }
 
     const handleCopyAsString = (lang: 'java' | 'python' | 'csharp') => {
@@ -40,11 +63,12 @@ export default function SqlFormatterClient() {
         let escaped = output.replace(/"/g, '\\"').replace(/\n/g, '\\n')
         let code = ""
 
-        // Simple string escaping (can be improved)
-        if (lang === 'java' || lang === 'csharp') {
-            code = `"${escaped}"`
+        if (lang === 'java') {
+            code = `String sql = "${escaped}";`
+        } else if (lang === 'csharp') {
+            code = `string sql = @"${output}";`
         } else if (lang === 'python') {
-            code = `"""${output}"""`
+            code = `sql = """${output}"""`
         }
 
         navigator.clipboard.writeText(code)
@@ -52,60 +76,35 @@ export default function SqlFormatterClient() {
 
     return (
         <ToolWrapper
-            title="SQL Formatter"
-            description="Beautify and standardise SQL queries. Supports MySQL, PostgreSQL, SQLite, and more."
+            title="SQL Formatter & Beautifier"
+            description="Beautify and standardize SQL queries instantly. Supports MySQL, PostgreSQL, SQLite, and more."
             toolSlug="sql-formatter"
             adSlot="sql-formatter-slot"
-            className="max-w-7xl"
+
+            className="max-w-[2000px] px-4"
         >
-            <div className="flex flex-col h-[calc(100vh-350px)] min-h-[450px] gap-6 relative">
-                {/* Fixed Control Deck */}
-                <div className="sticky top-0 z-30 flex flex-col md:flex-row items-center justify-between gap-6 py-4 px-6 bg-background/80 backdrop-blur-xl border border-white/10 rounded-3xl liquid-shadow animate-fade-in shrink-0">
-                    <div className="flex items-center gap-6">
-                        <div className="flex flex-col">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Database Link</span>
+            <div className="flex flex-col gap-6 animate-fade-in">
+                {/* Main Editors - Full Width */}
+                <div className="grid lg:grid-cols-2 gap-4 h-[60vh] min-h-[400px]">
+                    {/* Input Node */}
+                    <Card className={`bg-card border border-border shadow-sm flex flex-col min-h-0 overflow-hidden group transition-colors ${error ? 'border-destructive/50' : 'hover:shadow-md'}`}>
+                        <CardHeader className="py-1.5 px-3 border-b border-border flex flex-row items-center justify-between shrink-0 bg-muted/40">
+                            <CardTitle className="text-xs font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                                <Database className="w-3.5 h-3.5" /> Raw Query
+                            </CardTitle>
+                            {/* Input Actions */}
                             <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-primary" />
-                                <span className="text-xs font-bold uppercase tracking-tighter">{dialect} Engine</span>
-                            </div>
-                        </div>
-                        <Separator orientation="vertical" className="h-8 bg-white/10" />
-                        <div className="flex gap-3">
-                            <Button onClick={handleFormat} size="lg" className="h-12 px-8 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-black shadow-lg shadow-primary/20 active:scale-95 transition-all">
-                                <Play className="mr-2 h-4 w-4" /> FORMAT SQL
-                            </Button>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-primary/10 rounded-lg">
-                            <ShieldCheck className="w-4 h-4 text-primary" />
-                        </div>
-                        <p className="text-[10px] text-muted-foreground italic font-medium uppercase tracking-tighter">Localized Compute Zone</p>
-                    </div>
-                </div>
-
-                {/* Main Workspace Grid */}
-                <div className="grid lg:grid-cols-2 lg:flex-1 gap-6 min-h-0">
-                    <div className="space-y-2 flex flex-col h-full group">
-                        <div className="flex justify-between items-center shrink-0 px-1">
-                            <Label className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Input Source</Label>
-                            <div className="flex gap-2">
-                                <Select value={dialect} onValueChange={setDialect}>
-                                    <SelectTrigger className="w-[140px] h-8 text-[10px] font-bold uppercase tracking-tight bg-white/5 border-white/5"><SelectValue /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="sql">Standard SQL</SelectItem>
-                                        <SelectItem value="mysql">MySQL</SelectItem>
-                                        <SelectItem value="postgresql">PostgreSQL</SelectItem>
-                                        <SelectItem value="sqlite">SQLite</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <Button variant="ghost" size="sm" onClick={() => setInput("")} className="text-red-400 hover:bg-red-400/10 h-8 px-2 text-[10px] font-black uppercase">
-                                    <Trash2 className="mr-1.5 h-3.5 w-3.5" /> Clear
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => { setInput(""); setOutput(""); setError(null); }}
+                                    className="h-6 px-2 text-[10px] text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                                >
+                                    <Trash2 className="w-3 h-3 mr-1" /> Clear
                                 </Button>
                             </div>
-                        </div>
-                        <div className="flex-1 border-white/10 border-2 rounded-[1.5rem] overflow-hidden shadow-inner bg-black/20">
+                        </CardHeader>
+                        <CardContent className="flex-1 p-0 min-h-0 bg-card">
                             <Editor
                                 height="100%"
                                 defaultLanguage="sql"
@@ -114,74 +113,137 @@ export default function SqlFormatterClient() {
                                 onChange={(value) => setInput(value || "")}
                                 options={{
                                     minimap: { enabled: false },
-                                    fontSize: 14,
+                                    fontSize: 13,
                                     wordWrap: "on",
-                                    padding: { top: 16 },
-                                    renderLineHighlight: "none"
+                                    padding: { top: 16, bottom: 16 },
+                                    lineNumbersMinChars: 3,
+                                    renderLineHighlight: "none",
+                                    fontFamily: "'Geist Mono', monospace",
                                 }}
                             />
-                        </div>
-                    </div>
+                        </CardContent>
+                    </Card>
 
-                    <div className="space-y-2 flex flex-col h-full group">
-                        <div className="flex justify-between items-center shrink-0 px-1">
-                            <Label className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Prettified Output</Label>
+                    {/* Output Node */}
+                    <Card className="bg-card border border-border shadow-sm flex flex-col min-h-0 overflow-hidden group hover:shadow-md transition-all">
+                        <CardHeader className="py-1.5 px-3 border-b border-border flex flex-row items-center justify-between shrink-0 bg-muted/40">
+                            <CardTitle className="text-xs font-black uppercase tracking-widest text-primary flex items-center gap-2">
+                                <ShieldCheck className="w-3.5 h-3.5" /> Clean SQL
+                            </CardTitle>
+                            <Button variant="ghost" size="sm" onClick={handleCopy} disabled={!output} className="h-6 px-3 text-[10px] font-black tracking-widest hover:bg-primary/10 hover:text-primary rounded-md transition-all">
+                                {copied ? <Check className="w-3.5 h-3.5 mr-1" /> : <Copy className="w-3.5 h-3.5 mr-1" />}
+                                {copied ? "COPIED" : "COPY"}
+                            </Button>
+                        </CardHeader>
+                        <CardContent className="flex-1 p-0 min-h-0 bg-card">
+                            <div className="relative h-full">
+                                <Editor
+                                    height="100%"
+                                    defaultLanguage="sql"
+                                    theme="vs-dark"
+                                    value={output}
+                                    options={{
+                                        readOnly: true,
+                                        minimap: { enabled: false },
+                                        fontSize: 13,
+                                        wordWrap: "on",
+                                        padding: { top: 16, bottom: 16 },
+                                        lineNumbersMinChars: 3,
+                                        renderLineHighlight: "none",
+                                        fontFamily: "'Geist Mono', monospace",
+                                    }}
+                                />
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                {/* Error Banner */}
+                <AnimatePresence>
+                    {error && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10, height: 0 }}
+                            animate={{ opacity: 1, y: 0, height: 'auto' }}
+                            exit={{ opacity: 0, y: 10, height: 0 }}
+                        >
+                            <Alert variant="destructive" className="bg-red-500/10 border-red-500/20 rounded-xl">
+                                <AlertTitle className="font-black uppercase tracking-widest text-xs flex items-center gap-2">
+                                    <Database className="w-4 h-4" /> SQL Error Detected
+                                </AlertTitle>
+                                <AlertDescription className="font-mono text-xs opacity-80">{error}</AlertDescription>
+                            </Alert>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* Professional Toolbar */}
+                <Card className="bg-muted/30 border-border p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4">
+                    {/* Left: Dialect Selection */}
+                    <div className="flex items-center gap-4">
+                        <div className="space-y-1">
+                            <span className="text-[9px] font-black uppercase text-muted-foreground ml-1">Example Dialect</span>
                             <div className="flex gap-2">
-                                <Select onValueChange={(v) => handleCopyAsString(v as any)}>
-                                    <SelectTrigger className="w-[130px] h-8 text-[10px] font-bold uppercase bg-white/5 border-white/5">
-                                        <SelectValue placeholder="Code Snippet" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="java">Java String</SelectItem>
-                                        <SelectItem value="csharp">C# String</SelectItem>
-                                        <SelectItem value="python">Python String</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <Button variant="secondary" size="sm" onClick={() => navigator.clipboard.writeText(output)} className="h-8 px-4 text-[10px] font-black uppercase bg-white/10 hover:bg-white/20 border-white/5">
-                                    <Copy className="mr-1.5 h-3.5 w-3.5" /> Copy
-                                </Button>
+                                <PillSelector
+                                    value={dialect}
+                                    onChange={setDialect}
+                                    options={[
+                                        { value: 'sql', label: 'Standard SQL' },
+                                        { value: 'mysql', label: 'MySQL' },
+                                        { value: 'postgresql', label: 'Postgres' },
+                                        { value: 'sqlite', label: 'SQLite' },
+                                    ]}
+                                    className="h-9 bg-background border-border"
+                                />
                             </div>
                         </div>
-                        <div className="flex-1 border-white/10 border-2 rounded-[1.5rem] overflow-hidden shadow-inner bg-black/40">
-                            <Editor
-                                height="100%"
-                                defaultLanguage="sql"
-                                theme="vs-dark"
-                                value={output}
-                                options={{
-                                    readOnly: true,
-                                    minimap: { enabled: false },
-                                    fontSize: 14,
-                                    wordWrap: "on",
-                                    padding: { top: 16 },
-                                    renderLineHighlight: "none"
-                                }}
-                            />
+                    </div>
+
+                    {/* Center: Main Action */}
+                    <div className="flex-1 flex justify-center">
+                        <Button
+                            onClick={handleFormat}
+                            className="h-10 px-10 premium-button bg-primary text-primary-foreground font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform"
+                        >
+                            <Play className="mr-2 h-4 w-4 fill-current" /> Format Query
+                        </Button>
+                    </div>
+
+                    {/* Right: Export Options */}
+                    <div className="flex items-center gap-2">
+                        <span className="text-[9px] font-black uppercase text-muted-foreground mr-2 hidden sm:block">Export As String</span>
+                        <div className="flex gap-1 bg-background border border-border rounded-lg p-1">
+                            <Button variant="ghost" size="sm" className="h-7 text-[10px] font-bold px-2 hover:bg-muted" onClick={() => handleCopyAsString('java')}>Java</Button>
+                            <div className="w-px bg-border my-1" />
+                            <Button variant="ghost" size="sm" className="h-7 text-[10px] font-bold px-2 hover:bg-muted" onClick={() => handleCopyAsString('python')}>Python</Button>
+                            <div className="w-px bg-border my-1" />
+                            <Button variant="ghost" size="sm" className="h-7 text-[10px] font-bold px-2 hover:bg-muted" onClick={() => handleCopyAsString('csharp')}>C#</Button>
                         </div>
                     </div>
-                </div>
+                </Card>
             </div>
-
-            <ContentSection
-                title="SQL Formatter Guide"
-                description={`Clean up messy SQL queries instantly. \n\nConsistent formatting makes SQL easier to read, debug, and maintain. Our tool handles various dialects including MySQL, PostgreSQL, and SQLite.`}
-                features={[
-                    "Support for Multiple Dialects",
-                    "Standard 2-Space Indentation",
-                    "Syntax Error Detection",
-                    "One-Click Copy Output"
-                ]}
-                faq={[
-                    {
-                        question: "Why format SQL?",
-                        answer: "Clean code reduces bugs. Properly indented nested queries are much easier to understand than single-line spaghetti code."
-                    },
-                    {
-                        question: "Does it execute the SQL?",
-                        answer: "No. This is purely a text processing tool. It does not connect to any database or execute any commands."
-                    }
-                ]}
-            />
+            <div className="mt-12">
+                <ContentSection
+                    title="SQL Formatter & Beautifier Guide"
+                    description={`Clean up messy SQL queries instantly. \n\nConsistent formatting makes SQL easier to read, debug, and maintain. Our tool handles various dialects including MySQL, PostgreSQL, and SQLite.`}
+                    features={[
+                        "Support for Multiple Dialects",
+                        "Standard 2-Space Indentation",
+                        "Syntax Error Detection",
+                        "One-Click Copy Output",
+                        "Export as Java/Python/C# Strings"
+                    ]}
+                    faq={[
+                        {
+                            question: "Why format SQL?",
+                            answer: "Clean code reduces bugs. Properly indented nested queries are much easier to understand than single-line spaghetti code."
+                        },
+                        {
+                            question: "Does it execute the SQL?",
+                            answer: "No. This is purely a text processing tool. It does not connect to any database or execute any commands."
+                        }
+                    ]}
+                />
+            </div>
         </ToolWrapper>
     )
 }

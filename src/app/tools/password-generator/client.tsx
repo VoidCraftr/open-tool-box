@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
-import { Copy, RefreshCw, Check, Shield, Lock, Fingerprint, Hash, Zap, Sparkles, Activity, History as HistoryIcon, Clock, Eye, EyeOff, ShieldAlert, ShieldCheck } from "lucide-react"
+import { Copy, RefreshCw, Check, Shield, Lock, Fingerprint, Hash, Zap, Sparkles, Activity, History as HistoryIcon, Clock, Eye, EyeOff, ShieldAlert, ShieldCheck, Sliders } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 import { Button } from "@/components/ui/button"
@@ -12,14 +12,15 @@ import { Progress } from "@/components/ui/progress"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ToolWrapper } from "@/components/tools/ToolWrapper"
 import { ContentSection } from "@/components/tools/ContentSection"
-import { PrivacyBadge } from "@/components/common/PrivacyBadge"
 import { Separator } from "@/components/ui/separator"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { ToolLayout } from "@/components/tools/ui/ToolLayout"
+import { ControlCard } from "@/components/tools/ui/ControlCard"
+import { PillSelector } from "@/components/tools/ui/PillSelector"
 
 export default function PasswordGeneratorClient() {
     const [password, setPassword] = useState("")
     const [length, setLength] = useState([20])
-    const [isSimpleMode, setIsSimpleMode] = useState(true)
+    const [mode, setMode] = useState<"quick" | "custom">("quick")
     const [options, setOptions] = useState({
         uppercase: true,
         lowercase: true,
@@ -57,7 +58,6 @@ export default function PasswordGeneratorClient() {
         }
 
         let result = ""
-        // Browser's CSPRNG
         const randomValues = new Uint32Array(length[0])
         window.crypto.getRandomValues(randomValues)
 
@@ -104,7 +104,6 @@ export default function PasswordGeneratorClient() {
     const handleOptionChange = (key: keyof typeof options) => {
         setOptions(prev => {
             const next = { ...prev, [key]: !prev[key] }
-            // Ensure at least one charset is selected
             if (key !== 'excludeSimilar' && !next.uppercase && !next.lowercase && !next.numbers && !next.symbols) return prev
             return next
         })
@@ -116,7 +115,7 @@ export default function PasswordGeneratorClient() {
         if (options.lowercase) poolSize += 26
         if (options.numbers) poolSize += 10
         if (options.symbols) poolSize += 30
-        if (options.excludeSimilar) poolSize -= 8 // rough estimate
+        if (options.excludeSimilar) poolSize -= 8
 
         const entropy = Math.log2(Math.pow(poolSize, length[0]))
 
@@ -133,260 +132,182 @@ export default function PasswordGeneratorClient() {
 
     return (
         <ToolWrapper
-            title={isSimpleMode ? "Instant Security" : "Deep Security Engine"}
-            description={isSimpleMode ? "CSPRNG-grade encryption for your digital life. 100% private, 100% localized." : "Professional password architecture with real-time entropy analysis."}
+            title={mode === 'quick' ? "Instant Security" : "Deep Security Engine"}
+            description={mode === 'quick' ? "CSPRNG-grade encryption for your digital life. 100% private, 100% localized." : "Professional password architecture with real-time entropy analysis."}
             toolSlug="password-generator"
             adSlot="password-generator-slot"
-            className="max-w-6xl"
+            className="max-w-7xl"
         >
-            <div className="flex flex-col gap-8">
-                {/* Global Toggle */}
-                <div className="flex justify-center mb-4">
-                    <div className="p-1 liquid-glass border border-white/10 rounded-2xl flex gap-1">
+            <ToolLayout
+                sidebar={
+                    <div className="space-y-6">
+                        <ControlCard title="Generation Mode" icon={Sliders} className="animate-fade-in">
+                            <PillSelector
+                                value={mode}
+                                onChange={setMode}
+                                options={[
+                                    { value: 'quick', label: 'Quick Presets', icon: <Zap className="w-3 h-3" /> },
+                                    { value: 'custom', label: 'Custom Config', icon: <Sliders className="w-3 h-3" /> },
+                                ]}
+                            />
+                        </ControlCard>
+
+                        {mode === 'quick' ? (
+                            <ControlCard title="Security Profile" icon={Shield} className="animate-fade-in space-y-2">
+                                {[
+                                    { id: 'secure', icon: Shield, title: 'TITANIUM', sub: '24 Chars + Symbols', color: 'text-emerald-500', bg: 'hover:bg-emerald-500/10' },
+                                    { id: 'memorable', icon: Fingerprint, title: 'BALANCE', sub: '14 Chars (Readable)', color: 'text-blue-500', bg: 'hover:bg-blue-500/10' },
+                                    { id: 'pin', icon: Hash, title: 'EXPRESS', sub: '6-Digit Access Code', color: 'text-yellow-500', bg: 'hover:bg-yellow-500/10' }
+                                ].map((preset) => (
+                                    <button
+                                        key={preset.id}
+                                        onClick={() => applySimplePreset(preset.id as any)}
+                                        className={`w-full flex items-center gap-3 p-3 rounded-xl border border-border bg-muted/20 transition-all text-left group hover:border-primary/20 ${preset.bg}`}
+                                    >
+                                        <div className={`p-2 rounded-lg bg-background shadow-sm ${preset.color}`}>
+                                            <preset.icon className="w-4 h-4" />
+                                        </div>
+                                        <div>
+                                            <div className="text-xs font-black tracking-wider uppercase text-foreground">{preset.title}</div>
+                                            <div className="text-[10px] text-muted-foreground">{preset.sub}</div>
+                                        </div>
+                                    </button>
+                                ))}
+                            </ControlCard>
+                        ) : (
+                            <ControlCard title="Configuration Matrix" icon={Activity} className="animate-fade-in space-y-6">
+                                <div className="space-y-3">
+                                    <div className="flex justify-between items-end">
+                                        <Label className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Length</Label>
+                                        <span className="text-xl font-black text-primary font-mono">{length[0]}</span>
+                                    </div>
+                                    <Slider value={length} onValueChange={setLength} max={64} min={8} step={1} className="py-2" />
+                                </div>
+                                <div className="space-y-2">
+                                    {Object.entries(options).filter(([k]) => k !== 'excludeSimilar').map(([key, checked]) => (
+                                        <div key={key} onClick={() => handleOptionChange(key as any)} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 cursor-pointer group transition-colors">
+                                            <Label className="font-bold text-[10px] uppercase tracking-widest cursor-pointer group-hover:text-primary transition-colors text-foreground">{key}</Label>
+                                            <Switch checked={checked as boolean} className="scale-75 origin-right" />
+                                        </div>
+                                    ))}
+                                    <Separator className="bg-border my-2" />
+                                    <div onClick={() => handleOptionChange('excludeSimilar')} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 cursor-pointer group transition-colors">
+                                        <div className="flex flex-col">
+                                            <Label className="font-bold text-[10px] uppercase tracking-widest cursor-pointer group-hover:text-primary transition-colors text-foreground">No Ambiguous</Label>
+                                            <span className="text-[9px] text-muted-foreground">No i, l, 1, 0, o</span>
+                                        </div>
+                                        <Switch checked={options.excludeSimilar} className="scale-75 origin-right" />
+                                    </div>
+                                </div>
+                            </ControlCard>
+                        )}
+
                         <Button
-                            variant={isSimpleMode ? "default" : "ghost"}
-                            onClick={() => setIsSimpleMode(true)}
-                            className={`rounded-xl px-8 h-12 text-xs font-black tracking-widest transition-all ${isSimpleMode ? 'bg-primary shadow-lg shadow-primary/20' : 'text-muted-foreground'}`}
+                            onClick={generatePassword}
+                            className="w-full h-14 premium-button bg-primary text-primary-foreground text-lg font-black shadow-primary/25 rounded-2xl animate-pulse-slow"
                         >
-                            <Zap className="w-4 h-4 mr-2" /> QUICK SECURE
-                        </Button>
-                        <Button
-                            variant={!isSimpleMode ? "default" : "ghost"}
-                            onClick={() => setIsSimpleMode(false)}
-                            className={`rounded-xl px-8 h-12 text-xs font-black tracking-widest transition-all ${!isSimpleMode ? 'bg-primary shadow-lg shadow-primary/20' : 'text-muted-foreground'}`}
-                        >
-                            <Activity className="w-4 h-4 mr-2" /> CUSTOM ARCHITECT
+                            <RefreshCw className={`mr-2 h-5 w-5 ${isGenerating ? 'animate-spin' : ''}`} /> GENERATE
                         </Button>
                     </div>
-                </div>
-
-                {/* Terminal/Output Deck */}
-                <div className="relative group">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-primary/10 via-blue-500/10 to-emerald-500/10 rounded-[2.5rem] blur-2xl opacity-40 group-hover:opacity-100 transition duration-1000" />
-                    <Card className="relative liquid-glass border-white/20 shadow-liquid rounded-[2.5rem] overflow-hidden">
-                        <CardContent className="p-12 space-y-10">
-                            {/* Password Display */}
-                            <div className="flex flex-col items-center gap-6">
-                                <div className="w-full flex items-center justify-between gap-4">
-                                    <div className="flex-1 bg-black/40 rounded-3xl p-10 flex items-center justify-center min-h-[140px] border border-white/5 group/pass relative">
-                                        <div className="font-mono text-3xl md:text-5xl font-black tracking-[0.2em] break-all text-center leading-tight">
-                                            {password.split('').map((char, i) => {
-                                                let type = 'text-foreground'
-                                                if (/[0-9]/.test(char)) type = 'text-blue-400'
-                                                if (/[!@#$%^&*()_+~`|}{[\]:;?><,./-=]/.test(char)) type = 'text-primary'
-                                                if (/[a-z]/.test(char)) type = 'text-muted-foreground'
-                                                return <span key={i} className={type}>{char}</span>
-                                            })}
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col gap-3">
-                                        <Button
-                                            size="icon"
-                                            variant="ghost"
-                                            onClick={generatePassword}
-                                            className="h-16 w-16 rounded-3xl bg-white/5 hover:bg-white/10 text-primary active:scale-90 transition-all border border-white/5"
-                                        >
-                                            <RefreshCw className={`h-8 w-8 ${isGenerating ? 'animate-spin' : ''}`} />
-                                        </Button>
-                                        <Button
-                                            size="icon"
-                                            onClick={() => handleCopy(password)}
-                                            className="h-16 w-16 rounded-3xl premium-button shadow-2xl shadow-primary/30"
-                                        >
-                                            {copied ? <Check className="h-8 w-8" /> : <Copy className="h-8 w-8" />}
-                                        </Button>
-                                    </div>
-                                </div>
-
-                                {/* Status Dashboard */}
-                                <div className="w-full grid md:grid-cols-2 gap-8 items-center pt-4">
-                                    <div className="space-y-3">
-                                        <div className="flex justify-between items-end mb-1">
-                                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">Security Integrity</span>
-                                            <span className={`text-xs font-black uppercase ${stats.textColor} italic`}>{stats.label}</span>
-                                        </div>
-                                        <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                animate={{ width: `${Math.min(100, stats.entropy)}%` }}
-                                                className={`h-full ${stats.color} shadow-lg`}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="p-4 rounded-2xl bg-white/5 border border-white/5 flex flex-col items-center">
-                                            <span className="text-[9px] font-black text-muted-foreground uppercase mb-1">Time to Crack</span>
-                                            <span className="text-xs font-black text-foreground flex items-center gap-2">
-                                                <Clock className="w-3 h-3 text-primary" /> {stats.crackTime}
-                                            </span>
-                                        </div>
-                                        <div className="p-4 rounded-2xl bg-white/5 border border-white/5 flex flex-col items-center">
-                                            <span className="text-[9px] font-black text-muted-foreground uppercase mb-1">Processing</span>
-                                            <span className="text-xs font-black text-foreground flex items-center gap-2">
-                                                <ShieldCheck className="w-3 h-3 text-emerald-400" /> LOCAL-ONLY
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
+                }
+            >
+                {/* Main Content */}
+                <div className="flex flex-col gap-6">
+                    {/* Hero Password Display */}
+                    <Card className="bg-card border border-border/50 shadow-lg rounded-[2rem] overflow-hidden min-h-[200px] flex flex-col justify-center relative group">
+                        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-blue-500/5 to-emerald-500/5 blur-3xl opacity-50 group-hover:opacity-100 transition-opacity" />
+                        <CardContent className="p-8 md:p-12 flex flex-col items-center gap-6 relative z-10">
+                            <div className="font-mono text-3xl md:text-5xl font-black tracking-[0.15em] break-all text-center leading-tight selection:bg-primary/30">
+                                {password.split('').map((char, i) => {
+                                    let type = 'text-foreground'
+                                    if (/[0-9]/.test(char)) type = 'text-blue-500'
+                                    if (/[!@#$%^&*()_+~`|}{[\]:;?><,./-=]/.test(char)) type = 'text-primary'
+                                    if (/[a-z]/.test(char)) type = 'text-muted-foreground/80'
+                                    return <span key={i} className={type}>{char}</span>
+                                })}
+                            </div>
+                            <div className="flex gap-4">
+                                <Button size="lg" onClick={() => handleCopy(password)} className="rounded-xl px-8 bg-muted/30 hover:bg-muted/50 border border-border text-foreground backdrop-blur-md transition-all">
+                                    {copied ? <Check className="mr-2 h-5 w-5 text-emerald-500" /> : <Copy className="mr-2 h-5 w-5" />}
+                                    {copied ? "COPIED" : "COPY SECURELY"}
+                                </Button>
                             </div>
                         </CardContent>
                     </Card>
-                </div>
 
-                {/* Adaptive Controller */}
-                <AnimatePresence mode="wait">
-                    {isSimpleMode ? (
-                        <motion.div
-                            key="simple"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            className="grid sm:grid-cols-3 gap-6"
-                        >
-                            {[
-                                { id: 'secure', icon: Shield, title: 'TITANIUM', sub: '24 Chars + Symbols', color: 'text-emerald-400' },
-                                { id: 'memorable', icon: Fingerprint, title: 'BALANCE', sub: '14 Chars (Readable)', color: 'text-blue-400' },
-                                { id: 'pin', icon: Hash, title: 'EXPRESS', sub: '6-Digit Access Code', color: 'text-yellow-400' }
-                            ].map((preset) => (
-                                <button
-                                    key={preset.id}
-                                    onClick={() => applySimplePreset(preset.id as any)}
-                                    className="group p-8 rounded-[2rem] liquid-glass border border-white/10 hover:border-primary/50 transition-all text-left relative overflow-hidden active:scale-95"
-                                >
-                                    <div className={`mb-6 p-4 rounded-2xl bg-white/5 inline-flex ${preset.color}`}>
-                                        <preset.icon className="w-6 h-6" />
-                                    </div>
-                                    <h4 className="font-black text-lg tracking-widest">{preset.title}</h4>
-                                    <p className="text-xs text-muted-foreground font-medium mt-1">{preset.sub}</p>
-                                </button>
-                            ))}
-                        </motion.div>
-                    ) : (
-                        <motion.div
-                            key="advanced"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                        >
-                            <Card className="liquid-glass border-white/20 rounded-[2.5rem] overflow-hidden">
-                                <CardHeader className="p-8 border-b border-white/5">
-                                    <CardTitle className="text-sm font-black uppercase tracking-[0.4em] text-primary flex items-center gap-3">
-                                        <Activity className="w-4 h-4" /> Security Configuration Matrix
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="p-8 space-y-10">
-                                    {/* Length Slider Unified */}
-                                    <div className="space-y-6">
-                                        <div className="flex justify-between items-end">
-                                            <div className="space-y-1">
-                                                <Label className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Character Resolution</Label>
-                                                <p className="text-[11px] text-muted-foreground/60 italic">Higher length exponentially increases entropy.</p>
-                                            </div>
-                                            <span className="text-4xl font-black text-primary font-mono">{length[0]}</span>
-                                        </div>
-                                        <Slider
-                                            value={length}
-                                            onValueChange={setLength}
-                                            max={64}
-                                            min={8}
-                                            step={1}
-                                            className="py-4"
-                                        />
-                                    </div>
-
-                                    <Separator className="bg-white/5" />
-
-                                    {/* Settings Matrix */}
-                                    <div className="grid md:grid-cols-2 gap-12">
-                                        <div className="space-y-6">
-                                            <Label className="text-[10px] font-black uppercase text-muted-foreground tracking-widest block mb-4">Core Character Sets</Label>
-                                            <div className="grid grid-cols-2 gap-4">
-                                                {Object.entries(options).filter(([k]) => k !== 'excludeSimilar').map(([key, checked]) => (
-                                                    <div key={key} onClick={() => handleOptionChange(key as any)} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all cursor-pointer group">
-                                                        <Label className="font-black text-[10px] uppercase tracking-widest cursor-pointer group-hover:text-primary transition-colors">{key}</Label>
-                                                        <Switch checked={checked as boolean} />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        <div className="space-y-6">
-                                            <Label className="text-[10px] font-black uppercase text-muted-foreground tracking-widest block mb-4">Enhanced Filters</Label>
-                                            <div className="space-y-4">
-                                                <div onClick={() => handleOptionChange('excludeSimilar')} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all cursor-pointer group">
-                                                    <div className="space-y-1">
-                                                        <Label className="font-black text-[10px] uppercase tracking-widest block">Exclude Ambiguous</Label>
-                                                        <span className="text-[9px] text-muted-foreground">Remove i, l, 1, 0, O</span>
-                                                    </div>
-                                                    <Switch checked={options.excludeSimilar} />
-                                                </div>
-                                                <div className="p-4 rounded-2xl bg-primary/5 border border-primary/20 flex gap-4">
-                                                    <ShieldAlert className="w-5 h-5 text-primary shrink-0" />
-                                                    <p className="text-[10px] text-primary font-medium tracking-tight">Security Note: Excluding characters reduces pool size but makes the password more human-readable.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                {/* Vault Archive */}
-                {history.length > 1 && (
-                    <div className="space-y-4 animate-fade-in">
-                        <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.4em] flex items-center gap-2 ml-4">
-                            <HistoryIcon className="w-3 h-3 text-primary" /> Session Vault
-                        </h3>
-                        <div className="grid gap-3">
-                            <AnimatePresence>
-                                {history.slice(1, 6).map((pass, i) => (
+                    {/* Stats Grid */}
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <ControlCard title="Entropy Analysis" icon={Activity}>
+                            <div className="space-y-4 pt-2">
+                                <div className="flex justify-between items-end">
+                                    <span className="text-xs text-muted-foreground font-mono">Strength</span>
+                                    <span className={`text-sm font-black uppercase ${stats.textColor}`}>{stats.label}</span>
+                                </div>
+                                <div className="h-3 w-full bg-muted/40 rounded-full overflow-hidden border border-border/50">
                                     <motion.div
-                                        key={pass}
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        className="flex items-center justify-between p-5 rounded-3xl border border-white/5 bg-black/20 group hover:border-primary/20 transition-all hover:bg-black/40"
-                                    >
-                                        <span className="font-mono text-sm truncate mr-4 opacity-40 group-hover:opacity-100 group-hover:text-primary transition-all tracking-widest">{pass}</span>
-                                        <Button size="icon" variant="ghost" className="h-10 w-10 rounded-xl hover:bg-primary/20" onClick={() => handleCopy(pass)}>
-                                            <Copy className="h-4 w-4" />
-                                        </Button>
-                                    </motion.div>
-                                ))}
-                            </AnimatePresence>
-                        </div>
-                    </div>
-                )}
-            </div>
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${Math.min(100, stats.entropy)}%` }}
+                                        className={`h-full ${stats.color} shadow-sm`}
+                                    />
+                                </div>
+                                <div className="flex justify-between items-center bg-muted/20 p-3 rounded-lg border border-border/50">
+                                    <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Est. Crack Time</span>
+                                    <span className="text-xs font-bold font-mono text-foreground flex items-center gap-2">
+                                        <Clock className="w-3 h-3 text-primary" /> {stats.crackTime}
+                                    </span>
+                                </div>
+                            </div>
+                        </ControlCard>
 
-            <ContentSection
-                title="CSPRNG Secure Logic Architecture"
-                description={`OpenToolbox uses the Web Crypto API's cryptographically secure random number generator (CSPRNG) to build every password. This ensures true randomness that is statistically superior to standard Math.random() implementations.\n\nOur logic never leaves your CPU. No API calls, no analytics tracking, no remote logging. In a world of digital vulnerability, we provide a zero-trust environment for your most sensitive credentials.`}
-                features={[
-                    "🔐 **Zero-Knowledge Architecture**: Your data never leaves your RAM.",
-                    "⚡ **Entropy Analysis**: Real-time evaluation of password complexity based on pool size and length.",
-                    "🛠️ **Custom Matrix**: Fine-tune character sets and exclude ambiguous glyphs (i, l, 0, o).",
-                    "📱 **Device Local**: Works 100% offline once the page is loaded.",
-                    "🎨 **Visual Anatomy**: Distinct color coding for character types to prevent transcription errors."
-                ]}
-                howToUse={[
-                    "Choose between **Quick Secure** for instant presets or **Custom Architect** for manual control.",
-                    "Adjust the **Character Resolution** slider to define the target length.",
-                    "Toggle the **Matrix Filters** to include specific character sets.",
-                    "Generate and Copy your asset with the premium action buttons.",
-                    "Reference the **Session Vault** for previously generated codes."
-                ]}
-                faq={[
-                    {
-                        question: "How secure is 'Titanium' grade?",
-                        answer: "Titanium grade passwords (>100 bits of entropy) are practically impossible to crack with current computing power, requiring billions of years even for massive botnets."
-                    },
-                    {
-                        question: "Why are some characters colored differently?",
-                        answer: "We use visual anatomy highlighting to help you distinguish symbols (primary), numbers (blue), and letters (muted). This reduces errors when manually typing a password."
-                    }
-                ]}
-            />
+                        <ControlCard title="Session Vault" icon={HistoryIcon} contentClassName="space-y-2">
+                            {history.slice(0, 4).map((pass, i) => (
+                                <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-card border border-border/50 group hover:border-primary/20 transition-all shadow-sm">
+                                    <span className="font-mono text-xs truncate mr-4 opacity-50 group-hover:opacity-100 transition-all w-full text-foreground">{pass}</span>
+                                    <Button size="icon" variant="ghost" className="h-6 w-6 rounded-md opacity-0 group-hover:opacity-100" onClick={() => handleCopy(pass)}>
+                                        <Copy className="h-3 w-3" />
+                                    </Button>
+                                </div>
+                            ))}
+                            {history.length === 0 && (
+                                <div className="text-center py-8 text-xs text-muted-foreground opacity-50 italic">
+                                    Generated passwords will appear here
+                                </div>
+                            )}
+                        </ControlCard>
+                    </div>
+                </div>
+            </ToolLayout>
+
+            <div className="mt-12">
+                <ContentSection
+                    title="CSPRNG Secure Logic Architecture"
+                    description={`OpenToolbox uses the Web Crypto API's cryptographically secure random number generator (CSPRNG) to build every password. This ensures true randomness that is statistically superior to standard Math.random() implementations.\n\nOur logic never leaves your CPU. No API calls, no analytics tracking, no remote logging. In a world of digital vulnerability, we provide a zero-trust environment for your most sensitive credentials.`}
+                    features={[
+                        "🔐 **Zero-Knowledge Architecture**: Your data never leaves your RAM.",
+                        "⚡ **Entropy Analysis**: Real-time evaluation of password complexity based on pool size and length.",
+                        "🛠️ **Custom Matrix**: Fine-tune character sets and exclude ambiguous glyphs (i, l, 0, o).",
+                        "📱 **Device Local**: Works 100% offline once the page is loaded.",
+                        "🎨 **Visual Anatomy**: Distinct color coding for character types to prevent transcription errors."
+                    ]}
+                    howToUse={[
+                        "Choose between **Quick Secure** for instant presets or **Custom Architect** for manual control.",
+                        "Adjust the **Character Resolution** slider to define the target length.",
+                        "Toggle the **Matrix Filters** to include specific character sets.",
+                        "Generate and Copy your asset with the premium action buttons.",
+                        "Reference the **Session Vault** for previously generated codes."
+                    ]}
+                    faq={[
+                        {
+                            question: "How secure is 'Titanium' grade?",
+                            answer: "Titanium grade passwords (>100 bits of entropy) are practically impossible to crack with current computing power, requiring billions of years even for massive botnets."
+                        },
+                        {
+                            question: "Why are some characters colored differently?",
+                            answer: "We use visual anatomy highlighting to help you distinguish symbols (primary), numbers (blue), and letters (muted). This reduces errors when manually typing a password."
+                        }
+                    ]}
+                />
+            </div>
         </ToolWrapper>
     )
 }

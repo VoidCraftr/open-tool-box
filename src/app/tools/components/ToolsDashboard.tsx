@@ -52,9 +52,9 @@ export function ToolsDashboard() {
         : categories
 
     return (
-        <div className="relative min-h-screen w-full">
-            {/* Ambient Background */}
-            <div className="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+        <div className="relative min-h-screen w-full bg-background">
+            {/* Ambient Background - Clean & Subtle */}
+            <div className="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,oklch(var(--border)/0.4)_1px,transparent_1px),linear-gradient(to_bottom,oklch(var(--border)/0.4)_1px,transparent_1px)] bg-[size:32px_32px]"></div>
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[150px] rounded-full pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/5 blur-[150px] rounded-full pointer-events-none" />
 
@@ -72,21 +72,21 @@ export function ToolsDashboard() {
 
                     <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-foreground max-w-4xl leading-[1.1]">
                         The Ultimate <br />
-                        <span className="bg-gradient-to-r from-primary via-blue-500 to-emerald-500 bg-clip-text text-transparent italic animate-gradient">Developer Arsenal</span>
+                        <span className="text-primary/90 italic">Developer Arsenal</span>
                     </h1>
 
                     {/* Master Searchbar */}
                     <div className="relative w-full max-w-2xl group px-4">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 to-blue-500/30 rounded-3xl blur-xl opacity-20 group-hover:opacity-60 transition duration-1000" />
-                        <div className="relative flex items-center bg-background/40 backdrop-blur-3xl border-2 border-white/10 rounded-[2rem] shadow-2xl transition-all focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/10">
-                            <Search className="ml-6 h-6 w-6 text-primary/60 group-hover:text-primary transition-colors" />
+                        <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 to-blue-500/30 rounded-3xl blur-xl opacity-20 group-hover:opacity-40 transition duration-1000" />
+                        <div className="relative flex items-center bg-card border border-border rounded-[2rem] shadow-lg transition-all focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/10">
+                            <Search className="ml-6 h-6 w-6 text-muted-foreground group-hover:text-primary transition-colors" />
                             <Input
                                 placeholder="Search by name, category, or keyword..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                className="border-0 bg-transparent h-16 text-xl focus-visible:ring-0 placeholder:text-muted-foreground/30 font-medium px-4"
+                                className="border-0 bg-transparent h-16 text-xl focus-visible:ring-0 placeholder:text-muted-foreground/50 font-medium px-4 text-foreground"
                             />
-                            <div className="mr-6 hidden md:flex h-8 items-center gap-1.5 rounded-xl border-white/10 bg-white/5 border px-3 font-mono text-[10px] font-black text-muted-foreground uppercase">
+                            <div className="mr-6 hidden md:flex h-8 items-center gap-1.5 rounded-xl border-border bg-muted/20 border px-3 font-mono text-[10px] font-black text-muted-foreground uppercase">
                                 <Command className="h-3 w-3" /> K
                             </div>
                         </div>
@@ -102,7 +102,7 @@ export function ToolsDashboard() {
                                 "px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300",
                                 !selectedCategory
                                     ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                                    : "bg-white/5 border border-white/10 text-muted-foreground hover:bg-white/10 hover:border-white/20"
+                                    : "bg-card border border-border text-muted-foreground hover:bg-muted/50 hover:border-primary/20"
                             )}
                         >
                             <LayoutGrid className="w-3 h-3 inline mr-1.5" />
@@ -119,7 +119,7 @@ export function ToolsDashboard() {
                                         "px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300",
                                         selectedCategory === cat.id
                                             ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                                            : "bg-white/5 border border-white/10 text-muted-foreground hover:bg-white/10 hover:border-white/20"
+                                            : "bg-card border border-border text-muted-foreground hover:bg-muted/50 hover:border-primary/20"
                                     )}
                                 >
                                     <CatIcon className="w-3 h-3 inline mr-1.5" />
@@ -153,7 +153,7 @@ export function ToolsDashboard() {
                                             <CatIcon className="w-6 h-6 text-primary" />
                                         </div>
                                         <div>
-                                            <h2 className="text-2xl font-black uppercase tracking-tight">{category.label}</h2>
+                                            <h2 className="text-2xl font-black uppercase tracking-tight text-foreground">{category.label}</h2>
                                             <p className="text-sm text-muted-foreground font-medium">{categoryTools.length} Tools Available</p>
                                         </div>
                                     </div>
@@ -179,7 +179,7 @@ export function ToolsDashboard() {
                             <div className="h-24 w-24 rounded-[2rem] bg-primary/5 flex items-center justify-center mb-6 animate-bounce">
                                 <Search className="h-10 w-10 text-primary/20" />
                             </div>
-                            <h3 className="text-3xl font-black tracking-tight">Access Violation</h3>
+                            <h3 className="text-3xl font-black tracking-tight text-foreground">Access Violation</h3>
                             <p className="text-muted-foreground mt-3 max-w-sm mx-auto text-lg leading-relaxed">
                                 No utilities matching your search vector. Try searching for a broad category like <span className="text-primary font-bold">"Design"</span>.
                             </p>
@@ -215,14 +215,14 @@ function ToolEntry({ tool, x, y }: { tool: any, x: number, y: number }) {
         <Link
             ref={cardRef}
             href={`/tools/${tool.slug}`}
-            className="group relative rounded-[2rem] border-white/5 border bg-white/[0.03] p-8 transition-all hover:bg-white/[0.07] overflow-hidden flex flex-col gap-6 active:scale-95 liquid-shadow h-full"
+            className="group relative rounded-[2rem] border border-border bg-card p-8 transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden flex flex-col gap-6 active:scale-95 shadow-sm h-full"
         >
-            {/* Holographic Spotlight */}
+            {/* Holographic Spotlight - Adjusted for Light Mode */}
             {mounted && (
                 <div
                     className="pointer-events-none absolute -inset-px opacity-0 transition duration-500 group-hover:opacity-100 z-10"
                     style={{
-                        background: `radial-gradient(400px circle at ${x - offset.left}px ${y - offset.top}px, rgba(var(--primary-rgb), 0.1), transparent 70%)`,
+                        background: `radial-gradient(400px circle at ${x - offset.left}px ${y - offset.top}px, oklch(var(--primary)/0.05), transparent 70%)`,
                     }}
                 />
             )}
@@ -230,7 +230,7 @@ function ToolEntry({ tool, x, y }: { tool: any, x: number, y: number }) {
             <div className="relative z-20 flex flex-col gap-6 h-full">
                 {/* Visual Identity */}
                 <div className="flex items-start justify-between">
-                    <div className="rounded-2xl border border-primary/10 bg-primary/5 p-4 shadow-sm transition-all group-hover:bg-primary/10 group-hover:border-primary/20 group-hover:-translate-y-1">
+                    <div className="rounded-2xl border border-border bg-muted/20 p-4 shadow-sm transition-all group-hover:bg-primary/10 group-hover:border-primary/20">
                         <Icon className="h-8 w-8 text-primary transition-all duration-300 group-hover:scale-110" />
                     </div>
                     <div className="flex flex-col items-end gap-1.5 pt-1">
@@ -257,7 +257,7 @@ function ToolEntry({ tool, x, y }: { tool: any, x: number, y: number }) {
                     <h3 className="text-xl font-black leading-none tracking-tight text-foreground group-hover:text-primary transition-colors">
                         {tool.name}
                     </h3>
-                    <p className="text-sm text-muted-foreground/60 line-clamp-2 leading-relaxed font-medium group-hover:text-muted-foreground transition-colors">
+                    <p className="text-sm text-muted-foreground/80 line-clamp-2 leading-relaxed font-medium group-hover:text-muted-foreground transition-colors">
                         {tool.description}
                     </p>
                 </div>
@@ -265,7 +265,7 @@ function ToolEntry({ tool, x, y }: { tool: any, x: number, y: number }) {
                 {/* Footer Insight */}
                 <div className="flex items-center justify-between pt-2">
                     <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] font-bold uppercase text-primary/60 tracking-wider">
+                        <span className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider">
                             {categories.find(c => c.id === tool.category)?.label || tool.category}
                         </span>
                     </div>
