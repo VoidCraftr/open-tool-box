@@ -8,5 +8,15 @@ export const metadata = constructMetadata({
 })
 
 export default function ImageConverterPage() {
-    return <ImageConverterClient />
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({"@context":"https://schema.org","@type":"SoftwareApplication","name":"Image Converter (JPG, PNG, WebP)","description":"Convert images between JPG, PNG, and WebP formats instantly in your browser. No upload, completely secure.","applicationCategory":"UtilityApplication","operatingSystem":"Any (Web Browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Free Online Tool","Client-side Processing","No Registration Required","Privacy Focused"]})
+                }}
+            />
+            <ImageConverterClient />
+        </>
+    )
 }

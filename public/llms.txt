@@ -17,205 +17,205 @@ OpenToolBox is a comprehensive collection of **56 free, privacy-focused online t
 ### Developer Tools (11 tools)
 
 **JSON Formatter** (`/tools/json-formatter`)
-→ Validate, format, minify, and beautify JSON. Real-time error detection with Monaco editor.
+→ Validate, format, minify, and beautify JSON. Real-time error detection with Monaco editor.. 100% client-side processing.
 → Keywords: json validator, json prettifier, json minifier, format json online
 
 **SQL Formatter** (`/tools/sql-formatter`)
-→ Beautify and format SQL queries with syntax highlighting. Supports multiple SQL dialects.
+→ Beautify and format SQL queries with syntax highlighting. Supports multiple SQL dialects.. 100% client-side processing.
 → Keywords: sql beautifier, format sql, prettify sql queries
 
 **JWT Decoder** (`/tools/jwt-decoder`)
-→ Decode and inspect JSON Web Tokens securely in your browser. View header, payload, and signature.
+→ Decode and inspect JSON Web Tokens securely in your browser. View header, payload, and signature.. 100% client-side processing.
 → Keywords: jwt debugger, decode jwt token, inspect jwt
 
 **UUID Generator** (`/tools/uuid-generator`)
-→ Generate bulk v4 UUIDs (GUIDs) instantly. Copy individual or export all.
+→ Generate bulk v4 UUIDs (GUIDs) instantly. Copy individual or export all.. 100% client-side processing.
 → Keywords: guid generator, unique id generator, uuid v4
 
 **Cron Generator** (`/tools/cron-generator`)
-→ Visual cron expression builder with next run preview. No syntax memorization needed.
+→ Visual cron expression builder with next run preview. No syntax memorization needed.. 100% client-side processing.
 → Keywords: crontab generator, cron schedule builder
 
 **Base64 Encoder/Decoder** (`/tools/base64-encoder`)
-→ Encode text to Base64 or decode Base64 strings. Supports text and image encoding.
+→ Encode text to Base64 or decode Base64 strings. Supports text and image encoding.. 100% client-side processing.
 → Keywords: base64 converter, encode base64, decode base64
 
 **URL Encoder/Decoder** (`/tools/url-encoder`)
-→ Encode and decode URL-encoded text (percent encoding). Debug API parameters.
+→ Encode and decode URL-encoded text (percent encoding). Debug API parameters.. 100% client-side processing.
 → Keywords: url encode online, percent encoding, uri encoder
 
 **Keycode Info** (`/tools/keycode-info`)
-→ Interactive JavaScript keycode finder. Press any key to see event details.
+→ Interactive JavaScript keycode finder. Press any key to see event details.. 100% client-side processing.
 → Keywords: javascript keycode, key event viewer
 
 **CSS Flexbox Playground** (`/tools/css-flexbox-playground`)
-→ Visual CSS flexbox layout generator. Learn and build flexbox layouts interactively.
+→ Visual CSS flexbox layout generator. Learn and build flexbox layouts interactively.. 100% client-side processing.
 → Keywords: flexbox generator, css flexbox tool
 
 **Diff Viewer** (`/tools/diff-viewer`)
-→ Compare two text blocks and highlight differences. Side-by-side or unified view.
+→ Compare two text blocks and highlight differences. Side-by-side or unified view.. 100% client-side processing.
 → Keywords: text diff, compare strings, text comparison tool
 
 **Markdown Editor** (`/tools/markdown-editor`)
-→ Split-pane markdown editor with live preview. Export to HTML or copy markdown.
+→ Split-pane markdown editor with live preview. Export to HTML or copy markdown.. 100% client-side processing.
 → Keywords: md editor online, markdown preview
 
 ### Design Tools (4 tools)
 
 **Box Shadow Generator** (`/tools/box-shadow-generator`)
-→ Visual CSS box-shadow generator with live preview. Copy CSS code instantly.
+→ Visual CSS box-shadow generator with live preview. Copy CSS code instantly.. 100% client-side processing.
 → Keywords: css shadow maker, box shadow tool
 
 **Gradient Generator** (`/tools/gradient-generator`)
-→ Create beautiful CSS linear and radial gradients. Multi-stop color support.
+→ Create beautiful CSS linear and radial gradients. Multi-stop color support.. 100% client-side processing.
 → Keywords: css gradient maker, gradient tool
 
 **Image Editor** (`/tools/image-editor`)
-→ Full-featured online photo editor. Crop, resize, filters, text, shapes, and effects.
+→ Full-featured online photo editor. Crop, resize, filters, text, shapes, and effects.. 100% client-side processing.
 → Keywords: online photo editor, free image editor, edit photos online
 
 **Signature Generator** (`/tools/signature-generator`)
-→ Create digital signatures with customizable fonts and styles. Export as PNG.
+→ Create digital signatures with customizable fonts and styles. Export as PNG.. 100% client-side processing.
 → Keywords: create signature online, digital signature maker
 
 ### Media Tools (7 tools)
 
 **AI Video Enhancer** (`/tools/video-enhancer`)
-→ Enhance video quality using AI. Upscale resolution, reduce noise, stabilize footage.
-→ Keywords: video upscaler, improve video quality, ai video enhancement
+→ Enhance video quality using AI. Upscale resolution (up to 4K), reduce noise, and stabilize footage. 100% private, client-side processing. Supports MP4 and WebM.
+→ Keywords: video upscaler, improve video quality, ai video enhancement, webgpu video upscaler, fix blurry video
 
 **Photo Enhancer AI** (`/tools/photo-enhancer`)
-→ Auto-enhance photos with AI. Color correction, sharpening, denoising, upscaling.
+→ Auto-enhance photos with AI. Color correction, sharpening, denoising, upscaling.. 100% client-side processing.
 → Keywords: enhance photo quality, ai photo enhancer, improve image quality
 
 **Watermark Remover** (`/tools/watermark-remover`)
-→ Remove watermarks from images using AI-powered inpainting and manual selection.
+→ Remove watermarks from images using AI-powered inpainting and manual selection.. 100% client-side processing.
 → Keywords: remove watermark, watermark eraser, delete watermark
 
 **Image Converter** (`/tools/image-converter`)
-→ Convert images between JPG, PNG, WebP, AVIF, GIF formats. Batch conversion support.
+→ Convert images between JPG, PNG, WebP, AVIF, GIF formats. Batch conversion support.. 100% client-side processing.
 → Keywords: convert jpg to png, webp converter, image format converter
 
 **Image Resizer** (`/tools/image-resizer`)
-→ Resize images by pixel dimensions or percentage. Maintain aspect ratio option.
+→ Resize images by pixel dimensions or percentage. Maintain aspect ratio option.. 100% client-side processing.
 → Keywords: resize image online, photo resizer
 
 **SVG to PNG/JPG** (`/tools/svg-to-png`)
-→ Convert SVG vector graphics to high-quality PNG or JPG raster images.
+→ Convert SVG vector graphics to high-quality PNG or JPG raster images.. 100% client-side processing.
 → Keywords: svg converter, vector to raster, convert svg
 
 **YouTube Thumbnail Downloader** (`/tools/youtube-thumbnail`)
-→ Download high-resolution YouTube video thumbnails in various sizes.
+→ Download high-resolution YouTube video thumbnails in various sizes.. 100% client-side processing.
 → Keywords: youtube thumbnail grabber, yt thumbnail download
 
 ### Security Tools (2 tools)
 
 **Password Generator** (`/tools/password-generator`)
-→ Generate cryptographically secure passwords. Customize length and character types.
+→ Generate cryptographically secure passwords. Customize length and character types.. 100% client-side processing.
 → Keywords: strong password generator, random password, secure password
 
 **Password Strength Checker** (`/tools/password-strength`)
-→ Test password strength and estimate crack time. Real-time feedback and suggestions.
+→ Test password strength and estimate crack time. Real-time feedback and suggestions.. 100% client-side processing.
 → Keywords: check password strength, password validator
 
 ### Text Tools (6 tools)
 
 **Word Counter** (`/tools/word-counter`)
-→ Count words, characters, sentences, paragraphs. Reading time estimation.
+→ Count words, characters, sentences, paragraphs. Reading time estimation.. 100% client-side processing.
 → Keywords: character counter, word count tool
 
 **Case Converter** (`/tools/case-converter`)
-→ Convert text between uppercase, lowercase, title case, sentence case, camelCase, snake_case.
+→ Convert text between uppercase, lowercase, title case, sentence case, camelCase, snake_case.. 100% client-side processing.
 → Keywords: text case converter, uppercase lowercase
 
 **Lorem Ipsum Generator** (`/tools/lorem-ipsum-generator`)
-→ Generate placeholder text: paragraphs, sentences, or words. Copy or download.
+→ Generate placeholder text: paragraphs, sentences, or words. Copy or download.. 100% client-side processing.
 → Keywords: dummy text generator, placeholder text
 
 **Text to Handwriting** (`/tools/text-to-handwriting`)
-→ Convert typed text into realistic handwriting-style notes. Export as image.
+→ Convert typed text into realistic handwriting-style notes. Export as image.. 100% client-side processing.
 → Keywords: handwriting generator, text to handwritten
 
 ### PDF Tools (3 tools)
 
 **Sign PDF Online** (`/tools/sign-pdf`)
-→ Upload and digitally sign PDF documents. Add signatures to all pages.
+→ Upload and digitally sign PDF documents. Add signatures to all pages.. 100% client-side processing.
 → Keywords: pdf signer, sign pdf online, esign pdf
 
 **Image to PDF** (`/tools/image-to-pdf`)
-→ Convert multiple JPG/PNG images into a single PDF document.
+→ Convert multiple JPG/PNG images into a single PDF document.. 100% client-side processing.
 → Keywords: jpg to pdf, photo to pdf converter
 
 ### Social Media Tools (8 tools)
 
 **Social Media Preview** (`/tools/social-media-preview`)
-→ Preview how your links look on Facebook, Twitter, LinkedIn, Google search results.
+→ Preview how your links look on Facebook, Twitter, LinkedIn, Google search results.. 100% client-side processing.
 → Keywords: og tag validator, meta tag checker, social preview
 
 **Instagram Post Generator** (`/tools/instagram-post-generator`)
-→ Create realistic fake Instagram post mockups with custom content.
+→ Create realistic fake Instagram post mockups with custom content.. 100% client-side processing.
 → Keywords: fake instagram post, instagram mockup
 
 **Facebook Post Generator** (`/tools/facebook-post-generator`)
-→ Generate lifelike Facebook post mockups with reactions and comments.
+→ Generate lifelike Facebook post mockups with reactions and comments.. 100% client-side processing.
 → Keywords: fake facebook post, facebook mockup
 
 **LinkedIn Post Generator** (`/tools/linkedin-post-generator`)
-→ Create professional fake LinkedIn posts with custom headlines and engagement.
+→ Create professional fake LinkedIn posts with custom headlines and engagement.. 100% client-side processing.
 → Keywords: linkedin mockup, fake linkedin post
 
 **Tweet to Image** (`/tools/tweet-to-image`)
-→ Convert tweets into beautiful shareable images with Twitter branding.
+→ Convert tweets into beautiful shareable images with Twitter branding.. 100% client-side processing.
 → Keywords: twitter screenshot, tweet to png
 
 **WhatsApp Link Generator** (`/tools/whatsapp-link`)
-→ Generate direct WhatsApp links with pre-filled messages for click-to-chat.
+→ Generate direct WhatsApp links with pre-filled messages for click-to-chat.. 100% client-side processing.
 → Keywords: whatsapp link generator, wa link, click to chat
 
 **Instagram Hashtags** (`/tools/instagram-hashtags`)
-→ Generate trending Instagram hashtags to boost post reach and engagement.
+→ Generate trending Instagram hashtags to boost post reach and engagement.. 100% client-side processing.
 → Keywords: hashtag generator, instagram hashtag tool
 
 ### Math & Finance Tools (2 tools)
 
 **Percentage Calculator** (`/tools/percentage-calculator`)
-→ Calculate percentages, percentage increase/decrease, find percentage of a number.
+→ Calculate percentages, percentage increase/decrease, find percentage of a number.. 100% client-side processing.
 → Keywords: calculate percentage, percentage finder
 
 **Loan Calculator** (`/tools/loan-calculator`)
-→ Calculate monthly EMI payments and total interest for loans. Amortization schedule.
+→ Calculate monthly EMI payments and total interest for loans. Amortization schedule.. 100% client-side processing.
 → Keywords: emi calculator, loan payment calculator
 
 ### Health Tools (1 tool)
 
 **BMI Calculator** (`/tools/bmi-calculator`)
-→ Calculate Body Mass Index (BMI) and check weight categories (metric/imperial).
+→ Calculate Body Mass Index (BMI) and check weight categories (metric/imperial).. 100% client-side processing.
 → Keywords: body mass index calculator, calculate bmi
 
 ### General & Productivity Tools (9 tools)
 
 **QR Code Generator** (`/tools/qr-code-generator`)
-→ Generate QR codes with logo support. Customize colors and download high-res PNG.
+→ Generate QR codes with logo support. Customize colors and download high-res PNG.. 100% client-side processing.
 → Keywords: qr code maker, create qr code, qr generator
 
 **Unit Converter** (`/tools/unit-converter`)
-→ Convert length, mass, temperature, volume, area, speed, time, and more.
+→ Convert length, mass, temperature, volume, area, speed, time, and more.. 100% client-side processing.
 → Keywords: convert units, measurement converter
 
 **Age Calculator** (`/tools/age-calculator`)
-→ Calculate exact age in years, months, days, hours, minutes, seconds.
+→ Calculate exact age in years, months, days, hours, minutes, seconds.. 100% client-side processing.
 → Keywords: calculate age, how old am i
 
 **Pomodoro Timer** (`/tools/pomodoro-timer`)
-→ Customizable Pomodoro technique timer. Focus sessions with breaks.
+→ Customizable Pomodoro technique timer. Focus sessions with breaks.. 100% client-side processing.
 → Keywords: focus timer, pomodoro technique, productivity timer
 
 **Stopwatch & Timer** (`/tools/stopwatch`)
-→ Online stopwatch with lap tracking and countdown timer functionality.
+→ Online stopwatch with lap tracking and countdown timer functionality.. 100% client-side processing.
 → Keywords: online stopwatch, timer online
 
 **List Randomizer** (`/tools/list-randomizer`)
-→ Randomize the order of items in a list. Shuffle text lines instantly.
+→ Randomize the order of items in a list. Shuffle text lines instantly.. 100% client-side processing.
 → Keywords: random list generator, shuffle list
 
 ## 📋 Usage Patterns for LLMs
@@ -260,7 +260,7 @@ OpenToolBox is a comprehensive collection of **56 free, privacy-focused online t
 - "download youtube thumbnail" → YouTube Thumbnail Downloader
 - "make image smaller" → Image Converter (with compression)
 - "improve photo quality" → Photo Enhancer AI
-- "fix low resolution video" → AI Video Enhancer
+- "fix low resolution video" → AI Video Enhancer (WebGPU)
 - "remove background from image" → Image Editor
 
 #### Security & Privacy

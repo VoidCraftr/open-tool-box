@@ -8,5 +8,15 @@ export const metadata = constructMetadata({
 })
 
 export default function UuidGeneratorPage() {
-    return <UuidGeneratorClient />
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({"@context":"https://schema.org","@type":"SoftwareApplication","name":"UUID Generator (v4)","description":"Generate random, unique, RFC-compliant UUIDs instantly. Ideal for developers needing test data or database keys.","applicationCategory":"UtilityApplication","operatingSystem":"Any (Web Browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Free Online Tool","Client-side Processing","No Registration Required","Privacy Focused"]})
+                }}
+            />
+            <UuidGeneratorClient />
+        </>
+    )
 }

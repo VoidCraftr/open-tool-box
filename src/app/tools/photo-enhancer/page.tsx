@@ -31,5 +31,15 @@ export const metadata: Metadata = {
 }
 
 export default function PhotoEnhancerPage() {
-    return <PhotoEnhancerClient />
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({"@context":"https://schema.org","@type":"SoftwareApplication","name":"Photo Enhancer AI","description":"Free AI-powered photo enhancer tool. Auto enhance photos, improve image quality, sharpen, denoise, and upscale images online. 100% client-side processing for privacy.","applicationCategory":"UtilityApplication","operatingSystem":"Any (Web Browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Free Online Tool","Client-side Processing","No Registration Required","Privacy Focused"]})
+                }}
+            />
+            <PhotoEnhancerClient />
+        </>
+    )
 }

@@ -1,0 +1,277 @@
+[
+  {
+    "slug": "age-calculator",
+    "title": "Age Calculator - Calculate Exact Age Online",
+    "description": "Calculate your exact age in years, months, and days. Find out how many days until your next birthday. Free online age calculator."
+  },
+  {
+    "slug": "base64-encoder",
+    "title": "Base64 Encoder / Decoder - Decode and Encode Online",
+    "description": "Free online Base64 encoder and decoder. Convert text to Base64 and Base64 to text instantly. Secure client-side processing."
+  },
+  {
+    "slug": "bmi-calculator",
+    "title": "BMI Calculator - Calculate Body Mass Index",
+    "description": "Calculate your Body Mass Index (BMI) easily. Check your health status with our free online BMI calculator for men and women."
+  },
+  {
+    "slug": "box-shadow-generator",
+    "title": "CSS Box Shadow Generator - Visual CSS Shadow Tool",
+    "description": "Create beautiful CSS box shadows visually. Customizable blur, spread, color, and opacity. Generate CSS shadow code instantly."
+  },
+  {
+    "slug": "business-quote-generator",
+    "title": "Free Business Quote Generator | OpenToolBox",
+    "description": "Generate professional business quotes and proposals. Free, fast, and 100% private."
+  },
+  {
+    "slug": "case-converter",
+    "title": "Case Converter - Uppercase, Lowercase & Title Case",
+    "description": "Convert text case online. Toggle between Uppercase, Lowercase, Title Case, Sentence Case, and more. Instant text transformation."
+  },
+  {
+    "slug": "compound-interest",
+    "title": "Compound Interest Calculator - OpenToolBox",
+    "description": "Plan your wealth with our compound interest calculator. Visualize growth over time with interactive charts. Private and secure investment planning."
+  },
+  {
+    "slug": "cron-generator",
+    "title": "Cron Expression Generator - OpenToolbox",
+    "description": "Create, explain, and schedule cron jobs with our interactive Cron Expression Generator. Preview next run dates instantly."
+  },
+  {
+    "slug": "css-flexbox-playground",
+    "title": "CSS Flexbox Playground | Visual Generator | OpenToolBox",
+    "description": "Learn and generate CSS Flexbox layouts visually. Interactive playground for aligning items, setting gaps, and understanding flex properties."
+  },
+  {
+    "slug": "diff-viewer",
+    "title": "Diff Viewer & Compare Tool - OpenToolbox",
+    "description": "Compare text and code side-by-side. Highlight differences with syntax coloring using our advanced Monaco-based diff viewer."
+  },
+  {
+    "slug": "discount-calculator",
+    "title": "Discount Calculator - OpenToolBox",
+    "description": "Calculate savings instantly. Find the final price after discounts and taxes. Simple, fast, and private shopping tool."
+  },
+  {
+    "slug": "estimate-generator",
+    "title": "Free Estimate Generator | OpenToolBox",
+    "description": "Create professional project estimates and quotes for your clients. Free, private, and simple."
+  },
+  {
+    "slug": "facebook-post-generator",
+    "title": "Fake Facebook Post Generator | Create Facebook Mockups",
+    "description": "Create realistic fake Facebook posts for memes, pranks, or social media planning. Customize text, images, reactions, and comments."
+  },
+  {
+    "slug": "gradient-generator",
+    "title": "CSS Gradient Generator - Linear & Radial Gradients",
+    "description": "Create beautiful CSS gradients visually. Generate code for linear and radial gradients. Randomize colors for inspiration."
+  },
+  {
+    "slug": "image-converter",
+    "title": "Image Converter (JPG, PNG, WebP)",
+    "description": "Convert images between JPG, PNG, and WebP formats instantly in your browser. No upload, completely secure."
+  },
+  {
+    "slug": "image-editor",
+    "title": "Free Online Image Editor | OpenToolBox",
+    "description": "Crop, resize, filter, and edit photos online. Free, private, and no signup needed."
+  },
+  {
+    "slug": "image-resizer",
+    "title": "Image Resizer - Resize JPG, PNG & WebP Online",
+    "description": "Free online image resizer. Resize images by pixel dimensions or percentage without losing quality. Secure local processing."
+  },
+  {
+    "slug": "image-to-pdf",
+    "title": "Image to PDF Converter - JPG & PNG to PDF",
+    "description": "Convert multiple JPG, PNG, or WEBP images into a single high-quality PDF document. Free, secure, and client-side only."
+  },
+  {
+    "slug": "instagram-hashtags",
+    "title": "Instagram Hashtag Generator",
+    "description": "Generate trending and popular Instagram hashtags for travel, food, tech, and more."
+  },
+  {
+    "slug": "instagram-post-generator",
+    "title": "Fake Instagram Post Generator | Create Instagram Mockups",
+    "description": "Create realistic fake Instagram posts for memes, pranks, or social media planning. 100% free and client-side."
+  },
+  {
+    "slug": "invoice-generator",
+    "title": "Professional Invoice Generator - OpenToolBox",
+    "description": "Create professional business invoices for free. Zero-server processing ensures your business data remains private. Multiple themes and PDF export support."
+  },
+  {
+    "slug": "json-formatter",
+    "title": "JSON Formatter & Validator",
+    "description": "Free online JSON Formatter. Beautify, minify, and validate JSON data instantly. Secure client-side processing."
+  },
+  {
+    "slug": "jwt-decoder",
+    "title": "JWT Decoder - Decode JSON Web Tokens Online",
+    "description": "Decode JWT header and payload instantly. Debug JSON Web Tokens securely in your browser. No server-side processing."
+  },
+  {
+    "slug": "keycode-info",
+    "title": "Keycode Info - JavaScript Event KeyCodes & Key Values",
+    "description": "Get JavaScript event keycodes, key values, and code properties instantly by pressing any key. Essential tool for web developers."
+  },
+  {
+    "slug": "linkedin-post-generator",
+    "title": "Fake LinkedIn Post Generator | Create LinkedIn Mockups",
+    "description": "Create realistic fake LinkedIn posts for memes, pranks, or social media planning. Customize text, images, reactions, and connections."
+  },
+  {
+    "slug": "list-randomizer",
+    "title": "List Randomizer - Shuffle Lists Online",
+    "description": "Free online list randomizer. Shuffle lists, names, or choices instantly. Randomize the order of lines in a text file."
+  },
+  {
+    "slug": "loan-calculator",
+    "title": "Loan Calculator - EMI & Interest Calculator",
+    "description": "Calculate monthly loan payments (EMI) and total interest. View amortization breakdown for personal loans, car loans, and mortgages."
+  },
+  {
+    "slug": "lorem-ipsum-generator",
+    "title": "Lorem Ipsum Generator - Placeholder Text",
+    "description": "Free online Lorem Ipsum generator. Create dummy text for your designs, layouts, and mockups. Generate paragraphs, sentences, or words."
+  },
+  {
+    "slug": "markdown-editor",
+    "title": "Free Online Markdown Editor & Viewer | Live Preview | OpenToolBox",
+    "description": "Write and preview Markdown in real-time. A clean, split-pane editor for developers and writers to draft READMES, docs, and notes."
+  },
+  {
+    "slug": "meme-generator",
+    "title": "Meme Generator | Create Viral Memes Online | OpenToolBox",
+    "description": "Create funny memes with our free online meme maker. Thousands of templates, custom image uploads, and premium font customization without watermarks."
+  },
+  {
+    "slug": "password-generator",
+    "title": "Secure Password Generator",
+    "description": "Create strong, random passwords locally in your browser. Customizable length and character sets for maximum security."
+  },
+  {
+    "slug": "password-strength",
+    "title": "Password Strength Checker - Test Password Security",
+    "description": "Check your password strength instantly. Estimate crack time and entropy. Secure client-side password testing."
+  },
+  {
+    "slug": "percentage-calculator",
+    "title": "Percentage Calculator - Calculate Percentages & Changes",
+    "description": "Free online percentage calculator. Calculate percentage of a number, percentage change (increase/decrease), and what percent X is of Y."
+  },
+  {
+    "slug": "photo-enhancer",
+    "title": "Photo Enhancer AI - Improve Image Quality Online Free",
+    "description": "Free AI-powered photo enhancer tool. Auto enhance photos, improve image quality, sharpen, denoise, and upscale images online. 100% client-side processing for privacy."
+  },
+  {
+    "slug": "pomodoro-timer",
+    "title": "Pomodoro Timer - Focus & Productivity Timer",
+    "description": "Boost your productivity with our free online Pomodoro Timer. Customizable focus intervals, short breaks, and long breaks. Stay focused."
+  },
+  {
+    "slug": "qr-code-generator",
+    "title": "QR Code Generator - Free High-Quality QR Codes",
+    "description": "Create free custom QR codes for URLs, WiFi, and text. Download high-resolution PNGs with logo support. No expiration."
+  },
+  {
+    "slug": "receipt-generator",
+    "title": "Free Receipt Generator | OpenToolBox",
+    "description": "Create professional payment receipts for your business instantly. Free, private, and no signup required."
+  },
+  {
+    "slug": "scientific-calculator",
+    "title": "Free Scientific Calculator | OpenToolBox",
+    "description": "Advanced scientific calculator with history and trigonometry. Free, clean math tool."
+  },
+  {
+    "slug": "sign-pdf",
+    "title": "Free Online PDF Signer | Sign Documents Digitally",
+    "description": "Upload and sign PDF documents online for free. Add your digital signature to any page, or apply to all pages instantly. No watermarks. 100% Client-side privacy."
+  },
+  {
+    "slug": "signature-generator",
+    "title": "Free Signature Generator | Draw & Type Signatures",
+    "description": "Create professional digital signatures online for free. Draw your signature or type it with handwriting fonts. Transparency supported. Privacy focused."
+  },
+  {
+    "slug": "social-media-preview",
+    "title": "Social Media Preview Tool | Check Open Graph & Meta Tags | OpenToolBox",
+    "description": "Preview how your website links look on Facebook, Twitter, LinkedIn, and Google. Debug Open Graph (OG) tags and SEO metadata instantly."
+  },
+  {
+    "slug": "social-quote-generator",
+    "title": "Quote Post Generator | Create Cinematic Quote Images | OpenToolBox",
+    "description": "Convert your favorite quotes into beautiful, shareable images for social media. Choose from premium backgrounds, mesh gradients, and designer typography."
+  },
+  {
+    "slug": "sql-formatter",
+    "title": "SQL Formatter & Beautifier",
+    "description": "Format, validate, and beautify SQL queries for MySQL, PostgreSQL, SQLite, and more. Clean up messy code instantly."
+  },
+  {
+    "slug": "stopwatch",
+    "title": "Online Stopwatch & Timer - Countdown with Laps",
+    "description": "Free online precision stopwatch with lap tracking and customizable countdown timer. Accurate milliseconds timing for workouts and productivity."
+  },
+  {
+    "slug": "svg-to-png",
+    "title": "Free SVG to PNG/JPG Converter | High Resolution | OpenToolBox",
+    "description": "Convert SVG vector files to high-quality PNG or JPG images online. Customize scale and resolution. No upload to server - 100% client-side private."
+  },
+  {
+    "slug": "text-to-handwriting",
+    "title": "Text to Handwriting Converter - Online Handwriting Tool",
+    "description": "Convert typed text into realistic handwritten notes. Choose from multiple handwriting fonts and paper styles. Free text to handwriting tool."
+  },
+  {
+    "slug": "tip-calculator",
+    "title": "Tip Calculator - OpenToolBox",
+    "description": "Split bills and calculate tips instantly. Quick, easy, and ad-free experience for your dining and hospitality needs."
+  },
+  {
+    "slug": "tweet-to-image",
+    "title": "Fake Tweet Generator",
+    "description": "Create realistic fake tweets, replies, and threads. Perfect for memes and jokes. Customizable name, photo, and metrics."
+  },
+  {
+    "slug": "unit-converter",
+    "title": "Unit Converter - Length, Weight & Temperature Conversion",
+    "description": "Convert between common units of measurement including metric and imperial systems. Length, weight, mass, and temperature converter."
+  },
+  {
+    "slug": "url-encoder",
+    "title": "URL Encoder / Decoder - Encode & Decode URLs Online",
+    "description": "Free online URL encoder and decoder. Convert text to percent-encoded format and back. Essential tool for web developers."
+  },
+  {
+    "slug": "uuid-generator",
+    "title": "UUID Generator (v4)",
+    "description": "Generate random, unique, RFC-compliant UUIDs instantly. Ideal for developers needing test data or database keys."
+  },
+  {
+    "slug": "watermark-remover",
+    "title": "Watermark Remover - Remove Watermarks from Photos & Videos Free",
+    "description": "Free watermark remover tool. Remove watermarks from images and videos online with AI-powered technology. Easy-to-use watermark eraser with 100% client-side processing."
+  },
+  {
+    "slug": "whatsapp-link",
+    "title": "WhatsApp Link Generator - Create Chat Links Instantly",
+    "description": "Generate direct WhatsApp links with pre-filled messages. Open chats without saving numbers. Perfect for businesses and social media."
+  },
+  {
+    "slug": "word-counter",
+    "title": "Word Counter - Count Words, Characters & Sentences Online",
+    "description": "Free online word counter and character counter. Calculate reading time, speaking time, and keyword density instantly. Secure client-side analysis."
+  },
+  {
+    "slug": "youtube-thumbnail",
+    "title": "YouTube Thumbnail Downloader",
+    "description": "Download high-quality thumbnails from any YouTube video. Supports HD, SD, and HQ resolutions."
+  }
+]

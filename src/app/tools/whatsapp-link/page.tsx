@@ -8,5 +8,15 @@ export const metadata = constructMetadata({
 })
 
 export default function WhatsAppLinkPage() {
-    return <WhatsAppLinkClient />
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({"@context":"https://schema.org","@type":"SoftwareApplication","name":"WhatsApp Link Generator","description":"Generate direct WhatsApp links with pre-filled messages. Open chats without saving numbers. Perfect for businesses and social media.","applicationCategory":"UtilityApplication","operatingSystem":"Any (Web Browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Free Online Tool","Client-side Processing","No Registration Required","Privacy Focused"]})
+                }}
+            />
+            <WhatsAppLinkClient />
+        </>
+    )
 }

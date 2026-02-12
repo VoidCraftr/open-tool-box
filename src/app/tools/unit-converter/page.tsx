@@ -8,5 +8,15 @@ export const metadata = constructMetadata({
 })
 
 export default function UnitConverterPage() {
-    return <UnitConverterClient />
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({"@context":"https://schema.org","@type":"SoftwareApplication","name":"Unit Converter","description":"Convert between common units of measurement including metric and imperial systems. Length, weight, mass, and temperature converter.","applicationCategory":"UtilityApplication","operatingSystem":"Any (Web Browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Free Online Tool","Client-side Processing","No Registration Required","Privacy Focused"]})
+                }}
+            />
+            <UnitConverterClient />
+        </>
+    )
 }

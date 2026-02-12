@@ -7,5 +7,15 @@ export const metadata = {
 }
 
 export default function CompoundInterestPage() {
-    return <CompoundInterestClient />
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({"@context":"https://schema.org","@type":"SoftwareApplication","name":"Compound Interest Calculator","description":"Plan your wealth with our compound interest calculator. Visualize growth over time with interactive charts. Private and secure investment planning.","applicationCategory":"UtilityApplication","operatingSystem":"Any (Web Browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Free Online Tool","Client-side Processing","No Registration Required","Privacy Focused"]})
+                }}
+            />
+            <CompoundInterestClient />
+        </>
+    )
 }

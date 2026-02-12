@@ -4,6 +4,7 @@ import { RelatedTools } from "@/components/tools/RelatedTools"
 import { DonationSection } from "@/components/common/DonationSection"
 import { AdSense } from "@/components/ads/AdSense"
 import { adsConfig } from "@/config/ads.config"
+import { Breadcrumbs } from "@/components/tools/Breadcrumbs"
 
 import { cn } from "@/lib/utils"
 
@@ -30,26 +31,7 @@ export function ToolWrapper({
                 <div className="space-y-4 text-center md:text-left">
                     {toolSlug && (
                         <div className="flex justify-center md:justify-start">
-                            <a
-                                href="/tools"
-                                className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors group"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="mr-1 h-4 w-4 transition-transform group-hover:-translate-x-1"
-                                >
-                                    <path d="m15 18-6-6 6-6" />
-                                </svg>
-                                Back to Tools
-                            </a>
+                            <Breadcrumbs toolSlug={toolSlug} />
                         </div>
                     )}
                     <div>

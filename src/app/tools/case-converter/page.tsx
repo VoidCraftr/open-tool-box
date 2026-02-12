@@ -8,5 +8,15 @@ export const metadata = constructMetadata({
 })
 
 export default function CaseConverterPage() {
-    return <CaseConverterClient />
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({"@context":"https://schema.org","@type":"SoftwareApplication","name":"Case Converter","description":"Convert text case online. Toggle between Uppercase, Lowercase, Title Case, Sentence Case, and more. Instant text transformation.","applicationCategory":"UtilityApplication","operatingSystem":"Any (Web Browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Free Online Tool","Client-side Processing","No Registration Required","Privacy Focused"]})
+                }}
+            />
+            <CaseConverterClient />
+        </>
+    )
 }
