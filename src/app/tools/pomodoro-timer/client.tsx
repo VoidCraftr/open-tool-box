@@ -14,9 +14,36 @@ export default function PomodoroTimer() {
     const [timeLeft, setTimeLeft] = useState(25 * 60)
     const [isActive, setIsActive] = useState(false)
     const [mode, setMode] = useState<'focus' | 'short' | 'long'>('focus')
+    const originalTitle = useRef("")
 
     // We would use an audio Ref here properly in a real app
     // const audioRef = useRef<HTMLAudioElement | null>(null)
+
+    useEffect(() => {
+        originalTitle.current = document.title
+    }, [])
+
+    useEffect(() => {
+        const formatTitle = (seconds: number) => {
+            const m = Math.floor(seconds / 60)
+            const s = seconds % 60
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+        }
+
+        if (isActive) {
+            document.title = `${formatTitle(timeLeft)} - Focus Flow`
+        } else {
+            if (originalTitle.current) {
+                document.title = originalTitle.current
+            }
+        }
+
+        return () => {
+            if (originalTitle.current) {
+                document.title = originalTitle.current
+            }
+        }
+    }, [timeLeft, isActive])
 
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null
@@ -130,7 +157,11 @@ export default function PomodoroTimer() {
                         </svg>
 
                         <div className="relative z-10 text-center space-y-2">
-                            <div className="text-8xl md:text-9xl font-black font-mono tracking-tighter tabular-nums drop-shadow-2xl">
+                            <div
+                                className="text-8xl md:text-9xl font-black font-mono tracking-tighter tabular-nums drop-shadow-2xl"
+                                role="timer"
+                                aria-live="off"
+                            >
                                 {formatTime(timeLeft)}
                             </div>
                             <div className="flex items-center justify-center gap-2">
@@ -149,6 +180,7 @@ export default function PomodoroTimer() {
                             variant="outline"
                             className="w-16 h-16 rounded-3xl border-white/10 hover:bg-white/5 transition-all active:scale-95"
                             onClick={resetTimer}
+                            aria-label="Reset Timer"
                         >
                             <RotateCcw className="w-6 h-6 text-muted-foreground" />
                         </Button>
