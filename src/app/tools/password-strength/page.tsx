@@ -8,15 +8,5 @@ export const metadata = constructMetadata({
 })
 
 export default function PasswordStrengthPage() {
-    return (
-        <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({"@context":"https://schema.org","@type":"SoftwareApplication","name":"Password Strength Checker","description":"Check your password strength instantly. Estimate crack time and entropy. Secure client-side password testing.","applicationCategory":"UtilityApplication","operatingSystem":"Any (Web Browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Free Online Tool","Client-side Processing","No Registration Required","Privacy Focused"]})
-                }}
-            />
-            <PasswordStrengthClient />
-        </>
-    )
+    return <PasswordStrengthClient />
 }

@@ -29,15 +29,5 @@ export const metadata: Metadata = {
 }
 
 export default function WatermarkRemoverPage() {
-    return (
-        <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({"@context":"https://schema.org","@type":"SoftwareApplication","name":"Watermark Remover","description":"Free watermark remover tool. Remove watermarks from images and videos online with AI-powered technology. Easy-to-use watermark eraser with 100% client-side processing.","applicationCategory":"UtilityApplication","operatingSystem":"Any (Web Browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Free Online Tool","Client-side Processing","No Registration Required","Privacy Focused"]})
-                }}
-            />
-            <WatermarkRemoverClient />
-        </>
-    )
+    return <WatermarkRemoverClient />
 }

@@ -29,34 +29,5 @@ export const metadata: Metadata = {
 }
 
 export default function VideoEnhancerPage() {
-    return (
-        <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "SoftwareApplication",
-                        "name": "AI Video Enhancer",
-                        "description": "Free online video enhancer tool using WebGPU. Upscale video resolution, reduce noise, and improve quality directly in your browser without uploading files.",
-                        "applicationCategory": "MultimediaApplication",
-                        "operatingSystem": "Any (Web Browser with WebGPU support)",
-                        "offers": {
-                            "@type": "Offer",
-                            "price": "0",
-                            "priceCurrency": "USD"
-                        },
-                        "featureList": [
-                            "2x Video Upscaling",
-                            "Noise Reduction",
-                            "Client-side WebGPU Processing",
-                            "No Server Uploads",
-                            "MP4 and WebM Support"
-                        ]
-                    })
-                }}
-            />
-            <VideoEnhancerClient />
-        </>
-    )
+    return <VideoEnhancerClient />
 }

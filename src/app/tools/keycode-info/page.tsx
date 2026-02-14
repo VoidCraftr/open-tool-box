@@ -8,15 +8,5 @@ export const metadata = constructMetadata({
 })
 
 export default function KeycodeInfoPage() {
-    return (
-        <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({"@context":"https://schema.org","@type":"SoftwareApplication","name":"Keycode Info","description":"Get JavaScript event keycodes, key values, and code properties instantly by pressing any key. Essential tool for web developers.","applicationCategory":"UtilityApplication","operatingSystem":"Any (Web Browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Free Online Tool","Client-side Processing","No Registration Required","Privacy Focused"]})
-                }}
-            />
-            <KeycodeInfoClient />
-        </>
-    )
+    return <KeycodeInfoClient />
 }

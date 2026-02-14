@@ -8,15 +8,5 @@ export const metadata = constructMetadata({
 })
 
 export default function LoremIpsumGeneratorPage() {
-    return (
-        <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({"@context":"https://schema.org","@type":"SoftwareApplication","name":"Lorem Ipsum Generator","description":"Free online Lorem Ipsum generator. Create dummy text for your designs, layouts, and mockups. Generate paragraphs, sentences, or words.","applicationCategory":"UtilityApplication","operatingSystem":"Any (Web Browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Free Online Tool","Client-side Processing","No Registration Required","Privacy Focused"]})
-                }}
-            />
-            <LoremIpsumGeneratorClient />
-        </>
-    )
+    return <LoremIpsumGeneratorClient />
 }

@@ -8,15 +8,5 @@ export const metadata = constructMetadata({
 })
 
 export default function InstagramHashtagsPage() {
-    return (
-        <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({"@context":"https://schema.org","@type":"SoftwareApplication","name":"Instagram Hashtag Generator","description":"Generate trending and popular Instagram hashtags for travel, food, tech, and more.","applicationCategory":"UtilityApplication","operatingSystem":"Any (Web Browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Free Online Tool","Client-side Processing","No Registration Required","Privacy Focused"]})
-                }}
-            />
-            <InstagramHashtagsClient />
-        </>
-    )
+    return <InstagramHashtagsClient />
 }
