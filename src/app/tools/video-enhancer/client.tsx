@@ -31,6 +31,7 @@ export default function VideoEnhancerClient() {
     // Audio Refs for robust capture
     const audioContextRef = useRef<AudioContext | null>(null)
     const audioDestRef = useRef<MediaStreamAudioDestinationNode | null>(null)
+    const audioSourceRef = useRef<MediaElementAudioSourceNode | null>(null)
 
     // Check WebGPU support on mount
     useEffect(() => {
@@ -58,14 +59,31 @@ export default function VideoEnhancerClient() {
             setEnhancedVideoUrl("")
             setProgress(0)
             setProcessingStatus("")
+
+            // Reset audio source ref when new video is uploaded
+            if (audioSourceRef.current) {
+                audioSourceRef.current.disconnect()
+                audioSourceRef.current = null
+            }
         } else {
             alert("Please upload a valid video file")
         }
     }
 
     const processVideo = async () => {
-        if (!videoFile || !originalVideoRef.current || !canvasRef.current || !gpuSupported) return
+        console.log('processVideo called', {
+            videoFile: !!videoFile,
+            originalVideoRef: !!originalVideoRef.current,
+            canvasRef: !!canvasRef.current,
+            gpuSupported
+        })
 
+        if (!videoFile || !originalVideoRef.current || !canvasRef.current || !gpuSupported) {
+            console.log('processVideo early return - conditions not met')
+            return
+        }
+
+        console.log('Starting video processing...')
         setIsProcessing(true)
         setProgress(0)
         setProcessingStatus("Initializing AI Model...")
@@ -76,11 +94,13 @@ export default function VideoEnhancerClient() {
 
         try {
             // 1. Load Weights
+            console.log('Loading weights...')
             const weightsResponse = await fetch('/weights/cnn-2x-s.json')
             if (!weightsResponse.ok) throw new Error("Failed to load model weights")
             const weights = await weightsResponse.json()
 
             // 2. Initialize WebSR
+            console.log('Initializing WebSR...')
             const { default: WebSR } = await import("@websr/websr")
 
             const websr = new WebSR({
@@ -97,6 +117,11 @@ export default function VideoEnhancerClient() {
             // 3. Setup Canvas
             canvas.width = video.videoWidth * 2
             canvas.height = video.videoHeight * 2
+            console.log('Video dimensions:', {
+                original: { width: video.videoWidth, height: video.videoHeight },
+                upscaled: { width: canvas.width, height: canvas.height },
+                scale: '2x'
+            })
 
             // 4. Robust Audio Capture Fix
             // Create AudioContext if not exists
@@ -109,40 +134,71 @@ export default function VideoEnhancerClient() {
             const audioDest = audioCtx.createMediaStreamDestination()
             audioDestRef.current = audioDest
 
-            // Connect video to destination (and speakers if we want to hear, but we don't need to)
-            const source = audioCtx.createMediaElementSource(video)
+            // Connect video to destination - only create source once per video element
+            let source: MediaElementAudioSourceNode
+            if (!audioSourceRef.current) {
+                source = audioCtx.createMediaElementSource(video)
+                audioSourceRef.current = source
+            } else {
+                source = audioSourceRef.current
+            }
+
+            // Disconnect any previous connections and reconnect
+            source.disconnect()
             source.connect(audioDest)
             // Optional: source.connect(audioCtx.destination) // Uncomment to hear during processing
 
             // Create stream from canvas + audio destination
-            const canvasStream = canvas.captureStream(30)
-            const mixedStream = new MediaStream([
-                ...canvasStream.getVideoTracks(),
-                ...audioDest.stream.getAudioTracks()
-            ])
+            // 3. Setup MediaRecorder with canvas stream + audio
+            const canvasStream = canvas.captureStream(30) // 30 FPS for smooth playback
+            const videoTrack = canvasStream.getVideoTracks()[0]
+            const audioTrack = audioDest.stream.getAudioTracks()[0]
 
-            // Determine mime type
-            const mimeTypes = [
-                "video/mp4;codecs=h264,aac",
-                "video/webm;codecs=vp9,opus",
-                "video/webm"
-            ]
-            let selectedMimeType = "video/webm"
-            for (const type of mimeTypes) {
-                if (MediaRecorder.isTypeSupported(type)) {
-                    selectedMimeType = type
-                    break
-                }
+            // Log the actual capture settings
+            const trackSettings = videoTrack.getSettings()
+            console.log('Canvas capture stream settings:', {
+                width: trackSettings.width,
+                height: trackSettings.height,
+                frameRate: trackSettings.frameRate,
+                aspectRatio: trackSettings.aspectRatio
+            })
+
+            const mixedStream = new MediaStream([videoTrack, audioTrack])
+
+            // Select MIME type - MP4 is not actually supported despite isTypeSupported returning true
+            // Use WebM which is universally supported in Chrome/Edge
+            let selectedMimeType = 'video/webm;codecs=vp9,opus'
+            let ext = 'webm'
+
+            // Try VP9 first (best quality), then H.264, then fallback to basic webm
+            if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')) {
+                selectedMimeType = 'video/webm;codecs=vp9,opus'
+            } else if (MediaRecorder.isTypeSupported('video/webm;codecs=h264,opus')) {
+                selectedMimeType = 'video/webm;codecs=h264,opus'
+            } else if (MediaRecorder.isTypeSupported('video/webm')) {
+                selectedMimeType = 'video/webm'
             }
+
+            console.log('Selected MIME type:', selectedMimeType, 'Extension:', ext)
+            setOutputExt(ext)
 
             const mediaRecorder = new MediaRecorder(mixedStream, {
                 mimeType: selectedMimeType,
-                videoBitsPerSecond: 12000000 // 12Mbps for high quality
+                videoBitsPerSecond: 25000000 // 25Mbps for high quality (increased from 12Mbps)
             })
 
             const chunks: BlobPart[] = []
             mediaRecorder.ondataavailable = (e) => {
+                console.log('Data chunk received:', e.data.size, 'bytes')
                 if (e.data.size > 0) chunks.push(e.data)
+            }
+
+            mediaRecorder.onerror = (e) => {
+                console.error('MediaRecorder error:', e)
+            }
+
+            mediaRecorder.onstart = () => {
+                console.log('MediaRecorder started successfully')
             }
 
             mediaRecorder.onstop = () => {
@@ -152,6 +208,20 @@ export default function VideoEnhancerClient() {
 
                 const blob = new Blob(chunks, { type: type })
                 const url = URL.createObjectURL(blob)
+
+                // Log file size information
+                const outputSizeMB = (blob.size / (1024 * 1024)).toFixed(2)
+                const inputSizeMB = (videoFile.size / (1024 * 1024)).toFixed(2)
+                const estimatedBitrate = (blob.size * 8 / video.duration / 1000000).toFixed(2) // Mbps
+
+                console.log('Video encoding complete:', {
+                    inputSize: `${inputSizeMB} MB`,
+                    outputSize: `${outputSizeMB} MB`,
+                    estimatedBitrate: `${estimatedBitrate} Mbps`,
+                    targetBitrate: '25 Mbps',
+                    duration: `${video.duration.toFixed(2)}s`
+                })
+
                 setEnhancedVideoUrl(url)
                 setIsProcessing(false)
                 setProgress(100)
@@ -159,28 +229,43 @@ export default function VideoEnhancerClient() {
 
                 // Cleanup
                 websr.destroy()
-                source.disconnect()
             }
 
-            mediaRecorder.start()
+            // Start recording with timeslice to get data chunks periodically
+            console.log('Starting MediaRecorder with MIME type:', selectedMimeType)
+            mediaRecorder.start(100) // Request data every 100ms
 
             // 5. Play and Record loop
             video.currentTime = 0
             video.muted = true // Silent capture thanks to AudioContext!
             await video.play()
 
+            console.log('Starting frame processing loop...')
+            let frameCount = 0
+            const targetFPS = 30
+            const frameDelay = 1000 / targetFPS // ~33ms per frame
+
             const processFrame = async () => {
                 if (video.paused || video.ended) {
+                    console.log(`Processing complete. Processed ${frameCount} frames`)
                     if (mediaRecorder.state === "recording") mediaRecorder.stop()
                     return
                 }
 
+                // Render the current frame through WebSR
                 await websr.render()
+                frameCount++
+
+                // Update progress
                 const currentProgress = (video.currentTime / video.duration) * 100
                 setProgress(Math.round(currentProgress))
 
+                // Continue processing with slight delay for better frame capture
                 if (!video.ended && !video.paused) {
-                    requestAnimationFrame(processFrame)
+                    // Use setTimeout for more consistent timing instead of just requestAnimationFrame
+                    setTimeout(() => {
+                        requestAnimationFrame(processFrame)
+                    }, frameDelay / 2) // Half the frame delay for smoother processing
                 } else if (mediaRecorder.state === "recording") {
                     mediaRecorder.stop()
                 }
@@ -211,6 +296,9 @@ export default function VideoEnhancerClient() {
             description="Premium 2x video upscaling using GPU-accelerated neural networks directly in your browser."
             toolSlug="video-enhancer"
         >
+            {/* Hidden canvas - always rendered so ref is available before processing */}
+            <canvas ref={canvasRef} style={{ position: 'absolute', left: '-9999px' }} />
+
             <div className="grid lg:grid-cols-[380px_1fr] gap-8">
                 {/* Controls Sidebar */}
                 <div className="space-y-6">
@@ -293,7 +381,7 @@ export default function VideoEnhancerClient() {
                                 <Button
                                     onClick={processVideo}
                                     disabled={!videoFile || isProcessing || !gpuSupported}
-                                    className="w-full h-14 premium-button text-lg bg-primary text-primary-foreground shadow-primary/30"
+                                    className="w-full h-14 text-lg bg-primary text-primary-foreground shadow-lg hover:shadow-primary/25 transition-all duration-200 active:scale-95 hover:scale-[1.02] font-medium rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isProcessing ? (
                                         <span className="flex items-center gap-2">
@@ -307,6 +395,21 @@ export default function VideoEnhancerClient() {
                                         </span>
                                     )}
                                 </Button>
+
+                                {/* Debug Info */}
+                                {!isProcessing && (!videoFile || !gpuSupported) && (
+                                    <div className="text-xs text-muted-foreground space-y-1 p-3 bg-muted/20 rounded-lg border border-border/50">
+                                        <p className="font-semibold">Button Status:</p>
+                                        <ul className="space-y-0.5 ml-2">
+                                            <li className={videoFile ? "text-green-500" : "text-red-500"}>
+                                                {videoFile ? "✓" : "✗"} Video uploaded
+                                            </li>
+                                            <li className={gpuSupported ? "text-green-500" : "text-red-500"}>
+                                                {gpuSupported ? "✓" : "✗"} GPU supported
+                                            </li>
+                                        </ul>
+                                    </div>
+                                )}
 
                                 <AnimatePresence>
                                     {isProcessing && (
@@ -409,7 +512,16 @@ export default function VideoEnhancerClient() {
 
                                         {/* AI Neural Output */}
                                         <div className="relative aspect-video rounded-2xl overflow-hidden border-2 border-primary/40 bg-black shadow-2xl group">
-                                            <canvas ref={canvasRef} className="w-full h-full object-contain" />
+                                            {/* Canvas renders off-screen, this shows processing status */}
+                                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/5 to-transparent">
+                                                <div className="text-center space-y-3">
+                                                    <div className="w-16 h-16 mx-auto bg-primary/20 rounded-full flex items-center justify-center animate-pulse">
+                                                        <Zap className="w-8 h-8 text-primary" />
+                                                    </div>
+                                                    <p className="text-sm font-bold text-primary">AI Processing Frames...</p>
+                                                    <p className="text-xs text-muted-foreground">Upscaling to 2x resolution</p>
+                                                </div>
+                                            </div>
                                             {/* Scanning Line Animation */}
                                             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                                                 <motion.div
@@ -471,10 +583,10 @@ export default function VideoEnhancerClient() {
                                         </div>
                                     </div>
                                     <div className="flex justify-center">
-                                        <Button onClick={processVideo} size="lg" className="premium-button h-16 px-12 text-lg bg-primary shadow-primary/30 scale-110 hover:scale-115 transition-transform">
-                                            <Sparkles className="w-5 h-5 mr-3" />
-                                            Initialize AI Enhancement
-                                        </Button>
+                                        <div className="text-center space-y-3">
+                                            <p className="text-lg font-bold text-primary">Video Ready for Enhancement</p>
+                                            <p className="text-sm text-muted-foreground">Click the "Boost to 4K / 2X" button in the sidebar to start processing</p>
+                                        </div>
                                     </div>
                                 </div>
                             ) : (
