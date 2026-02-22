@@ -75,6 +75,16 @@ export function LaunchShowcase() {
                 </svg>
 
             )
+        },
+        {
+            name: "Peerpush",
+            url: "https://peerpush.net/p/opentoolbox",
+            color: "hover:text-[#6366f1]",
+            logo: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="h-8 w-8">
+                    <path d="M12 2L2 22h20L12 2zm0 4.5l5.5 11h-11L12 6.5z" />
+                </svg>
+            )
         }
     ];
 
