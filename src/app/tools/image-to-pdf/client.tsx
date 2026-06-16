@@ -51,9 +51,14 @@ export default function ImageToPdf() {
         setIsGenerating(true)
         const pdf = new jsPDF()
 
+        // Fetch all image properties concurrently before generating the PDF
+        const imageProperties = await Promise.all(
+            images.map(img => getImageProperties(img.src))
+        )
+
         for (let i = 0; i < images.length; i++) {
             const img = images[i]
-            const imgProps = await getImageProperties(img.src)
+            const imgProps = imageProperties[i]
 
             const pageWidth = pdf.internal.pageSize.getWidth()
             const pageHeight = pdf.internal.pageSize.getHeight()
