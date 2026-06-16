@@ -17,11 +17,6 @@ This is a live preview editor. Type in the left pane (or top pane on mobile) and
 - clean interface
 - standard markdown support
 
-### Code Block Example
-\`\`\`javascript
-console.log("Hello World");
-\`\`\`
-
 > "Simplicity is the ultimate sophistication." - Leonardo da Vinci
 
 [Learn more about Markdown](https://www.markdownguide.org)
