@@ -25,9 +25,9 @@ export default function StopwatchPage() {
     const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
     // Timer State
-    const [timerTime, setTimerTime] = useState(0)
-    const [isTimerRunning, setIsTimerRunning] = useState(false)
     const [initialTimer, setInitialTimer] = useState(300000) // 5 mins default
+    const [timerTime, setTimerTime] = useState(initialTimer)
+    const [isTimerRunning, setIsTimerRunning] = useState(false)
     const timerIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
     // Stopwatch Logic
@@ -84,7 +84,6 @@ export default function StopwatchPage() {
     }
 
     useEffect(() => {
-        setTimerTime(initialTimer)
         return () => {
             if (intervalRef.current) clearInterval(intervalRef.current)
             if (timerIntervalRef.current) clearInterval(timerIntervalRef.current)
