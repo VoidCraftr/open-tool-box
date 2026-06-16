@@ -337,6 +337,31 @@ export const toolSEO: Record<string, ToolSEOConfig> = {
             'hash generator',
             'id generator'
         ]
+    },
+    'unix-timestamp-converter': {
+        longTailKeywords: [
+            'unix timestamp converter online',
+            'epoch time to date conversion',
+            'convert unix time to human readable',
+            'epoch timestamp to iso8601',
+            'unix timestamp millisecond converter',
+            'date to epoch time',
+            'unix timestamp to timezone',
+            'epoch converter tool free',
+            'unix time to string',
+            'timestamp format converter'
+        ],
+        useCases: [
+            'Debugging server logs',
+            'API response parsing',
+            'Database record verification',
+            'Testing time-sensitive code'
+        ],
+        relatedSearches: [
+            'cron generator',
+            'timezone converter',
+            'json formatter'
+        ]
     }
 };
 
@@ -363,7 +388,8 @@ export const toolPriorities = {
         'uuid-generator',
         'base64-encoder',
         'image-editor',
-        'word-counter'
+        'word-counter',
+        'unix-timestamp-converter'
     ],
     normal: [] // All others default to normal (0.8)
 };

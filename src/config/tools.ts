@@ -134,6 +134,14 @@ export const tools: ToolMetadata[] = [
         icon: Keyboard,
         isNew: true,
     },
+    {
+        slug: "unix-timestamp-converter",
+        name: "Unix Timestamp Converter",
+        description: "Convert Unix timestamps (epoch) to readable dates and vice-versa.",
+        category: "developer",
+        icon: Clock,
+        isNew: true,
+    },
 
     // --- Design Tools ---
     {
