@@ -1,13 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Coffee, Heart, Sparkles, Trophy, Zap } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import confetti from "canvas-confetti"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 
 export default function SupportPage() {
@@ -19,16 +18,9 @@ export default function SupportPage() {
 
     const handleBrew = () => {
         setCoffees(c => c + 1)
-        setXp(x => x + 1)
 
-        // Small haptic if available
-        if (typeof navigator !== "undefined" && navigator.vibrate) {
-            navigator.vibrate(10)
-        }
-    }
-
-    useEffect(() => {
-        if (xp >= levelUpXp) {
+        const newXp = xp + 1
+        if (newXp >= levelUpXp) {
             setLevel(l => l + 1)
             setXp(0)
             confetti({
@@ -37,8 +29,15 @@ export default function SupportPage() {
                 origin: { y: 0.6 },
                 colors: ['#f97316', '#fb923c', '#fdba74'] // Orange theme
             })
+        } else {
+            setXp(newXp)
         }
-    }, [xp, levelUpXp])
+
+        // Small haptic if available
+        if (typeof navigator !== "undefined" && navigator.vibrate) {
+            navigator.vibrate(10)
+        }
+    }
 
     return (
         <div className="container max-w-4xl py-12 px-4 space-y-16 mx-auto">
@@ -50,7 +49,7 @@ export default function SupportPage() {
                     Fuel the Code.
                 </h1>
                 <p className="text-xl text-muted-foreground leading-relaxed">
-                    OpenToolbox is 100% free and open source. We don't sell data, we don't run ads, and we don't track you.
+                    OpenToolbox is 100% free and open source. We don&apos;t sell data, we don&apos;t run ads, and we don&apos;t track you.
                     If these tools saved you time today, consider buying us a coffee.
                 </p>
                 <div className="flex justify-center gap-4 pt-4">

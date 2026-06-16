@@ -1,0 +1,17 @@
+
+> open-tool-box@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+
+✓ Starting...
+✓ Ready in 1269ms
+○ Compiling / ...
+⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ HEAD / 200 in 6.9s (compile: 6.1s, render: 814ms)
+⚠ Unsupported metadata viewport is configured in metadata export in /support. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /support 200 in 1738ms (compile: 1419ms, render: 319ms)
