@@ -1,11 +1,9 @@
 export function AdBanner({
     slot,
-    format = "auto",
     responsive = true,
     className = "",
 }: {
     slot: string
-    format?: "auto" | "fluid" | "rectangle"
     responsive?: boolean
     className?: string
 }) {
@@ -26,7 +24,6 @@ export function AdBanner({
          style={{ display: "block" }}
          data-ad-client="ca-pub-XXXXXXXXXXXXX"
          data-ad-slot={slot}
-         data-ad-format={format}
          data-full-width-responsive={responsive}
       /> */}
         </div>
