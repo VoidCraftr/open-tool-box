@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Upload, Download, Image as ImageIcon, RefreshCcw, Check, Zap, Sparkles } from "lucide-react"
+import { Upload, Download, RefreshCcw, Check, Zap, Sparkles } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 import { Button } from "@/components/ui/button"
