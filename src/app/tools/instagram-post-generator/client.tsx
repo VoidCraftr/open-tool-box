@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, Fragment } from "react"
 import { Download, Upload, Heart, MessageCircle, Send, Bookmark, MoreHorizontal, Shuffle } from "lucide-react"
 import { ToolWrapper } from "@/components/tools/ToolWrapper"
 import { Input } from "@/components/ui/input"
@@ -280,7 +280,14 @@ export default function InstagramPostGeneratorClient() {
                                         <div className="font-semibold text-sm mb-2">{likes} likes</div>
                                         <div className="text-sm">
                                             <span className="font-semibold mr-2">{username}</span>
-                                            <span dangerouslySetInnerHTML={{ __html: caption.replace(/\n/g, '<br/>') }} />
+                                            <span>
+                                                {caption.split('\n').map((line, i, arr) => (
+                                                    <Fragment key={i}>
+                                                        {line}
+                                                        {i < arr.length - 1 && <br />}
+                                                    </Fragment>
+                                                ))}
+                                            </span>
                                         </div>
                                         <div className={`text-[10px] uppercase mt-2 mb-3 tracking-wide ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
                                             {timeAgo}
