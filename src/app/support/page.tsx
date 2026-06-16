@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { Coffee, Heart, Sparkles, Trophy, Zap } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import confetti from "canvas-confetti"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 
 export default function SupportPage() {
