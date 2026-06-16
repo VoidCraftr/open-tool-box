@@ -221,9 +221,12 @@ export function SignPdf({ initialSignature }: SignPdfProps) {
                 const visualWidth = 500; // Fixed visual width
                 const scaleFactor = pdfPageWidth / visualWidth;
 
-                for (const sig of sigs) {
+                const embeddedSigs = await Promise.all(sigs.map(async (sig) => {
                     const signatureImage = await pdfDoc.embedPng(sig.dataUrl);
+                    return { sig, signatureImage };
+                }));
 
+                for (const { sig, signatureImage } of embeddedSigs) {
                     // Maintain aspect ratio logic
                     const visualSigWidth = sig.width; // 150
                     const scaledSigWidth = visualSigWidth * scaleFactor;
