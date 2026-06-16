@@ -71,13 +71,6 @@ export default function VideoEnhancerClient() {
     }
 
     const processVideo = async () => {
-        console.log('processVideo called', {
-            videoFile: !!videoFile,
-            originalVideoRef: !!originalVideoRef.current,
-            canvasRef: !!canvasRef.current,
-            gpuSupported
-        })
-
         if (!videoFile || !originalVideoRef.current || !canvasRef.current || !gpuSupported) {
             console.log('processVideo early return - conditions not met')
             return
@@ -168,7 +161,7 @@ export default function VideoEnhancerClient() {
             // Select MIME type - MP4 is not actually supported despite isTypeSupported returning true
             // Use WebM which is universally supported in Chrome/Edge
             let selectedMimeType = 'video/webm;codecs=vp9,opus'
-            let ext = 'webm'
+            const ext = 'webm'
 
             // Try VP9 first (best quality), then H.264, then fallback to basic webm
             if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')) {
