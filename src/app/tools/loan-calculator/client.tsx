@@ -209,7 +209,7 @@ export default function LoanCalculator() {
                                                     ))}
                                                 </Pie>
                                                 <Tooltip
-                                                    formatter={(value: number | undefined) => [value !== undefined ? formatCurrency(value) : '', ""]}
+                                                    formatter={(value: any) => [value !== undefined ? formatCurrency(Number(value)) : '', ""]}
                                                     contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', color: 'white', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)' }}
                                                     itemStyle={{ color: 'white', fontSize: '12px', fontWeight: 'bold' }}
                                                 />

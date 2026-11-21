@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { evaluate } from "mathjs"
 import { ToolWrapper } from "@/components/tools/ToolWrapper"
 import { ContentSection } from "@/components/tools/ContentSection"
 import { Button } from "@/components/ui/button"
@@ -48,30 +49,23 @@ export default function ScientificCalculatorClient() {
             let expr = display
                 .replace(/×/g, "*")
                 .replace(/÷/g, "/")
-                .replace(/π/g, "Math.PI")
-                .replace(/e/g, "Math.E")
-                .replace(/\^/g, "**")
-                .replace(/√\(/g, "Math.sqrt(")
+                .replace(/π/g, "pi")
+                .replace(/\^/g, "^")
+                .replace(/√\(/g, "sqrt(")
 
             // Handle functions
             if (expr.includes("sin(") || expr.includes("cos(") || expr.includes("tan(")) {
-                // Simple regex replacement isn't perfect for nested parens, but works for simple cases
-                // Better to use a parser, but using eval for MVP with care
                 // Convert angles if DEG
                 if (!isRad) {
                     // Advanced parsing needed for DEG/RAD conversion inside expressions
                     // For MVP, assume inputs are basic
                 }
                 expr = expr
-                    .replace(/sin/g, "Math.sin")
-                    .replace(/cos/g, "Math.cos")
-                    .replace(/tan/g, "Math.tan")
-                    .replace(/log/g, "Math.log10")
-                    .replace(/ln/g, "Math.log")
+                    .replace(/log/g, "log10")
+                    .replace(/ln/g, "log")
             }
 
-            // eslint-disable-next-line no-eval
-            const result = eval(expr)
+            const result = evaluate(expr)
 
             // Format result
             const resString = Number(result).toLocaleString("en-US", { maximumFractionDigits: 10 })
